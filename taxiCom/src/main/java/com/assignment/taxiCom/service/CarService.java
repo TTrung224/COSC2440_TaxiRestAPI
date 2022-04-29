@@ -28,6 +28,7 @@ public class CarService {
         return String.format("Car with ID %1$s is added (%2$s)", car.getVin(), car.getDateCreated());
     }
 
+
     public List<Car> getAllCars() {
         return sessionFactory.getCurrentSession().createCriteria(Car.class).list();
     }

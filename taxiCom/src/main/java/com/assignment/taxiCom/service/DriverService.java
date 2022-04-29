@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Query;
 import java.util.List;
 
 @Service
@@ -30,5 +31,11 @@ public class DriverService {
 
     public List<Driver> getAllDrivers(){
         return sessionFactory.getCurrentSession().createCriteria(Driver.class).list();
+    }
+
+    public List<Driver> getDriverByLicense(String license) {
+        Query query = sessionFactory.getCurrentSession().createQuery("from Driver D where D.licenseNumber = :license");
+        query.setParameter("license", license);
+        return query.getResultList();
     }
 }

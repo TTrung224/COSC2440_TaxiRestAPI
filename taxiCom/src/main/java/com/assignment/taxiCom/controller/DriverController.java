@@ -3,10 +3,7 @@ package com.assignment.taxiCom.controller;
 import com.assignment.taxiCom.entity.Driver;
 import com.assignment.taxiCom.service.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,7 +26,12 @@ public class DriverController {
         return driverService.getAllDrivers();
     }
 
-    @PostMapping(value = "/drivers")
+    @GetMapping(value = "/drivers", params = "license")
+    public List<Driver> getDriverByLicense(@RequestParam String license) {
+        return driverService.getDriverByLicense(license);
+    }
+
+    @PostMapping("/drivers")
     public String addDriver(@RequestBody Driver driver){
         return driverService.addDriver(driver);
     }

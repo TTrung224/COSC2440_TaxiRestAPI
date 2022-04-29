@@ -41,7 +41,7 @@ public class AppConfig {
 
         sessionFactoryBean.setDataSource(dataSource);
         sessionFactoryBean.setHibernateProperties(properties);
-        sessionFactoryBean.setPackagesToScan("tutorial8Ex2.model");
+        sessionFactoryBean.setPackagesToScan("com.assignment.taxiCom.model");
 
         return sessionFactoryBean;
     }

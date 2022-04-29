@@ -1,5 +1,6 @@
 package com.assignment.taxiCom.config;
 
+import com.assignment.taxiCom.entity.Booking;
 import org.hibernate.SessionFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -18,6 +19,11 @@ import java.util.Properties;
 @EnableTransactionManagement
 @EnableWebMvc
 public class AppConfig {
+
+    @Bean
+    public Booking booking(){
+        return new Booking();
+    }
 
     @Bean
     public LocalSessionFactoryBean sessionFactory(){
@@ -41,7 +47,7 @@ public class AppConfig {
 
         sessionFactoryBean.setDataSource(dataSource);
         sessionFactoryBean.setHibernateProperties(properties);
-        sessionFactoryBean.setPackagesToScan("com.assignment.taxiCom.model");
+        sessionFactoryBean.setPackagesToScan("com.assignment.taxiCom.entity");
 
         return sessionFactoryBean;
     }

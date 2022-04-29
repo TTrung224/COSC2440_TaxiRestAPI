@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.assignment.taxiCom.config;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 

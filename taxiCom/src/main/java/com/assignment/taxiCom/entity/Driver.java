@@ -13,17 +13,13 @@ public class Driver {
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @CreationTimestamp
     @Column
+    @CreationTimestamp
     private ZonedDateTime dateCreated;
-
     @Column
     private String licenseNumber;
-
     @Column
     private String phoneNumber;
-
     @Column
     private int rating;
 
@@ -40,10 +36,6 @@ public class Driver {
 
     public ZonedDateTime getDateCreated() {
         return dateCreated;
-    }
-
-    public void setDateCreated(ZonedDateTime dateCreated) {
-        this.dateCreated = dateCreated;
     }
 
     public String getLicenseNumber() {

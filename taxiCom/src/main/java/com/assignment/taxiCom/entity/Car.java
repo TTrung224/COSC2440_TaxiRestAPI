@@ -2,10 +2,7 @@ package com.assignment.taxiCom.entity;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.ZonedDateTime;
 
 @Entity
@@ -15,29 +12,21 @@ public class Car {
     @Id
     @Column
     private long vin;
-
     @Column
     @CreationTimestamp
     private ZonedDateTime dateCreated;
-
     @Column
     private String make;
-
     @Column
     private String model;
-
     @Column
     private String color;
-
     @Column
     private boolean convertible;
-
     @Column
     private int rating;
-
     @Column
     private String licensePlate;
-
     @Column
     private int ratePerKilometer;
 
@@ -54,10 +43,6 @@ public class Car {
 
     public ZonedDateTime getDateCreated() {
         return dateCreated;
-    }
-
-    public void setDateCreated(ZonedDateTime dateCreated) {
-        this.dateCreated = dateCreated;
     }
 
     public String getMake() {

@@ -22,17 +22,25 @@ public class DriverController {
     }
 
     @GetMapping(value = "/drivers")
-    public List<Driver> getAllDrivers() {
-        return driverService.getAllDrivers();
+    public List<Driver> getAllDrivers(@RequestParam(defaultValue = "1", required = false) int page) {
+        return driverService.getAllDrivers(page);
     }
 
-    @GetMapping(value = "/drivers", params = "license")
-    public List<Driver> getDriverByLicense(@RequestParam String license) {
+    @GetMapping(value = "/drivers/license")
+    public List<Driver> getDriverByLicense(@RequestParam(name = "value") String license) {
         return driverService.getDriverByLicense(license);
+    }
+
+    @GetMapping(value = "/drivers/rating")
+    public List<Driver> getDriverByRating(@RequestParam(name = "value") int rating, @RequestParam(defaultValue = "1") int page){
+        return driverService.getDriverByRating(rating, page);
     }
 
     @PostMapping("/drivers")
     public String addDriver(@RequestBody Driver driver){
         return driverService.addDriver(driver);
     }
+
+    @DeleteMapping("/drivers")
+    public String deleteDriver(@RequestBody Driver driver) {return  driverService.deleteDriver(driver);}
 }

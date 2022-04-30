@@ -19,7 +19,6 @@ import java.util.Properties;
 @EnableTransactionManagement
 @EnableWebMvc
 public class AppConfig {
-
     @Bean
     public Booking booking(){
         return new Booking();
@@ -27,7 +26,6 @@ public class AppConfig {
 
     @Bean
     public LocalSessionFactoryBean sessionFactory(){
-
         Properties properties = new Properties();
         //For Postgresql
         properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
@@ -47,7 +45,7 @@ public class AppConfig {
 
         sessionFactoryBean.setDataSource(dataSource);
         sessionFactoryBean.setHibernateProperties(properties);
-        sessionFactoryBean.setPackagesToScan("com.assignment.taxiCom.entity");
+        sessionFactoryBean.setPackagesToScan("com.assignment.taxiCom");
 
         return sessionFactoryBean;
     }

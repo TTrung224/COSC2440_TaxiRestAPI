@@ -29,12 +29,13 @@ public class Booking {
     @Column
     private double distance;
 
-    @Column
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "invoiceID", referencedColumnName = "id")
     private Invoice invoice;
 
     public Booking(){
-//        ZonedDateTime time = ZonedDateTime.now();
-//        this.dateCreated = time;
+        ZonedDateTime time = ZonedDateTime.now();
+        this.dateCreated = time;
     }
 
     public long getId() {
@@ -73,7 +74,8 @@ public class Booking {
         return pickUpTime;
     }
 
-    public void setPickUpTime(LocalDateTime pickUpTime) {
+    public void setPickUpTime(String strPickUpTime) {
+        LocalDateTime pickUpTime = LocalDateTime.parse(strPickUpTime);
         this.pickUpTime = pickUpTime;
     }
 
@@ -81,7 +83,8 @@ public class Booking {
         return dropOffTime;
     }
 
-    public void setDropOffTime(LocalDateTime dropOffTime) {
+    public void setDropOffTime(String strDropOffTime) {
+        LocalDateTime dropOffTime = LocalDateTime.parse(strDropOffTime);
         this.dropOffTime = dropOffTime;
     }
 

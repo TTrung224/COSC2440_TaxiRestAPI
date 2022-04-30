@@ -29,11 +29,11 @@ public class BookingService {
     }
 
     public long addBooking(Booking booking){
-        sessionFactory.getCurrentSession().save(booking);
+        sessionFactory.getCurrentSession().saveOrUpdate(booking);
         return booking.getId();
     }
 
-    public Page getAllBooking(){
+    public Page<Booking> getAllBooking(){
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Booking.class);
         List<Booking> resultList = criteria.list();
         Page<Booking> page = new PageImpl<>(resultList);
@@ -43,6 +43,5 @@ public class BookingService {
     public Booking getBookingById(Long id){
         return sessionFactory.getCurrentSession().get(Booking.class, id);
     }
-
 
 }

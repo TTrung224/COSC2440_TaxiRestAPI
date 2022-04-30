@@ -3,13 +3,14 @@ package com.assignment.taxiCom.service;
 import com.assignment.taxiCom.entity.Booking;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.SimpleTimeZone;
 
@@ -35,8 +36,7 @@ public class BookingService {
 
     public Page<Booking> getAllBooking(){
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Booking.class);
-        List<Booking> resultList = criteria.list();
-        Page<Booking> page = new PageImpl<>(resultList);
+        Page<Booking> page = new PageImpl<>(criteria.list());
         return page;
     }
 
@@ -44,4 +44,19 @@ public class BookingService {
         return sessionFactory.getCurrentSession().get(Booking.class, id);
     }
 
+    public Page<Booking> filterBookingByPickUpDate(LocalDateTime start, LocalDateTime end){
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Booking.class);
+        criteria.add(Restrictions.ge("pickUpTime", start));
+        criteria.add(Restrictions.le("pickUpTime", end));
+        Page<Booking> page = new PageImpl<>(criteria.list());
+        return page;
+    }
+
+    public Page<Booking> filterBookingByDropOffDate(LocalDateTime start, LocalDateTime end){
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Booking.class);
+        criteria.add(Restrictions.ge("dropOffTime", start));
+        criteria.add(Restrictions.le("dropOffTime", end));
+        Page<Booking> page = new PageImpl<>(criteria.list());
+        return page;
+    }
 }

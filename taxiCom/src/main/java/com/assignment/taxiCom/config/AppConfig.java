@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -18,24 +19,21 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @EnableWebMvc
+@EnableJpaRepositories("com.assignment.taxiCom.repository")
 public class AppConfig {
     @Bean
     public Booking booking(){
         return new Booking();
     }
 
-    @Bean
+    @Bean(name="entityManagerFactory")
     public LocalSessionFactoryBean sessionFactory(){
         Properties properties = new Properties();
-        //For Postgresql
         properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-        //For mysql
-        //properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         properties.put("hibernate.show_sql", true);
         properties.put("hibernate.hbm2ddl.auto", "update");
 
         LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
-
 
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
@@ -45,7 +43,7 @@ public class AppConfig {
 
         sessionFactoryBean.setDataSource(dataSource);
         sessionFactoryBean.setHibernateProperties(properties);
-        sessionFactoryBean.setPackagesToScan("com.assignment.taxiCom");
+        sessionFactoryBean.setPackagesToScan("com.assignment.taxiCom.entity");
 
         return sessionFactoryBean;
     }

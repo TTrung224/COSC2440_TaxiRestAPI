@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @RestController
 public class BookingController {
@@ -23,27 +22,65 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    @RequestMapping(path = "/booking", method = RequestMethod.POST)
+    @PostMapping(path = "/booking")
     public long addBooking(@RequestBody Booking booking){
         return bookingService.addBooking(booking);
     }
 
-    @RequestMapping(path = "/booking", method = RequestMethod.GET)
-    public Page<Booking> getAllBooking(){
-        return bookingService.getAllBooking();
+    @GetMapping(path = "/booking")
+    public Page<Booking> getAllBooking(
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize){
+        System.out.println(bookingService.getAllBooking(page, pageSize));
+        return bookingService.getAllBooking(page, pageSize);
     }
 
-    @RequestMapping(path = "/booking/filterPickUpDate/{strStartDate}/{strEndDate}", method = RequestMethod.GET)
-    public Page<Booking> filterBookingByPickUpDate(@PathVariable String strStartDate, @PathVariable String strEndDate){
-        LocalDateTime startDate = LocalDateTime.parse(strStartDate);
-        LocalDateTime endDate = LocalDateTime.parse(strEndDate);
-        return bookingService.filterBookingByPickUpDate(startDate, endDate);
+    @GetMapping(path = "/booking/searchById")
+    public Booking getBookingById(@RequestParam long id){
+        return bookingService.getBookingById(id);
     }
 
-    @RequestMapping(path = "/booking/filterDropOffDate/{strStartDate}/{strEndDate}", method = RequestMethod.GET)
-    public Page<Booking> filterBookingByDropOffDate(@PathVariable String strStartDate, @PathVariable String strEndDate){
-        LocalDateTime startDate = LocalDateTime.parse(strStartDate);
-        LocalDateTime endDate = LocalDateTime.parse(strEndDate);
-        return bookingService.filterBookingByDropOffDate(startDate, endDate);
+    @GetMapping(path = "/booking/searchByInvoiceId")
+    public Booking getBookingByInvoiceId(@RequestParam long invoiceId){
+        return bookingService.getBookingByInvoiceId(invoiceId);
+    }
+
+    @GetMapping(path = "/booking/filterByDistance/{min}/{max}")
+    public Page<Booking> filterBookingByDistance(
+            @PathVariable double min,
+            @PathVariable double max,
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize
+    ){
+        return bookingService.filterBookingByDistance(min, max, page, pageSize);
+    }
+
+    @GetMapping(path = "/booking/filterByStartLocation/{startLocation}")
+    public Page<Booking> filterBookingByStartLocation(
+            @PathVariable String startLocation,
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize
+    ){
+        return bookingService.findBookingByStartLocation(startLocation, page, pageSize);
+    }
+
+    @GetMapping(path = "/booking/filterByStartLocation/{endLocation}")
+    public Page<Booking> filterBookingByTime(
+            @PathVariable String endLocation,
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize
+            ){
+
+        return bookingService.findBookingByEndLocation(endLocation, page, pageSize);
+    }
+
+    @PutMapping(path = "/booking")
+    public Booking updateBooking(@RequestBody Booking booking){
+        return bookingService.updateBooking(booking);
+    }
+
+    @DeleteMapping(path = "/booking")
+    public Long deleteBooking(@RequestBody Booking booking){
+        return bookingService.deleteBooking(booking);
     }
 }

@@ -69,9 +69,15 @@ public class BookingService {
         return bookingRepository.findBookingByInvoiceId(invoiceId);
     }
 
-    public Page<Booking> filterBookingByTime(LocalDateTime start, LocalDateTime end, int page, int pageSize){
+    public Page<Booking> filterBookingByPickUpTime(LocalDateTime start, LocalDateTime end, int page, int pageSize){
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("pickUpTime").ascending());
-        Page<Booking> bookings = bookingRepository.filterBookingByTime(start, end, pageable);
+        Page<Booking> bookings = bookingRepository.filterBookingByPickUpTime(start, end, pageable);
+        return bookings;
+    }
+
+    public Page<Booking> filterBookingByDropOffTime(LocalDateTime start, LocalDateTime end, int page, int pageSize){
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("dropOffTime").ascending());
+        Page<Booking> bookings = bookingRepository.filterBookingByDropOffTime(start, end, pageable);
         return bookings;
     }
 

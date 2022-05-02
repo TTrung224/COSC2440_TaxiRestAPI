@@ -1,5 +1,6 @@
 package com.assignment.taxiCom.config;
 
+import com.assignment.taxiCom.entity.Invoice;
 import org.hibernate.SessionFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -18,6 +19,10 @@ import java.util.Properties;
 @EnableTransactionManagement
 @EnableWebMvc
 public class AppConfig {
+    @Bean
+    public Invoice invoice(){
+        return new Invoice();
+    }
 
     @Bean
     public LocalSessionFactoryBean sessionFactory(){
@@ -37,11 +42,11 @@ public class AppConfig {
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/demo");
         dataSource.setUsername("postgres");
-        dataSource.setPassword("tranquoctrung224");
+        dataSource.setPassword("123456");
 
         sessionFactoryBean.setDataSource(dataSource);
         sessionFactoryBean.setHibernateProperties(properties);
-        sessionFactoryBean.setPackagesToScan("com.assignment.taxiCom.model");
+        sessionFactoryBean.setPackagesToScan("com.assignment.taxiCom.entity");
 
         return sessionFactoryBean;
     }

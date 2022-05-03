@@ -14,20 +14,13 @@ public class Invoice {
     private long id;
 
     @Column
-    private String name;
+    private Customer customer;
 
     @Column
-    private String carModel;
+    private Driver driver;
 
     @Column
-    @CreationTimestamp
-    private ZonedDateTime date;
-
-    @Column
-    private int totalPrice;
-
-    @Column
-    private String guestName;
+    private int totalCharge;
 
     public long getId() {
         return id;
@@ -37,43 +30,27 @@ public class Invoice {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
-    public String getCarModel() {
-        return carModel;
+    public Driver getDriver() {
+        return driver;
     }
 
-    public void setCarModel(String carModel) {
-        this.carModel = carModel;
+    public void setDriver(Driver driver) {
+        this.driver = driver;
     }
 
-    public ZonedDateTime getDate() {
-        return date;
+    public int getTotalCharge() {
+        return totalCharge;
     }
 
-    public void setDate(ZonedDateTime date) {
-        this.date = date;
-    }
-
-    public int getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(int totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public String getGuestName() {
-        return guestName;
-    }
-
-    public void setGuestName(String guestName) {
-        this.guestName = guestName;
+    public void setTotalCharge(int totalCharge) {
+        this.totalCharge = totalCharge;
     }
 }

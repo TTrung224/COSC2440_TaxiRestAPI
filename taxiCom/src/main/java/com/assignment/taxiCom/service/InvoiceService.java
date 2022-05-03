@@ -24,7 +24,7 @@ public class InvoiceService {
 
     public String addInvoice(Invoice invoice){
         sessionFactory.getCurrentSession().save(invoice);
-        return String.format("Invoice with ID %1$s is added (%2$s)", invoice.getId(), invoice.getDate());
+        return String.format("Invoice with ID %1$s is added (%2$s)", invoice.getId());
     }
 
     public List<Invoice> getAllInvoices() {

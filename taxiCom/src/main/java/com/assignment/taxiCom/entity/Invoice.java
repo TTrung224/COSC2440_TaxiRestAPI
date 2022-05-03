@@ -13,14 +13,21 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
-    private Customer customer;
 
-    @Column
-    private Driver driver;
+
 
     @Column
     private int totalCharge;
+
+    public Invoice(){};
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name ="customerID", referencedColumnName = "id",nullable = false)
+    private Customer customer;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name ="driverID", referencedColumnName = "id", nullable = false)
+    private Driver driver;
 
     public long getId() {
         return id;

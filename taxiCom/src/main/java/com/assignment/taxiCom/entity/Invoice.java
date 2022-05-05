@@ -29,6 +29,11 @@ public class Invoice {
     @JoinColumn(name ="driverID", referencedColumnName = "id", nullable = false)
     private Driver driver;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name ="bookingID", referencedColumnName = "id", nullable = false)
+    private Booking booking;
+
+
     public long getId() {
         return id;
     }

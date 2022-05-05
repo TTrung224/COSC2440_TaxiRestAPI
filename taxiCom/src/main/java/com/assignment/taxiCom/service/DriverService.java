@@ -15,8 +15,6 @@ import java.util.List;
 @Transactional
 public class DriverService {
 
-    private int pageSize = 10;
-
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -38,7 +36,12 @@ public class DriverService {
         return String.format("Driver with ID %s is deleted", driver.getId());
     }
 
-    public List<Driver> getAllDrivers(int page){
+    public String updateDriver(Driver driver){
+        sessionFactory.getCurrentSession().update(driver);
+        return String.format("Driver with ID %s has been updated", driver.getId());
+    }
+
+    public List<Driver> getAllDrivers(int page, int pageSize){
         Query query = sessionFactory.getCurrentSession().createQuery("from Driver ");
         query.setFirstResult((page - 1) * pageSize);
         query.setMaxResults(pageSize);
@@ -51,7 +54,7 @@ public class DriverService {
         return query.getResultList();
     }
 
-    public List<Driver> getDriverByRating(int rating, int page) {
+    public List<Driver> getDriverByRating(int rating, int page, int pageSize) {
         Query query = sessionFactory.getCurrentSession().createQuery("from Driver D where D.rating = :rating");
         query.setParameter("rating", rating);
         query.setFirstResult((page - 1) * pageSize);

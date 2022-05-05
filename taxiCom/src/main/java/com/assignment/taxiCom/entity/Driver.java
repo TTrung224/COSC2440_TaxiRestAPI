@@ -1,5 +1,6 @@
 package com.assignment.taxiCom.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -23,7 +24,20 @@ public class Driver {
     @Column
     private int rating;
 
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @JoinColumn(name = "car_id", referencedColumnName = "id")
+    @JsonIgnore
+    private Car car;
+
     public Driver() {
+    }
+
+    public Car getCar() {
+        return car;
+    }
+
+    public void setCar(Car car) {
+        this.car = car;
     }
 
     public long getId() {

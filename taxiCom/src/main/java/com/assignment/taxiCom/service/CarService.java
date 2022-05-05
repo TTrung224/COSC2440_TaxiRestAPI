@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Query;
 import java.util.List;
 
 @Service
@@ -25,11 +26,24 @@ public class CarService {
 
     public String addCar(Car car){
         sessionFactory.getCurrentSession().save(car);
-        return String.format("Car with ID %1$s is added (%2$s)", car.getVin(), car.getDateCreated());
+        return String.format("Car with ID %1$s is added (%2$s)", car.getId(), car.getDateCreated());
+    }
+
+    public String deleteCar(Car car){
+        sessionFactory.getCurrentSession().delete(car);
+        return String.format("Car with ID %s is deleted", car.getId());
+    }
+
+    public String updateCar(Car car) {
+        sessionFactory.getCurrentSession().update(car);
+        return String.format("Car with ID %s has been updated", car.getId());
     }
 
 
-    public List<Car> getAllCars() {
-        return sessionFactory.getCurrentSession().createCriteria(Car.class).list();
+    public List<Car> getAllCars(int page, int pageSize) {
+        Query query = sessionFactory.getCurrentSession().createQuery("from Car ");
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
+        return query.getResultList();
     }
 }

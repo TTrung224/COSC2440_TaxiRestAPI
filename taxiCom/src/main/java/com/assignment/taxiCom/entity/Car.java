@@ -11,38 +11,65 @@ public class Car {
 
     @Id
     @Column
-    private long vin;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     @Column
     @CreationTimestamp
     private ZonedDateTime dateCreated;
+
+    @Column(unique = true)
+    private String vin;
+
     @Column
     private String make;
+
     @Column
     private String model;
+
     @Column
     private String color;
+
     @Column
     private boolean convertible;
+
     @Column
     private int rating;
+
     @Column
     private String licensePlate;
+
     @Column
     private int ratePerKilometer;
+
+    @OneToOne(mappedBy = "car", fetch = FetchType.EAGER)
+    private Driver driver;
 
     public Car() {
     }
 
-    public long getVin() {
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getVin() {
         return vin;
     }
 
-    public void setVin(long vin) {
+    public void setVin(String vin) {
         this.vin = vin;
     }
 
     public ZonedDateTime getDateCreated() {
         return dateCreated;
+    }
+
+    public void setDateCreated(ZonedDateTime dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public String getMake() {
@@ -99,5 +126,13 @@ public class Car {
 
     public void setRatePerKilometer(int ratePerKilometer) {
         this.ratePerKilometer = ratePerKilometer;
+    }
+
+    public Driver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
     }
 }

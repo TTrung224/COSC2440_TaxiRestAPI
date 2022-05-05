@@ -3,10 +3,7 @@ package com.assignment.taxiCom.controller;
 import com.assignment.taxiCom.entity.Car;
 import com.assignment.taxiCom.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,8 +22,17 @@ public class CarController {
     }
 
     @GetMapping(value = "/cars")
-    public List<Car> getAllCars() {return carService.getAllCars();}
+    public List<Car> getAllCars(@RequestParam(defaultValue = "1") int page,
+                                @RequestParam(defaultValue = "10") int pageSize) {
+        return carService.getAllCars(page, pageSize);
+    }
 
     @PostMapping(value = "/cars")
     public String addCar(@RequestBody Car car) {return carService.addCar(car);}
+
+    @DeleteMapping("/cars")
+    public String deleteCar(@RequestBody Car car) {return carService.deleteCar(car);}
+
+    @PatchMapping("/cars")
+    public String updateCar(@RequestBody Car car) {return  carService.updateCar(car);}
 }

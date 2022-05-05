@@ -14,6 +14,7 @@ public class InvoiceService {
     @Autowired
     private SessionFactory sessionFactory;
 
+
     public SessionFactory getSessionFactory() {
         return sessionFactory;
     }
@@ -22,12 +23,18 @@ public class InvoiceService {
         this.sessionFactory = sessionFactory;
     }
 
-    public String addInvoice(Invoice invoice){
+
+    public Long addInvoice(Invoice invoice){
         sessionFactory.getCurrentSession().save(invoice);
-        return String.format("Invoice with ID %1$s is added (%2$s)", invoice.getId());
+//        return String.format("Invoice with ID %1$s is added (%2$s)", invoice.getId());
+        return invoice.getId();
     }
 
     public List<Invoice> getAllInvoices() {
         return sessionFactory.getCurrentSession().createCriteria(Invoice.class).list();
     }
+
+//    public List<Invoice> getAllInvoiceByPeriod(){
+//
+//    }
 }

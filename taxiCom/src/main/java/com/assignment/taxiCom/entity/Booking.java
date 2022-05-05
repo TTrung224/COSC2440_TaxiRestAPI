@@ -35,8 +35,9 @@ public class Booking {
         private double distance;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "booking")
-    private List<Invoice> invoice;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name ="bookingID", referencedColumnName = "id", nullable = false)
+    private Invoice invoice;
 
         public Booking(){
             ZonedDateTime time = ZonedDateTime.now();
@@ -106,7 +107,7 @@ public class Booking {
         }
 
         public void setInvoice(Invoice invoice) {
-            this.invoice = (List<Invoice>) invoice;
+            this.invoice = invoice;
         }
 
 }

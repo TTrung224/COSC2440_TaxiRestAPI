@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @RestController
@@ -26,9 +27,15 @@ public class InvoiceController {
     }
 
     @GetMapping(value = "/invoices")
-    public List<Invoice> getAllCars() {return invoiceService.getAllInvoices();}
+    public List<Invoice> getAllInvoice() {return invoiceService.getAllInvoices();}
 
     @PostMapping(value = "/invoices")
-    public String addCar(@RequestBody Invoice invoice) {return invoiceService.addInvoice(invoice);}
+    public Long addInvoice(@RequestBody Invoice invoice) {return invoiceService.addInvoice(invoice);}
+
+//    @GetMapping(value ="/invoice")
+//    public List<Invoice> getInvoiceByPeriod(){
+//
+//
+//    }
 
 }

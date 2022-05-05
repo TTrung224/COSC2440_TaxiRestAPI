@@ -13,9 +13,6 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-
-
-
     @Column
     private int totalCharge;
 
@@ -29,8 +26,7 @@ public class Invoice {
     @JoinColumn(name ="driverID", referencedColumnName = "id", nullable = false)
     private Driver driver;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="bookingID", referencedColumnName = "id", nullable = false)
+    @OneToOne(mappedBy = "invoice")
     private Booking booking;
 
 
@@ -56,6 +52,15 @@ public class Invoice {
 
     public void setDriver(Driver driver) {
         this.driver = driver;
+    }
+
+
+    public Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(Booking booking) {
+        this.booking = booking;
     }
 
     public int getTotalCharge() {

@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
@@ -52,5 +53,18 @@ public class InvoiceService {
         return invoices;
     }
 
+    public Page<Invoice> filterInvoiceByPeriod(String strStart,String strEnd, int page, int pageSize){
+        ZonedDateTime startDay = ZonedDateTime.parse(strStart);
+        ZonedDateTime enDay = ZonedDateTime.parse(strEnd);
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("id").ascending());
+        Page<Invoice> invoices = invoiceRepository.filterInvoiceByPeriod(startDay,enDay,pageable);
+        return invoices;
+    }
 
+    public Page<Invoice> filterInvoiceByDate(String strDate, int page, int pageSize){
+        ZonedDateTime date = ZonedDateTime.parse(strDate);
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("id").ascending());
+        Page<Invoice> invoices = invoiceRepository.filterInvoiceByDate(date,pageable);
+        return invoices;
+    }
 }

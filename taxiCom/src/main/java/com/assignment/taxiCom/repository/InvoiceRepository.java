@@ -16,8 +16,9 @@ public interface InvoiceRepository extends PagingAndSortingRepository<Invoice, I
 
     Page<Invoice> findAll(Pageable pageable);
 
-//    @Query(value = "Select * from invoice i where i.dateCreated >= ?1 and i.dateCreated <= ?2", nativeQuery = true)
-//    Page<Invoice> filterInvoiceByPeriod(ZonedDateTime startDay, ZonedDateTime endDay, Pageable pageable);
+    @Query(value = "Select * from invoice i where i.dateCreated >= ?1 and i.dateCreated <= ?2", nativeQuery = true)
+    Page<Invoice> filterInvoiceByPeriod(ZonedDateTime startDay, ZonedDateTime endDay, Pageable pageable);
 
-
+    @Query(value = "Select * from invoice i where i.dateCreated ==?1", nativeQuery = true)
+    Page<Invoice> filterInvoiceByDate(ZonedDateTime date, Pageable pageable);
 }

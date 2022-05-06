@@ -28,17 +28,30 @@ public class InvoiceController {
     public Page<Invoice> getAllInvoice(
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize){
-        System.out.println(invoiceService.getAllInvoice(page, pageSize));
+
         return invoiceService.getAllInvoice(page, pageSize);
     }
 
     @PostMapping(value = "/invoices")
     public String addInvoice(@RequestBody Invoice invoice) {return invoiceService.addInvoice(invoice);}
 
-//    @GetMapping(value ="/invoice")
-//    public List<Invoice> filter(){
-//
-//
-//    }
+    @GetMapping(value ="/invoices/filterByCreatedDate/{strStart}/{strEnd}")
+    public Page<Invoice> filterInvoiceByPeriod(
+            @PathVariable(name = "strStart") String strStart,
+            @PathVariable(name = "strEnd") String strEnd,
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize
+    ){
+        return invoiceService.filterInvoiceByPeriod(strStart,strEnd, page, pageSize);
+    }
+
+    @GetMapping(value ="/invoices/filterByCreatedDate/{strDate}")
+    public Page<Invoice> filterInvoiceByDate(
+            @PathVariable(name="strDate") String strDate,
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize
+    ){
+        return invoiceService.filterInvoiceByDate(strDate, page, pageSize);
+    }
 
 }

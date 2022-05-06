@@ -26,7 +26,7 @@ public class AppConfig {
         return new Invoice();
     }
 
-    @Bean
+    @Bean(name="entityManagerFactory")
     public LocalSessionFactoryBean sessionFactory(){
 
         Properties properties = new Properties();

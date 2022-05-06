@@ -3,10 +3,8 @@ package com.assignment.taxiCom.controller;
 import com.assignment.taxiCom.entity.Invoice;
 import com.assignment.taxiCom.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -27,13 +25,18 @@ public class InvoiceController {
     }
 
     @GetMapping(value = "/invoices")
-    public List<Invoice> getAllInvoice() {return invoiceService.getAllInvoices();}
+    public Page<Invoice> getAllInvoice(
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize){
+        System.out.println(invoiceService.getAllInvoice(page, pageSize));
+        return invoiceService.getAllInvoice(page, pageSize);
+    }
 
     @PostMapping(value = "/invoices")
-    public Long addInvoice(@RequestBody Invoice invoice) {return invoiceService.addInvoice(invoice);}
+    public String addInvoice(@RequestBody Invoice invoice) {return invoiceService.addInvoice(invoice);}
 
 //    @GetMapping(value ="/invoice")
-//    public List<Invoice> getInvoiceByPeriod(){
+//    public List<Invoice> filter(){
 //
 //
 //    }

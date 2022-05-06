@@ -22,11 +22,11 @@ public class Invoice {
     public Invoice(){};
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="customerID", referencedColumnName = "id",nullable = false)
+    @JoinColumn(name ="customerID", referencedColumnName = "id",nullable = true)
     private Customer customer;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="driverID", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name ="driverID", referencedColumnName = "id", nullable = true)
     private Driver driver;
 
     @OneToOne(mappedBy = "invoice")

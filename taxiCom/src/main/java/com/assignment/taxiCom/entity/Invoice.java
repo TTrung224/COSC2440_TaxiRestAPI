@@ -1,5 +1,7 @@
 package com.assignment.taxiCom.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,7 +12,11 @@ public class Invoice {
     private long id;
 
     @Column
-    String name;
+    private String name;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "invoice")
+    Booking booking;
 
     public Invoice(){
 
@@ -30,5 +36,13 @@ public class Invoice {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(Booking booking) {
+        this.booking = booking;
     }
 }

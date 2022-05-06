@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.management.Query;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
@@ -69,14 +70,26 @@ public class BookingService {
         return bookingRepository.findBookingByInvoiceId(invoiceId);
     }
 
-    public Page<Booking> filterBookingByPickUpTime(LocalDateTime start, LocalDateTime end, int page, int pageSize){
+    public Page<Booking> filterBookingByCreatedTime(String strStart, String strEnd, int page, int pageSize){
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("dateCreated").ascending());
+        ZonedDateTime start = ZonedDateTime.parse(strStart);
+        ZonedDateTime end = ZonedDateTime.parse(strEnd);
+        Page<Booking> bookings = bookingRepository.filterBookingByCreatedTime(start, end, pageable);
+        return bookings;
+    }
+
+    public Page<Booking> filterBookingByPickUpTime(String strStart, String strEnd, int page, int pageSize){
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("pickUpTime").ascending());
+        ZonedDateTime start = ZonedDateTime.parse(strStart);
+        ZonedDateTime end = ZonedDateTime.parse(strEnd);
         Page<Booking> bookings = bookingRepository.filterBookingByPickUpTime(start, end, pageable);
         return bookings;
     }
 
-    public Page<Booking> filterBookingByDropOffTime(LocalDateTime start, LocalDateTime end, int page, int pageSize){
+    public Page<Booking> filterBookingByDropOffTime(String strStart, String strEnd, int page, int pageSize){
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("dropOffTime").ascending());
+        ZonedDateTime start = ZonedDateTime.parse(strStart);
+        ZonedDateTime end = ZonedDateTime.parse(strEnd);
         Page<Booking> bookings = bookingRepository.filterBookingByDropOffTime(start, end, pageable);
         return bookings;
     }

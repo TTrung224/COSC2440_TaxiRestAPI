@@ -42,7 +42,6 @@ public class BookingController {
     public Page<Booking> getAllBooking(
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize){
-        System.out.println(bookingService.getAllBooking(page, pageSize));
         return bookingService.getAllBooking(page, pageSize);
     }
 
@@ -56,6 +55,16 @@ public class BookingController {
         return bookingService.getBookingByInvoiceId(invoiceId);
     }
 
+    @GetMapping(path = "/booking/filterByCreatedTime/{strStart}/{strEnd}")
+    public Page<Booking> filterBookingByCreatedTime(
+            @PathVariable String strStart,
+            @PathVariable String strEnd,
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize
+    ){
+        return bookingService.filterBookingByCreatedTime(strStart, strEnd, page, pageSize);
+    }
+
     @GetMapping(path = "/booking/filterByPickUpTime/{strStart}/{strEnd}")
     public Page<Booking> filterBookingByPickUpTime(
             @PathVariable String strStart,
@@ -63,9 +72,7 @@ public class BookingController {
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize
     ){
-        LocalDateTime start = LocalDateTime.parse(strStart);
-        LocalDateTime end = LocalDateTime.parse(strEnd);
-        return bookingService.filterBookingByPickUpTime(start, end, page, pageSize);
+        return bookingService.filterBookingByPickUpTime(strStart, strEnd, page, pageSize);
     }
 
     @GetMapping(path = "/booking/filterByDropOffTime/{strStart}/{strEnd}")
@@ -75,9 +82,7 @@ public class BookingController {
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize
     ){
-        LocalDateTime start = LocalDateTime.parse(strStart);
-        LocalDateTime end = LocalDateTime.parse(strEnd);
-        return bookingService.filterBookingByDropOffTime(start, end, page, pageSize);
+        return bookingService.filterBookingByDropOffTime(strStart, strEnd, page, pageSize);
     }
 
     @GetMapping(path = "/booking/filterByDistance/{min}/{max}")

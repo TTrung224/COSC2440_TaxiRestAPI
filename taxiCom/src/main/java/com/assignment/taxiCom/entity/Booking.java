@@ -1,5 +1,7 @@
 package com.assignment.taxiCom.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -11,6 +13,7 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss z")
     @Column
     private ZonedDateTime dateCreated;
 
@@ -20,11 +23,13 @@ public class Booking {
     @Column
     private String endLocation;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss z")
     @Column
-    private LocalDateTime pickUpTime;
+    private ZonedDateTime pickUpTime;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss z")
     @Column
-    private LocalDateTime dropOffTime;
+    private ZonedDateTime dropOffTime;
 
     @Column
     private double distance;
@@ -70,21 +75,21 @@ public class Booking {
         this.endLocation = endLocation;
     }
 
-    public LocalDateTime getPickUpTime() {
+    public ZonedDateTime getPickUpTime() {
         return pickUpTime;
     }
 
     public void setPickUpTime(String strPickUpTime) {
-        LocalDateTime pickUpTime = LocalDateTime.parse(strPickUpTime);
+        ZonedDateTime pickUpTime = ZonedDateTime.parse(strPickUpTime);
         this.pickUpTime = pickUpTime;
     }
 
-    public LocalDateTime getDropOffTime() {
+    public ZonedDateTime getDropOffTime() {
         return dropOffTime;
     }
 
     public void setDropOffTime(String strDropOffTime) {
-        LocalDateTime dropOffTime = LocalDateTime.parse(strDropOffTime);
+        ZonedDateTime dropOffTime = ZonedDateTime.parse(strDropOffTime);
         this.dropOffTime = dropOffTime;
     }
 

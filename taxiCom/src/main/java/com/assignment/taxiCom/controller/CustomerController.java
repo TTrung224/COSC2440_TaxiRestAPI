@@ -16,23 +16,48 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @RequestMapping(path = {"/customers"}, method = RequestMethod.GET)
+    public CustomerService getCustomerService(){
+        return customerService;
+    }
 
-    public List<Customer> getCustomerByName(String name){
+    public void setCustomerService(CustomerService customerService){
+        this.customerService = customerService;
+    }
+
+    @PostMapping(path = "/customer")
+    public long addCustomer(@RequestBody Customer customer){
+        return customerService.addCustomer(customer);
+    }
+
+    @PutMapping
+    public Customer updateCustomer(@RequestBody Customer customer){
+        return customerService.updateCustomer(customer);
+    }
+
+    @DeleteMapping
+    public long deleteCustomer(@RequestBody Customer customer){
+        return customerService.deleteCustomer(customer);
+    }
+
+    @GetMapping(path = "/customers/searchByName")
+    public List<Customer> getCustomerByName(@RequestParam String name){
         return customerService.getCustomerByName(name);
     }
 
-    @RequestMapping(path = {"/customers"}, method = RequestMethod.GET)
-
-    public List<Customer> getCustomerByAddress(String address){
-        return customerService.getCustomerByName(address);
+    @GetMapping(path = "/customers/searchByAddress")
+    public List<Customer> getCustomerByAddress(@RequestParam String address){
+        return customerService.getCustomerByAddress(address);
     }
 
-    @RequestMapping(value="/method9")
-    public String method9(@RequestParam("phone") int phone){
-        return "method9 with phone= "+phone;
+    @GetMapping(path="/customers/searchByPhone")
+    public Customer getCustomerByPhone (@RequestParam int phone){
+        return customerService.getCustomerByPhone(phone);
     }
 
+    @GetMapping(path = "/customers/searchByID")
+    public Customer getCustomerByID(@RequestParam long ID){
+        return customerService.getCustomerByID(ID);
+    }
     @RequestMapping(path  =  {"/customers"},  method  =
             RequestMethod.POST)
     public  void  saveCustomer(@RequestBody  Customer

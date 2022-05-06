@@ -23,12 +23,13 @@ public class Customer {
 
     }
 
-    public Customer(int id, String name, String address, int phone) {
+    public Customer(int id, String name, String address, int phone, ZonedDateTime DateCreated) {
         super();
         this.id = id;
         this.name = name;
         this.address = address;
         this.phone = phone;
+        this.DateCreated = DateCreated;
     }
 
     public int getId() {
@@ -61,6 +62,14 @@ public class Customer {
 
     public void setPhone(int phone) {
         this.phone = phone;
+    }
+
+    public ZonedDateTime getDateCreated() {
+        return DateCreated;
+    }
+
+    public void setDateCreated(ZonedDateTime dateCreated) {
+        DateCreated = dateCreated;
     }
 }
 

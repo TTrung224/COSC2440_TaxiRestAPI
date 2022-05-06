@@ -16,6 +16,9 @@ public class Invoice {
     @Column
     private int totalCharge;
 
+    @Column
+    private ZonedDateTime dateCreated;
+
     public Invoice(){};
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -69,5 +72,13 @@ public class Invoice {
 
     public void setTotalCharge(int totalCharge) {
         this.totalCharge = totalCharge;
+    }
+
+    public ZonedDateTime getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(ZonedDateTime dateCreated) {
+        this.dateCreated = dateCreated;
     }
 }

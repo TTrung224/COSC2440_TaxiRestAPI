@@ -1,5 +1,7 @@
 package com.assignment.taxiCom.config;
 
+
+import com.assignment.taxiCom.entity.Customer;
 import org.hibernate.SessionFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -13,11 +15,19 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.Properties;
 
+
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
 @Configuration
 @EnableTransactionManagement
 @EnableWebMvc
 public class AppConfig {
+
+    @Bean
+    public Customer customer() {
+        return new Customer();
+    }
+
+
 
     @Bean
     public LocalSessionFactoryBean sessionFactory(){
@@ -32,16 +42,16 @@ public class AppConfig {
 
         LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
 
+        sessionFactoryBean.setPackagesToScan("com.example.demo.model");
 
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/demo");
         dataSource.setUsername("postgres");
-        dataSource.setPassword("tranquoctrung224");
+        dataSource.setPassword("minhkhoi");
 
         sessionFactoryBean.setDataSource(dataSource);
         sessionFactoryBean.setHibernateProperties(properties);
-        sessionFactoryBean.setPackagesToScan("com.assignment.taxiCom.model");
 
         return sessionFactoryBean;
     }
@@ -49,6 +59,9 @@ public class AppConfig {
     @Bean
     public HibernateTransactionManager transactionManager(SessionFactory sessionFactory){
         HibernateTransactionManager tx = new HibernateTransactionManager(sessionFactory);
+
         return tx;
     }
+
 }
+

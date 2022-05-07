@@ -42,7 +42,8 @@ public class Car {
     @Column
     private int ratePerKilometer;
 
-    @OneToOne(mappedBy = "car", fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "driver_id", referencedColumnName = "id")
     private Driver driver;
 
     public Car() {

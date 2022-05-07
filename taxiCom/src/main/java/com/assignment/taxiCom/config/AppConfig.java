@@ -2,11 +2,13 @@ package com.assignment.taxiCom.config;
 
 import com.assignment.taxiCom.entity.Car;
 import com.assignment.taxiCom.entity.Driver;
+import com.assignment.taxiCom.repository.DriverRepository;
 import org.hibernate.SessionFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -19,6 +21,7 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @EnableWebMvc
+@EnableJpaRepositories("com.assignment.taxiCom.repository")
 public class AppConfig {
 
     @Bean
@@ -27,7 +30,7 @@ public class AppConfig {
     @Bean
     public Driver driver() {return new Driver();}
 
-    @Bean
+    @Bean(name="entityManagerFactory")
     public LocalSessionFactoryBean sessionFactory(){
 
         Properties properties = new Properties();

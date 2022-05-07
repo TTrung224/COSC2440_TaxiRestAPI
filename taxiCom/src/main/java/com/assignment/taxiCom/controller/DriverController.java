@@ -3,6 +3,7 @@ package com.assignment.taxiCom.controller;
 import com.assignment.taxiCom.entity.Driver;
 import com.assignment.taxiCom.service.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,19 +23,19 @@ public class DriverController {
     }
 
     @GetMapping(value = "/drivers")
-    public List<Driver> getAllDrivers(@RequestParam(defaultValue = "1") int page,
+    public Page<Driver> getAllDrivers(@RequestParam(defaultValue = "0") int page,
                                       @RequestParam(defaultValue = "10") int pageSize) {
         return driverService.getAllDrivers(page, pageSize);
     }
 
     @GetMapping(value = "/drivers/license")
-    public List<Driver> getDriverByLicense(@RequestParam(name = "value") String license) {
+    public Page<Driver> getDriverByLicense(@RequestParam(name = "value") String license) {
         return driverService.getDriverByLicense(license);
     }
 
     @GetMapping(value = "/drivers/rating")
-    public List<Driver> getDriverByRating(@RequestParam(name = "value") int rating,
-                                          @RequestParam(defaultValue = "1") int page,
+    public Page<Driver> getDriverByRating(@RequestParam(name = "value") int rating,
+                                          @RequestParam(defaultValue = "0") int page,
                                           @RequestParam(defaultValue = "10") int pageSize){
         return driverService.getDriverByRating(rating, page, pageSize);
     }

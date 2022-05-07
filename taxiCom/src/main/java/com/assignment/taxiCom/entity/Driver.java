@@ -24,9 +24,7 @@ public class Driver {
     @Column
     private int rating;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
-    @JoinColumn(name = "car_id", referencedColumnName = "id")
-    @JsonIgnore
+    @OneToOne(mappedBy = "driver")
     private Car car;
 
     public Driver() {

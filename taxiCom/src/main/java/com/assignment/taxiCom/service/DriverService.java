@@ -1,10 +1,13 @@
 package com.assignment.taxiCom.service;
 
 import com.assignment.taxiCom.entity.Driver;
+import com.assignment.taxiCom.repository.DriverRepository;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +20,17 @@ public class DriverService {
 
     @Autowired
     private SessionFactory sessionFactory;
+
+    @Autowired
+    private DriverRepository driverRepository;
+
+    public DriverRepository getDriverRepository() {
+        return driverRepository;
+    }
+
+    public void setDriverRepository(DriverRepository driverRepository) {
+        this.driverRepository = driverRepository;
+    }
 
     public SessionFactory getSessionFactory() {
         return sessionFactory;
@@ -41,23 +55,15 @@ public class DriverService {
         return String.format("Driver with ID %s has been updated", driver.getId());
     }
 
-    public List<Driver> getAllDrivers(int page, int pageSize){
-        Query query = sessionFactory.getCurrentSession().createQuery("from Driver ");
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
-        return query.getResultList();
+    public Page<Driver> getAllDrivers(int page, int pageSize){
+        return driverRepository.findAll(PageRequest.of(page, pageSize));
     }
 
-    public List<Driver> getDriverByLicense(String license) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from Driver D where D.licenseNumber = :license");
-        query.setParameter("license", license);
-        return query.getResultList();
+    public Page<Driver> getDriverByLicense(String license) {
+        return driverRepository.findDriverByLicense(license, PageRequest.of(0, 1));
     }
 
-    public List<Driver> getDriverByRating(int rating, int page, int pageSize) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from Driver D where D.rating = :rating");
-        query.setParameter("rating", rating);
-        query.setFirstResult((page - 1) * pageSize);
-        return query.getResultList();
+    public Page<Driver> getDriverByRating(int rating, int page, int pageSize) {
+        return driverRepository.findDriverByRating(rating, PageRequest.of(page, pageSize));
     }
 }

@@ -1,8 +1,12 @@
 package com.assignment.taxiCom.service;
 
 import com.assignment.taxiCom.entity.Car;
+import com.assignment.taxiCom.repository.CarRepository;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +19,9 @@ public class CarService {
 
     @Autowired
     private SessionFactory sessionFactory;
+
+    @Autowired
+    private CarRepository carRepository;
 
     public SessionFactory getSessionFactory() {
         return sessionFactory;
@@ -40,10 +47,51 @@ public class CarService {
     }
 
 
-    public List<Car> getAllCars(int page, int pageSize) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from Car ");
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
-        return query.getResultList();
+    public Page<Car> getAllCars(int page, int pageSize) {
+        return carRepository.findAll(PageRequest.of(page, pageSize));
+    }
+
+    public Page<Car> getCarByVin(String vin, int page, int pageSize) {
+        return carRepository.findCarByVin(vin, PageRequest.of(page, pageSize));
+    }
+
+    public Page<Car> getCarByLicense(String license, int page, int pageSize) {
+        return carRepository.findCarByLicensePlate(license, PageRequest.of(page, pageSize));
+    }
+
+    public Page<Car> getCarByMake(String make, int page, int pageSize){
+        return carRepository.findCarByMake(make, PageRequest.of(page, pageSize));
+    }
+
+    public Page<Car> getCarByModel(String model, int page, int pageSize){
+        return carRepository.findCarByModel(model, PageRequest.of(page, pageSize));
+    }
+
+    public Page<Car> getCarByRating(int rating, int page, int pageSize){
+        return carRepository.findCarByRating(rating, PageRequest.of(page, pageSize));
+    }
+
+    public Page<Car> getCarByRate(int ratePerKilometer, int page, int pageSize){
+        return carRepository.findCarByRate(ratePerKilometer, PageRequest.of(page, pageSize));
+    }
+
+    public Page<Car> getCarByConvertible(boolean convertible, int page, int pageSize){
+        return carRepository.findCarByConvertible(convertible, PageRequest.of(page, pageSize));
+    }
+
+    public Page<Car> getCarByColor(String color, int page, int pageSize){
+        return carRepository.findCarByColor(color, PageRequest.of(page, pageSize));
+    }
+
+    public Page<Car> sortCarRating(int page, int pageSize){
+        return carRepository.findAll(PageRequest.of(page, pageSize, Sort.by("rating").ascending()));
+    }
+
+    public Page<Car> sortCarRate(int page, int pageSize){
+        return carRepository.findAll(PageRequest.of(page, pageSize, Sort.by("ratePerKilometer").ascending()));
+    }
+
+    public Page<Car> getAvailable(int page, int pageSize) {
+        return  carRepository.getAvailable(PageRequest.of(page, pageSize));
     }
 }

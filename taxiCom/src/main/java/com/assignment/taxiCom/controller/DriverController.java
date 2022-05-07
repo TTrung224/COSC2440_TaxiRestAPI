@@ -48,6 +48,11 @@ public class DriverController {
     @DeleteMapping("/drivers")
     public String deleteDriver(@RequestBody Driver driver) {return  driverService.deleteDriver(driver);}
 
-    @PatchMapping("/drivers")
+    @PutMapping ("/drivers")
     public String updateDriver(@RequestBody Driver driver) {return driverService.updateDriver(driver);}
+
+    @PutMapping("/drivers/assign")
+    public String assignCar(@RequestBody Driver driver, @RequestParam(name = "car_id") long id){
+        return driverService.assignCar(driver, id);
+    }
 }

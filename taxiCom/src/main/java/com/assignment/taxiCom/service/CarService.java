@@ -51,6 +51,10 @@ public class CarService {
         return carRepository.findAll(PageRequest.of(page, pageSize));
     }
 
+    public Page<Car> getCarById(long id, int page, int pageSize) {
+        return carRepository.findCarById(id, PageRequest.of(page, pageSize));
+    }
+
     public Page<Car> getCarByVin(String vin, int page, int pageSize) {
         return carRepository.findCarByVin(vin, PageRequest.of(page, pageSize));
     }
@@ -92,6 +96,13 @@ public class CarService {
     }
 
     public Page<Car> getAvailable(int page, int pageSize) {
-        return  carRepository.getAvailable(PageRequest.of(page, pageSize));
+        Query query = sessionFactory.getCurrentSession().createQuery("SELECT D.car from Driver D");
+        System.out.println(query.getResultList().size());
+        if(query.getResultList().size() > 0){
+            return  carRepository.getAvailable(PageRequest.of(page, pageSize));
+        }
+        else {
+            return carRepository.findAll(PageRequest.of(page, pageSize));
+        }
     }
 }

@@ -99,6 +99,7 @@ public class CarController {
     @GetMapping("/cars/available")
     public Page<Car> getAvailable(@RequestParam(defaultValue = "0") int page,
                                   @RequestParam(defaultValue = "10") int pageSize) {
+
         return carService.getAvailable(page, pageSize);
     }
 

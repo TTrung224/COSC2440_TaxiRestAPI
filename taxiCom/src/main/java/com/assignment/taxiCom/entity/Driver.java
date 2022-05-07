@@ -24,7 +24,8 @@ public class Driver {
     @Column
     private int rating;
 
-    @OneToOne(mappedBy = "driver")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "car_id", referencedColumnName = "id", unique = true)
     private Car car;
 
     public Driver() {

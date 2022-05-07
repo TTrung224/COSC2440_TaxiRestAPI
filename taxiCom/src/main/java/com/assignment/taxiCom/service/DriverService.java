@@ -1,5 +1,6 @@
 package com.assignment.taxiCom.service;
 
+import com.assignment.taxiCom.entity.Car;
 import com.assignment.taxiCom.entity.Driver;
 import com.assignment.taxiCom.repository.DriverRepository;
 import org.hibernate.Criteria;
@@ -23,6 +24,9 @@ public class DriverService {
 
     @Autowired
     private DriverRepository driverRepository;
+
+    @Autowired
+    private CarService carService;
 
     public DriverRepository getDriverRepository() {
         return driverRepository;
@@ -51,8 +55,28 @@ public class DriverService {
     }
 
     public String updateDriver(Driver driver){
+        if (driver.getCar() != null){
+            driver.getCar().setDriver(driver);
+        }
         sessionFactory.getCurrentSession().update(driver);
         return String.format("Driver with ID %s has been updated", driver.getId());
+    }
+
+    public String assignCar(Driver driver, long carId){
+        Car car = carService.getCarById(carId,0, 1).getContent().get(0);
+        if(car != null){
+            if(car.getDriver() != null){
+                return "Car already assigned to another driver";
+            }
+            else{
+                driver.setCar(car);
+                sessionFactory.getCurrentSession().update(driver);
+                return String.format("Car with ID %1$s has been assigned to Driver with ID %2$s", car.getId(), driver.getId());
+            }
+        }
+        else{
+            return "Car does not exist";
+        }
     }
 
     public Page<Driver> getAllDrivers(int page, int pageSize){
@@ -65,5 +89,13 @@ public class DriverService {
 
     public Page<Driver> getDriverByRating(int rating, int page, int pageSize) {
         return driverRepository.findDriverByRating(rating, PageRequest.of(page, pageSize));
+    }
+
+    public Page<Driver> getDriverByPhone(String phoneNum, int page, int pageSize) {
+        return driverRepository.findDriverByPhone(phoneNum, PageRequest.of(page, pageSize));
+    }
+
+    public Page<Driver> sortDriverRating(int page, int pageSize) {
+        return driverRepository.findAll(PageRequest.of(page, pageSize));
     }
 }

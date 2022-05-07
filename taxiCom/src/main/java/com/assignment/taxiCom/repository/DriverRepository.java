@@ -19,4 +19,5 @@ public interface DriverRepository extends PagingAndSortingRepository<Driver, Int
 
     @Query(value = "select * from driver d where d.phoneNumber = ?1", nativeQuery = true)
     Page<Driver> findDriverByPhone(String phoneNumber, Pageable pageable);
+
 }

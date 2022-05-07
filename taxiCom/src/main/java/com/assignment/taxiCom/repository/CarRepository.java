@@ -11,6 +11,9 @@ import org.springframework.stereotype.Repository;
 public interface CarRepository  extends PagingAndSortingRepository<Car, Integer> {
     Page<Car> findAll(Pageable pageable);
 
+    @Query(value = "select * from car c where c.id = ?1", nativeQuery = true)
+    Page<Car> findCarById(long id, Pageable pageable);
+
     @Query(value = "select * from car c where c.vin = ?1", nativeQuery = true)
     Page<Car> findCarByVin(String vin, Pageable pageable);
 
@@ -35,6 +38,6 @@ public interface CarRepository  extends PagingAndSortingRepository<Car, Integer>
     @Query(value = "select * from car c where c.ratePerKilometer = ?1", nativeQuery = true)
     Page<Car>  findCarByRate(int ratePerKilometer, Pageable pageable);
 
-    @Query(value = "select * from car c where c.driver_id is null", nativeQuery = true)
+    @Query(value = "select * from car c where c.id not in (select car_id from driver)", nativeQuery = true)
     Page<Car> getAvailable(Pageable pageable);
 }

@@ -9,12 +9,16 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @Column
     private String name;
+
     @Column
     private String address;
+
     @Column
     private int phone;
+
     @Column
     private ZonedDateTime DateCreated;
 
@@ -23,14 +27,14 @@ public class Customer {
 
     }
 
-    public Customer(int id, String name, String address, int phone, ZonedDateTime DateCreated) {
-        super();
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.phone = phone;
-        this.DateCreated = DateCreated;
-    }
+//    public Customer(int id, String name, String address, int phone, ZonedDateTime DateCreated) {
+//        super();
+//        this.id = id;
+//        this.name = name;
+//        this.address = address;
+//        this.phone = phone;
+//        this.DateCreated = DateCreated;
+//    }
 
     public int getId() {
         return id;

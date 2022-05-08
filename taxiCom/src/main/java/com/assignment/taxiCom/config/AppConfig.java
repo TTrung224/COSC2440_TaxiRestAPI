@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -20,6 +21,7 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @EnableWebMvc
+@EnableJpaRepositories("com.assignment.taxiCom.repository")
 public class AppConfig {
 
     @Bean
@@ -27,9 +29,7 @@ public class AppConfig {
         return new Customer();
     }
 
-
-
-    @Bean
+    @Bean(name="entityManagerFactory")
     public LocalSessionFactoryBean sessionFactory(){
 
         Properties properties = new Properties();
@@ -42,8 +42,6 @@ public class AppConfig {
 
         LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
 
-        sessionFactoryBean.setPackagesToScan("com.example.demo.model");
-
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/demo");
@@ -52,6 +50,7 @@ public class AppConfig {
 
         sessionFactoryBean.setDataSource(dataSource);
         sessionFactoryBean.setHibernateProperties(properties);
+        sessionFactoryBean.setPackagesToScan("com.example.demo.entity");
 
         return sessionFactoryBean;
     }

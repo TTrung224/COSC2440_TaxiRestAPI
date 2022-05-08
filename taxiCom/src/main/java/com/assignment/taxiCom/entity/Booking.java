@@ -3,7 +3,6 @@ package com.assignment.taxiCom.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 @Entity
@@ -15,7 +14,7 @@ public class Booking {
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss z")
     @Column
-    private ZonedDateTime dateCreated;
+    private final ZonedDateTime dateCreated;
 
     @Column
     private String startingLocation;
@@ -35,7 +34,7 @@ public class Booking {
     private double distance;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "invoiceID", referencedColumnName = "id")
+    @JoinColumn(name = "invoiceID", referencedColumnName = "id", unique = true)
     private Invoice invoice;
 
     public Booking(){
@@ -53,10 +52,6 @@ public class Booking {
 
     public ZonedDateTime getDateCreated() {
         return dateCreated;
-    }
-
-    public void setDateCreated(ZonedDateTime dateCreated) {
-        this.dateCreated = dateCreated;
     }
 
     public String getStartingLocation() {

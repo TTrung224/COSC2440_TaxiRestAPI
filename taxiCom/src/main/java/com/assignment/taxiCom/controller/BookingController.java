@@ -2,12 +2,9 @@ package com.assignment.taxiCom.controller;
 
 import com.assignment.taxiCom.entity.Booking;
 import com.assignment.taxiCom.service.BookingService;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 @RestController
 public class BookingController {

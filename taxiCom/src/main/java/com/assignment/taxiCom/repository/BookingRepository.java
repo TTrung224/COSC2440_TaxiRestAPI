@@ -30,9 +30,9 @@ public interface BookingRepository extends PagingAndSortingRepository<Booking, I
     @Query(value = "SELECT * FROM booking b WHERE b.invoiceId = ?1", nativeQuery = true)
     Booking findBookingByInvoiceId(long invoiceId);
 
-    @Query(value = "SELECT * FROM booking b WHERE b.startingLocation LIKE ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM booking b WHERE UPPER(b.startingLocation) LIKE %?1%", nativeQuery = true)
     Page<Booking> findBookingByStartLocation(String startingLocation, Pageable pageable);
 
-    @Query(value = "SELECT * FROM booking b WHERE b.endLocation = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM booking b WHERE UPPER(b.endLocation) LIKE %?1%", nativeQuery = true)
     Page<Booking> findBookingByEndLocation(String endLocation, Pageable pageable);
 }

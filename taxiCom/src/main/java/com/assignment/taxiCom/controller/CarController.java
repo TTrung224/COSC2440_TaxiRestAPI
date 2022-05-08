@@ -83,17 +83,13 @@ public class CarController {
     }
 
     @GetMapping(value = "/cars/license")
-    public Page<Car> getCarByLicense(@RequestParam(name = "value") String license,
-                                     @RequestParam(defaultValue = "0") int page,
-                                     @RequestParam(defaultValue = "10") int pageSize) {
-        return carService.getCarByLicense(license, page, pageSize);
+    public Page<Car> getCarByLicense(@RequestParam(name = "value") String license) {
+        return carService.getCarByLicense(license);
     }
 
     @GetMapping(value = "/cars/vin")
-    public Page<Car> getCarByVin(@RequestParam(name = "value") String vin,
-                                 @RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "10") int pageSize) {
-        return carService.getCarByVin(vin, page, pageSize);
+    public Page<Car> getCarByVin(@RequestParam(name = "value") String vin) {
+        return carService.getCarByVin(vin);
     }
 
     @GetMapping("/cars/available")

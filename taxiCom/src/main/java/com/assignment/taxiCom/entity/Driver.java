@@ -17,9 +17,9 @@ public class Driver {
     @Column
     @CreationTimestamp
     private ZonedDateTime dateCreated;
-    @Column
+    @Column(unique = true)
     private String licenseNumber;
-    @Column
+    @Column(unique = true)
     private String phoneNumber;
     @Column
     private int rating;

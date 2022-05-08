@@ -63,7 +63,7 @@ public class DriverService {
     }
 
     public String assignCar(Driver driver, long carId){
-        Car car = carService.getCarById(carId,0, 1).getContent().get(0);
+        Car car = carService.getCarById(carId).getContent().get(0);
         if(car != null){
             if(car.getDriver() != null){
                 return "Car already assigned to another driver";
@@ -83,6 +83,10 @@ public class DriverService {
         return driverRepository.findAll(PageRequest.of(page, pageSize));
     }
 
+    public Page<Driver> getDriverById(long id) {
+        return driverRepository.findDriverById(id, PageRequest.of(0, 1));
+    }
+
     public Page<Driver> getDriverByLicense(String license) {
         return driverRepository.findDriverByLicense(license, PageRequest.of(0, 1));
     }
@@ -91,8 +95,8 @@ public class DriverService {
         return driverRepository.findDriverByRating(rating, PageRequest.of(page, pageSize));
     }
 
-    public Page<Driver> getDriverByPhone(String phoneNum, int page, int pageSize) {
-        return driverRepository.findDriverByPhone(phoneNum, PageRequest.of(page, pageSize));
+    public Page<Driver> getDriverByPhone(String phoneNum) {
+        return driverRepository.findDriverByPhone(phoneNum, PageRequest.of(0, 1));
     }
 
     public Page<Driver> sortDriverRating(int page, int pageSize) {

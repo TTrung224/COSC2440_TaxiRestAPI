@@ -51,16 +51,16 @@ public class CarService {
         return carRepository.findAll(PageRequest.of(page, pageSize));
     }
 
-    public Page<Car> getCarById(long id, int page, int pageSize) {
-        return carRepository.findCarById(id, PageRequest.of(page, pageSize));
+    public Page<Car> getCarById(long id) {
+        return carRepository.findCarById(id, PageRequest.of(0, 1));
     }
 
-    public Page<Car> getCarByVin(String vin, int page, int pageSize) {
-        return carRepository.findCarByVin(vin, PageRequest.of(page, pageSize));
+    public Page<Car> getCarByVin(String vin) {
+        return carRepository.findCarByVin(vin, PageRequest.of(0, 1));
     }
 
-    public Page<Car> getCarByLicense(String license, int page, int pageSize) {
-        return carRepository.findCarByLicensePlate(license, PageRequest.of(page, pageSize));
+    public Page<Car> getCarByLicense(String license) {
+        return carRepository.findCarByLicensePlate(license, PageRequest.of(0, 1));
     }
 
     public Page<Car> getCarByMake(String make, int page, int pageSize){

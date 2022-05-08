@@ -1,5 +1,6 @@
 package com.assignment.taxiCom.controller;
 
+import com.assignment.taxiCom.entity.Car;
 import com.assignment.taxiCom.entity.Driver;
 import com.assignment.taxiCom.service.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,17 @@ public class DriverController {
                                           @RequestParam(defaultValue = "0") int page,
                                           @RequestParam(defaultValue = "10") int pageSize){
         return driverService.getDriverByRating(rating, page, pageSize);
+    }
+
+    @GetMapping(value = "drivers/rating/sort")
+    public Page<Driver> sortDriverByRating(@RequestParam(defaultValue = "0") int page,
+                                           @RequestParam(defaultValue = "10") int pageSize) {
+        return driverService.sortDriverRating(page, pageSize);
+    }
+
+    @GetMapping(value = "drivers/phone")
+    public Page<Driver> getDriverByPhone(@RequestParam(name = "value") String phoneNum){
+        return driverService.getDriverByPhone(phoneNum);
     }
 
     @PostMapping("/drivers")

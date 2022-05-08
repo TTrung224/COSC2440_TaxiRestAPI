@@ -11,6 +11,9 @@ import org.springframework.stereotype.Repository;
 public interface DriverRepository extends PagingAndSortingRepository<Driver, Integer> {
     Page<Driver> findAll(Pageable pageable);
 
+    @Query(value = "select * from driver d where d.id = ?1", nativeQuery = true)
+    Page<Driver> findDriverById(long id, Pageable pageable);
+
     @Query(value = "SELECT * FROM driver D WHERE D.license = ?1", nativeQuery = true)
     Page<Driver> findDriverByLicense(String license, Pageable pageable);
 

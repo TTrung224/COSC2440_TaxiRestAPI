@@ -33,10 +33,8 @@ public class AppConfig {
     public LocalSessionFactoryBean sessionFactory(){
 
         Properties properties = new Properties();
-        //For Postgresql
+
         properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-        //For mysql
-        //properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         properties.put("hibernate.show_sql", true);
         properties.put("hibernate.hbm2ddl.auto", "update");
 
@@ -50,7 +48,7 @@ public class AppConfig {
 
         sessionFactoryBean.setDataSource(dataSource);
         sessionFactoryBean.setHibernateProperties(properties);
-        sessionFactoryBean.setPackagesToScan("com.example.demo.entity");
+        sessionFactoryBean.setPackagesToScan("com.assignment.taxiCom.entity");
 
         return sessionFactoryBean;
     }

@@ -1,4 +1,6 @@
 package com.assignment.taxiCom.entity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 
@@ -8,7 +10,7 @@ public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Column
     private String name;
@@ -16,31 +18,32 @@ public class Customer {
     @Column
     private String address;
 
-    @Column
-    private int phone;
+    @Column(unique = true)
+    private String phone;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss z")
     @Column
-    private ZonedDateTime DateCreated;
+    private ZonedDateTime dateCreated;
 
 
     public Customer(){
-
+        this.dateCreated = ZonedDateTime.now();
     }
 
-//    public Customer(int id, String name, String address, int phone, ZonedDateTime DateCreated) {
-//        super();
-//        this.id = id;
-//        this.name = name;
-//        this.address = address;
-//        this.phone = phone;
-//        this.DateCreated = DateCreated;
-//    }
+    public Customer(long id, String name, String address, String phone, ZonedDateTime dateCreated) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.dateCreated = dateCreated;
+    }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -60,20 +63,20 @@ public class Customer {
         this.address = address;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
     public ZonedDateTime getDateCreated() {
-        return DateCreated;
+        return dateCreated;
     }
 
     public void setDateCreated(ZonedDateTime dateCreated) {
-        DateCreated = dateCreated;
+        this.dateCreated = dateCreated;
     }
 }
 

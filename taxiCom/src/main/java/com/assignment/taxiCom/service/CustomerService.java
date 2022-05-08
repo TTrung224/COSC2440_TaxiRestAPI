@@ -2,10 +2,7 @@ package com.assignment.taxiCom.service;
 
 import com.assignment.taxiCom.entity.Customer;
 import com.assignment.taxiCom.repository.CustomerRepository;
-import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.Locale;
+import java.time.format.DateTimeFormatter;
+
 
 @Service
 @Transactional
@@ -45,46 +42,54 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
+    public Page<Customer> getAllCustomers(int page, int pageSize){
+        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("dateCreated").ascending());
+        return (Page<Customer>) customerRepository.findAll(pageable);
+    }
+
     public long addCustomer(Customer customer){
         sessionFactory.getCurrentSession().saveOrUpdate(customer);
         return customer.getId();
     }
 
-//    public Customer updateCustomer(Customer customer){
-//        sessionFactory.getCurrentSession().update(customer);
-//        return customer;
-//    }
-//
-//    public long deleteCustomer(Customer customer){
-//        sessionFactory.getCurrentSession().delete(customer);
-//        return customer.getId();
-//    }
+    public Customer updateCustomer(Customer customer){
+        sessionFactory.getCurrentSession().update(customer);
+        return customer;
+    }
 
-//    public Customer getCustomerByID(Long ID){
-//        return sessionFactory.getCurrentSession().get(Customer.class,ID);
-//    }
-//
-//    public Customer getCustomerByPhone(int phone){
-//        return sessionFactory.getCurrentSession().get(Customer.class, phone);
-//    }
-//
-//    public Page<Customer> filterCustomerByCreatedTime(String strStart, String strEnd, int page, int pageSize){
-//        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("dateCreated").ascending());
-//        ZonedDateTime start = ZonedDateTime.parse(strStart);
-//        ZonedDateTime end = ZonedDateTime.parse(strEnd);
-//        Page<Customer> customers = customerRepository.filterCustomerByCreatedTime(start, end, pageable);
-//        return customers;
-//    }
-//
-//    public Page<Customer> filterCustomerByName(String name, int page, int pageSize){
-//        name = name.toUpperCase();
-//        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("name").ascending());
-//        Page<Customer> customers = customerRepository.filterCustomerByName(name, pageable);
-//        return customers;
-//    }
+    public long deleteCustomer(Customer customer){
+        sessionFactory.getCurrentSession().delete(customer);
+        return customer.getId();
+    }
 
-//    public Page<Customer> filterCustomerByAddress(String address, int page, int pageSize){
-//        address = address.
-//    }
+    public Customer getCustomerByID(long ID){
+        return sessionFactory.getCurrentSession().get(Customer.class,ID);
+    }
+
+    public Customer getCustomerByPhone(String phone){
+        return customerRepository.findCustomerByPhone(phone);
+    }
+
+    public Page<Customer> filterCustomerByCreatedTime(String strStart, String strEnd, int page, int pageSize){
+        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("dateCreated").ascending());
+        ZonedDateTime start = ZonedDateTime.parse(strStart, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z"));
+        ZonedDateTime end = ZonedDateTime.parse(strEnd, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z"));
+        Page<Customer> customers = customerRepository.filterCustomerByCreatedTime(start, end, pageable);
+        return customers;
+    }
+
+    public Page<Customer> filterCustomerByName(String name, int page, int pageSize){
+        name = name.toUpperCase();
+        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("name").ascending());
+        Page<Customer> customers = customerRepository.filterCustomerByName(name, pageable);
+        return customers;
+    }
+
+    public Page<Customer> filterCustomerByAddress(String address, int page, int pageSize){
+        address = address.toUpperCase();
+        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("address").ascending());
+        Page<Customer> customers = customerRepository.filterCustomerByAddress(address, pageable);
+        return customers;
+    }
 
 }

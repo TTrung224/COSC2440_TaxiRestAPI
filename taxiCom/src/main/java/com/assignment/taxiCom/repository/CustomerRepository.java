@@ -14,18 +14,16 @@ public interface CustomerRepository extends PagingAndSortingRepository<Customer,
 
     Page<Customer> findAll(Pageable pageable);
 
-//    @Query(value = "SELECT * FROM customer c WHERE c.dateCreated => ?1 AND c.dateCreated <= ?2", nativeQuery = true)
-//    Page<Customer> filterCustomerByCreatedTime(ZonedDateTime startTime, ZonedDateTime endTime, Pageable pageable);
-//
-//    @Query(value = "SELECT * FROM customer c WHERE c.ID => ?1 AND c.ID <= ?2", nativeQuery = true)
-//    Page<Customer> filterCustomerByID(long id);
-//
-//    @Query(value = "SELECT * FROM customer c WHERE UPPER(c.name) LIKE '%?1%'", nativeQuery = true)
-//    Page<Customer> filterCustomerByName(String name, Pageable pageable);
-//
-//    @Query(value = "SELECT * FROM customer c WHERE UPPER(c.address) LIKE '%?1%'", nativeQuery = true)
-//    Page<Customer> filterCustomerByAddress(String address, Pageable pageable);
-//
-//    @Query(value = "SELECT * FROM customer c WHERE c.phone LIKE ?1", nativeQuery = true)
-//    Page<Customer> findCustomerByPhone(int phone, Pageable pageable);
+    @Query(value = "SELECT * FROM customer c WHERE c.dateCreated >= ?1 AND c.dateCreated <= ?2", nativeQuery = true)
+    Page<Customer> filterCustomerByCreatedTime(ZonedDateTime startTime, ZonedDateTime endTime, Pageable pageable);
+
+    @Query(value = "SELECT * FROM customer c WHERE UPPER(c.name) LIKE %?1%", nativeQuery = true)
+    Page<Customer> filterCustomerByName(String name, Pageable pageable);
+
+    @Query(value = "SELECT * FROM customer c WHERE UPPER(c.address) LIKE %?1%", nativeQuery = true)
+    Page<Customer> filterCustomerByAddress(String address, Pageable pageable);
+
+    @Query(value = "SELECT * FROM customer c WHERE c.phone LIKE %?1%", nativeQuery = true)
+    Customer findCustomerByPhone(String phone);
+
 }

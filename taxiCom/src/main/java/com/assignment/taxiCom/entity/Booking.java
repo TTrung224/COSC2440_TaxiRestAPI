@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "booking")
@@ -74,8 +75,7 @@ public class Booking {
         return pickUpTime;
     }
 
-    public void setPickUpTime(String strPickUpTime) {
-        ZonedDateTime pickUpTime = ZonedDateTime.parse(strPickUpTime);
+    public void setPickUpTime(ZonedDateTime pickUpTime) {
         this.pickUpTime = pickUpTime;
     }
 
@@ -83,8 +83,7 @@ public class Booking {
         return dropOffTime;
     }
 
-    public void setDropOffTime(String strDropOffTime) {
-        ZonedDateTime dropOffTime = ZonedDateTime.parse(strDropOffTime);
+    public void setDropOffTime(ZonedDateTime dropOffTime) {
         this.dropOffTime = dropOffTime;
     }
 

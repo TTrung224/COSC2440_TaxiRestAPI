@@ -89,7 +89,7 @@ public class InvoiceService {
         ZonedDateTime startDay = ZonedDateTime.parse(strStart, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z"));
         ZonedDateTime enDay = ZonedDateTime.parse(strEnd,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z"));
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("id").ascending());
-        Page<Invoice> invoices = invoiceRepository.getCustomerByPeriod(customerId,startDay,enDay,pageable);
+        Page<Invoice> invoices = invoiceRepository.getCustomerInvoiceByPeriod(customerId,startDay,enDay,pageable);
         return invoices;
     }
 
@@ -97,7 +97,19 @@ public class InvoiceService {
         ZonedDateTime startDay = ZonedDateTime.parse(strStart, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z"));
         ZonedDateTime enDay = ZonedDateTime.parse(strEnd,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z"));
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("id").ascending());
-        Page<Invoice> invoices = invoiceRepository.getDriverByPeriod(driverId,startDay,enDay,pageable);
+        Page<Invoice> invoices = invoiceRepository.getDriverInvoiceByPeriod(driverId,startDay,enDay,pageable);
         return invoices;
+    }
+
+    public Invoice updateInvoice(Invoice invoice, long customerID, long driverID){
+        sessionFactory.getCurrentSession().update(invoice);
+        invoice.setCustomer(customerService.getCustomerByID(customerID));
+        invoice.setDriver(driverService.getDriverByID(driverID));
+        return invoice;
+    }
+
+    public long deleteInvoice(Invoice invoice){
+        sessionFactory.getCurrentSession().delete(invoice);
+        return invoice.getId();
     }
 }

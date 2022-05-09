@@ -40,6 +40,22 @@ public class InvoiceController {
         return invoiceService.addInvoice(invoice, customerID, driverID);
     }
 
+    @PutMapping(value="/invoices")
+    public Invoice updateInvoice(
+            @RequestParam(name = "customerID") long customerID,
+            @RequestParam(name = "driverID") long driverID,
+            @RequestBody Invoice invoice
+    ){
+        return invoiceService.updateInvoice(invoice,customerID,driverID);
+    }
+
+    @DeleteMapping(value ="/invoices")
+    public long deleteInvoice(
+            @RequestBody Invoice invoice
+    ){
+        return invoiceService.deleteInvoice(invoice);
+    }
+
     @GetMapping(value ="/invoices/filterByCreatedDate/{strStart}/{strEnd}")
     public Page<Invoice> filterInvoiceByPeriod(
             @PathVariable(name = "strStart") String strStart,
@@ -79,7 +95,7 @@ public class InvoiceController {
         return invoiceService.getCustomerInvoiceByPeriod(customerId,strStart,strEnd,page, pageSize);
     }
 
-    @GetMapping(value ="/invoices/getCustomerInvoice/{driverId}/{strStart}/{strEnd}")
+    @GetMapping(value ="/invoices/getDriverInvoice/{driverId}/{strStart}/{strEnd}")
     public Page<Invoice> getDriverInvoiceByPeriod(
             @PathVariable(name = "driverId") long driverId,
             @PathVariable(name = "strStart") String strStart,

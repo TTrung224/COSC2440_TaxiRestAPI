@@ -1,5 +1,7 @@
 package com.assignment.taxiCom.config;
 
+
+import com.assignment.taxiCom.entity.Booking;
 import com.assignment.taxiCom.entity.Car;
 import com.assignment.taxiCom.entity.Driver;
 import com.assignment.taxiCom.repository.DriverRepository;
@@ -23,23 +25,24 @@ import java.util.Properties;
 @EnableWebMvc
 @EnableJpaRepositories("com.assignment.taxiCom.repository")
 public class AppConfig {
-
     @Bean
+
+    public Booking booking(){return new Booking();}
+
     public Car car() {return new Car();}
 
     @Bean
     public Driver driver() {return new Driver();}
 
+
     @Bean(name="entityManagerFactory")
     public LocalSessionFactoryBean sessionFactory(){
-
         Properties properties = new Properties();
         properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         properties.put("hibernate.show_sql", true);
         properties.put("hibernate.hbm2ddl.auto", "update");
 
         LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
-
 
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");

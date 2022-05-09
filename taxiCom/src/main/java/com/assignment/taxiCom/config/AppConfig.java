@@ -1,10 +1,14 @@
 package com.assignment.taxiCom.config;
 
+import com.assignment.taxiCom.entity.Car;
+import com.assignment.taxiCom.entity.Driver;
+import com.assignment.taxiCom.repository.DriverRepository;
 import org.hibernate.SessionFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -17,16 +21,20 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @EnableWebMvc
+@EnableJpaRepositories("com.assignment.taxiCom.repository")
 public class AppConfig {
 
     @Bean
+    public Car car() {return new Car();}
+
+    @Bean
+    public Driver driver() {return new Driver();}
+
+    @Bean(name="entityManagerFactory")
     public LocalSessionFactoryBean sessionFactory(){
 
         Properties properties = new Properties();
-        //For Postgresql
         properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-        //For mysql
-        //properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         properties.put("hibernate.show_sql", true);
         properties.put("hibernate.hbm2ddl.auto", "update");
 
@@ -37,11 +45,11 @@ public class AppConfig {
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/demo");
         dataSource.setUsername("postgres");
-        dataSource.setPassword("tranquoctrung224");
+        dataSource.setPassword("kythanh");
 
         sessionFactoryBean.setDataSource(dataSource);
         sessionFactoryBean.setHibernateProperties(properties);
-        sessionFactoryBean.setPackagesToScan("com.assignment.taxiCom.model");
+        sessionFactoryBean.setPackagesToScan("com.assignment.taxiCom.entity");
 
         return sessionFactoryBean;
     }

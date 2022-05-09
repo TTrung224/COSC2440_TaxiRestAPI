@@ -1,7 +1,7 @@
 package com.assignment.taxiCom.config;
 
 
-
+import com.assignment.taxiCom.entity.Invoice;
 import com.assignment.taxiCom.entity.Customer;
 import com.assignment.taxiCom.entity.Booking;
 import com.assignment.taxiCom.entity.Car;
@@ -28,6 +28,11 @@ import java.util.Properties;
 @EnableWebMvc
 @EnableJpaRepositories("com.assignment.taxiCom.repository")
 public class AppConfig {
+
+    @Bean
+    public Invoice invoice(){
+        return new Invoice();
+    }
     @Bean
     public Booking booking(){return new Booking();}
     
@@ -39,6 +44,7 @@ public class AppConfig {
 
     @Bean
     public Driver driver() {return new Driver();}
+
 
     @Bean(name="entityManagerFactory")
     public LocalSessionFactoryBean sessionFactory(){
@@ -54,7 +60,6 @@ public class AppConfig {
         dataSource.setUrl("jdbc:postgresql://localhost:5432/demo");
         dataSource.setUsername("postgres");
         dataSource.setPassword("minhkhoi");
-
 
         sessionFactoryBean.setDataSource(dataSource);
         sessionFactoryBean.setHibernateProperties(properties);

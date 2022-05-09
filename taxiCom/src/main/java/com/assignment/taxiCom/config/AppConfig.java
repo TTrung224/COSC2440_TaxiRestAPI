@@ -1,6 +1,10 @@
 package com.assignment.taxiCom.config;
 
+
 import com.assignment.taxiCom.entity.Booking;
+import com.assignment.taxiCom.entity.Car;
+import com.assignment.taxiCom.entity.Driver;
+import com.assignment.taxiCom.repository.DriverRepository;
 import org.hibernate.SessionFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -22,9 +26,14 @@ import java.util.Properties;
 @EnableJpaRepositories("com.assignment.taxiCom.repository")
 public class AppConfig {
     @Bean
-    public Booking booking(){
-        return new Booking();
-    }
+
+    public Booking booking(){return new Booking();}
+
+    public Car car() {return new Car();}
+
+    @Bean
+    public Driver driver() {return new Driver();}
+
 
     @Bean(name="entityManagerFactory")
     public LocalSessionFactoryBean sessionFactory(){
@@ -39,7 +48,7 @@ public class AppConfig {
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/demo");
         dataSource.setUsername("postgres");
-        dataSource.setPassword("tranquoctrung224");
+        dataSource.setPassword("kythanh");
 
         sessionFactoryBean.setDataSource(dataSource);
         sessionFactoryBean.setHibernateProperties(properties);

@@ -63,7 +63,7 @@ public class DriverService {
     }
 
     public String assignCar(Driver driver, long carId){
-        Car car = carService.getCarById(carId).getContent().get(0);
+        Car car = carService.getCarById(carId);
         if(car != null){
             if(car.getDriver() != null){
                 return "Car already assigned to another driver";

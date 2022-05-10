@@ -12,16 +12,16 @@ public interface CarRepository  extends PagingAndSortingRepository<Car, Integer>
     Page<Car> findAll(Pageable pageable);
 
     @Query(value = "select * from car c where c.id = ?1", nativeQuery = true)
-    Page<Car> findCarById(long id, Pageable pageable);
+    Car findCarById(long id);
 
     @Query(value = "select * from car c where c.vin = ?1", nativeQuery = true)
-    Page<Car> findCarByVin(String vin, Pageable pageable);
+    Car findCarByVin(String vin);
 
     @Query(value = "select * from car c where c.color = ?1", nativeQuery = true)
     Page<Car> findCarByColor(String color, Pageable pageable);
 
     @Query(value = "select * from car c where c.licensePlate = ?1", nativeQuery = true)
-    Page<Car> findCarByLicensePlate(String license, Pageable pageable);
+    Car findCarByLicensePlate(String license);
 
     @Query(value = "select * from car c where c.convertible = ?1", nativeQuery = true)
     Page<Car> findCarByConvertible(boolean convertible, Pageable pageable);

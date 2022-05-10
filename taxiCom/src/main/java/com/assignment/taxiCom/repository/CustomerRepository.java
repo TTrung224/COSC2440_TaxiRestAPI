@@ -23,7 +23,7 @@ public interface CustomerRepository extends PagingAndSortingRepository<Customer,
     @Query(value = "SELECT * FROM customer c WHERE UPPER(c.address) LIKE %?1%", nativeQuery = true)
     Page<Customer> filterCustomerByAddress(String address, Pageable pageable);
 
-    @Query(value = "SELECT * FROM customer c WHERE c.phone LIKE %?1%", nativeQuery = true)
+    @Query(value = "SELECT * FROM customer c WHERE c.phone LIKE ?1", nativeQuery = true)
     Customer findCustomerByPhone(String phone);
 
 }

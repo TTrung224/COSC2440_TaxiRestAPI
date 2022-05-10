@@ -33,9 +33,9 @@ public class InvoiceController {
     public long addInvoice(
             @RequestParam(name = "bookingId") long bookingID,
             @RequestParam(name = "customerId") long customerID,
-            @RequestParam(name = "driverId") long driverID,
+            @RequestParam(name = "carId") long carID,
             @RequestBody Invoice invoice) {
-        return invoiceService.addInvoice(invoice, bookingID, customerID, driverID);
+        return invoiceService.addInvoice(invoice, bookingID, customerID, carID);
     }
 
     @PutMapping(value="/invoices")

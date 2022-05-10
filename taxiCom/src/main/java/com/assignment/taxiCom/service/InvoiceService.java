@@ -2,6 +2,7 @@ package com.assignment.taxiCom.service;
 
 import com.assignment.taxiCom.entity.Booking;
 import com.assignment.taxiCom.entity.Customer;
+import com.assignment.taxiCom.entity.Driver;
 import com.assignment.taxiCom.entity.Invoice;
 import com.assignment.taxiCom.repository.InvoiceRepository;
 import org.hibernate.SessionFactory;
@@ -31,6 +32,9 @@ public class InvoiceService {
 
     @Autowired
     private BookingService bookingService;
+
+    @Autowired
+    private CarService carService;
 
     @Autowired
     private InvoiceRepository invoiceRepository;
@@ -75,13 +79,22 @@ public class InvoiceService {
         this.bookingService = bookingService;
     }
 
-    public long addInvoice(Invoice invoice, long bookingID, long customerID, long driverID){
+    public CarService getCarService() {
+        return carService;
+    }
+
+    public void setCarService(CarService carService) {
+        this.carService = carService;
+    }
+
+    public long addInvoice(Invoice invoice, long bookingID, long customerID, long carID){
         Booking booking = bookingService.getBookingById(bookingID);
         booking.setInvoice(invoice);
         invoice.setCustomer(customerService.getCustomerByID(customerID));
         customerService.getCustomerByID(customerID).getInvoice().add(invoice);
-        invoice.setDriver(driverService.getDriverById(driverID));
-        driverService.getDriverById(driverID).getInvoice().add(invoice);
+        Driver driver = carService.getCarById(carID).getDriver();
+        invoice.setDriver(driver);
+        driver.getInvoice().add(invoice);
         invoice.setTotalCharge(booking.getDistance() * invoice.getDriver().getCar().getRatePerKilometer());
         sessionFactory.getCurrentSession().save(invoice);
         return invoice.getId();

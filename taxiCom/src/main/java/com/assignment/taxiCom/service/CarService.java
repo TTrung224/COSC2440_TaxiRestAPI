@@ -6,11 +6,15 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -104,5 +108,12 @@ public class CarService {
         else {
             return carRepository.findAll(PageRequest.of(page, pageSize));
         }
+    }
+
+    public Page<Car> getAvailableForBooking(String strPickUp, String strDropOff, int page, int pageSize){
+        LocalDateTime pickUp = LocalDateTime.parse(strPickUp, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime dropOff = LocalDateTime.parse(strDropOff, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return carRepository.getAvailableForBooking(pickUp, dropOff, pageable);
     }
 }

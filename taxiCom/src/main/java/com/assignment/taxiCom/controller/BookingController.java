@@ -43,8 +43,8 @@ public class BookingController {
 
     @GetMapping(path = "/bookings")
     public Page<Booking> getAllBooking(
-            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize){
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
         return bookingService.getAllBooking(page, pageSize);
     }
 
@@ -62,8 +62,8 @@ public class BookingController {
     public Page<Booking> filterBookingByCreatedTime(
             @PathVariable String strStart,
             @PathVariable String strEnd,
-            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
     ){
         return bookingService.filterBookingByCreatedTime(strStart, strEnd, page, pageSize);
     }
@@ -72,8 +72,8 @@ public class BookingController {
     public Page<Booking> filterBookingByPickUpTime(
             @PathVariable String strStart,
             @PathVariable String strEnd,
-            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
     ){
         return bookingService.filterBookingByPickUpTime(strStart, strEnd, page, pageSize);
     }
@@ -82,8 +82,8 @@ public class BookingController {
     public Page<Booking> filterBookingByDropOffTime(
             @PathVariable String strStart,
             @PathVariable String strEnd,
-            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
     ){
         return bookingService.filterBookingByDropOffTime(strStart, strEnd, page, pageSize);
     }
@@ -92,8 +92,8 @@ public class BookingController {
     public Page<Booking> filterBookingByDistance(
             @PathVariable double min,
             @PathVariable double max,
-            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
     ){
         return bookingService.filterBookingByDistance(min, max, page, pageSize);
     }
@@ -101,8 +101,8 @@ public class BookingController {
     @GetMapping(path = "/bookings/startLocation/{startLocation}")
     public Page<Booking> filterBookingByStartLocation(
             @PathVariable String startLocation,
-            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
     ){
         return bookingService.findBookingByStartLocation(startLocation, page, pageSize);
     }
@@ -110,8 +110,8 @@ public class BookingController {
     @GetMapping(path = "/bookings/endLocation/{endLocation}")
     public Page<Booking> filterBookingByEndLocation(
             @PathVariable String endLocation,
-            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
     ){
         return bookingService.findBookingByEndLocation(endLocation, page, pageSize);
     }

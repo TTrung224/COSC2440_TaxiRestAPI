@@ -24,8 +24,8 @@ public class DriverController {
     }
 
     @GetMapping(value = "/drivers")
-    public Page<Driver> getAllDrivers(@RequestParam(defaultValue = "0", required = false) int page,
-                                      @RequestParam(defaultValue = "10", required = false) int pageSize) {
+    public Page<Driver> getAllDrivers(@RequestParam(defaultValue = "0") int page,
+                                      @RequestParam(defaultValue = "10") int pageSize) {
         return driverService.getAllDrivers(page, pageSize);
     }
 
@@ -42,8 +42,8 @@ public class DriverController {
     }
 
     @GetMapping(value = "drivers/rating/sort")
-    public Page<Driver> sortDriverByRating(@RequestParam(defaultValue = "0", required = false) int page,
-                                           @RequestParam(defaultValue = "10", required = false) int pageSize) {
+    public Page<Driver> sortDriverByRating(@RequestParam(defaultValue = "0") int page,
+                                           @RequestParam(defaultValue = "10") int pageSize) {
         return driverService.sortDriverRating(page, pageSize);
     }
 

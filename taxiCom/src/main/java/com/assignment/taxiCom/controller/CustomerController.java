@@ -22,8 +22,8 @@ public class CustomerController {
 
     @GetMapping(path = "/customers")
     public Page<Customer> getAllCustomers(
-            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize){
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
         return customerService.getAllCustomers(page, pageSize);
     }
 
@@ -56,8 +56,8 @@ public class CustomerController {
     public Page<Customer> filterCustomerCreatedTime(
             @PathVariable String strStart,
             @PathVariable String strEnd,
-            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
     ){
         return customerService.filterCustomerByCreatedTime(strStart, strEnd, page, pageSize);
 
@@ -66,8 +66,8 @@ public class CustomerController {
     @GetMapping(path = "/customers/name/{name}")
     public Page<Customer> filterCustomerByName(
             @PathVariable String name,
-            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
     ){
         return customerService.filterCustomerByName(name, page, pageSize);
     }
@@ -75,8 +75,8 @@ public class CustomerController {
     @GetMapping(path = "/customers/address/{address}")
     public Page<Customer> filterCustomerByAddress(
             @PathVariable(name = "address") String address,
-            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
     ){
         return customerService.filterCustomerByAddress(address, page, pageSize);
     }

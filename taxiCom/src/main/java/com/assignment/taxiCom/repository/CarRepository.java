@@ -53,5 +53,4 @@ public interface CarRepository  extends PagingAndSortingRepository<Car, Integer>
                             "and ((?1 between B.pickUpTime and B.dropOffTime) or (?2 between B.pickUpTime and B.dropOffTime))))",
             nativeQuery = true)
     Page<Car> getAvailableForBooking(LocalDateTime pickUp, LocalDateTime dropOff, Pageable pageable);
-
 }

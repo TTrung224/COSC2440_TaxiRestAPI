@@ -23,9 +23,8 @@ public class InvoiceController {
 
     @GetMapping(value = "/invoices")
     public Page<Invoice> getAllInvoice(
-            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize){
-
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
         return invoiceService.getAllInvoice(page, pageSize);
     }
 
@@ -58,8 +57,8 @@ public class InvoiceController {
     public Page<Invoice> filterInvoiceByPeriod(
             @PathVariable(name = "strStart") String strStart,
             @PathVariable(name = "strEnd") String strEnd,
-            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
     ){
         return invoiceService.filterInvoiceByPeriod(strStart,strEnd, page, pageSize);
     }
@@ -87,8 +86,8 @@ public class InvoiceController {
             @PathVariable(name = "customerId") long customerId,
             @PathVariable(name = "strStart") String strStart,
             @PathVariable(name = "strEnd") String strEnd,
-            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
     ){
         return invoiceService.getCustomerInvoiceByPeriod(customerId,strStart,strEnd,page, pageSize);
     }
@@ -98,8 +97,8 @@ public class InvoiceController {
             @PathVariable(name = "driverId") long driverId,
             @PathVariable(name = "strStart") String strStart,
             @PathVariable(name = "strEnd") String strEnd,
-            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
     ){
         return invoiceService.getDriverInvoiceByPeriod(driverId,strStart,strEnd,page, pageSize);
     }

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.Query;
 import java.sql.ResultSet;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -107,7 +108,7 @@ public class CarService {
         }
     }
 
-    public Page<List> getUsage(int page, int pageSize) {
+    public Page<Map<String, Integer>> getUsage(int page, int pageSize) {
         return carRepository.getUsage(PageRequest.of(page, pageSize));
     }
 }

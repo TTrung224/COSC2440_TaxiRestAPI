@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.ResultSet;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class CarController {
@@ -101,8 +102,8 @@ public class CarController {
     }
 
     @GetMapping(value = "/cars/usage")
-    public Page<List> getUsage(@RequestParam(defaultValue = "0") int page,
-                               @RequestParam(defaultValue = "10") int pageSize){
+    public Page<Map<String, Integer>> getUsage(@RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "10") int pageSize){
         return carService.getUsage(page, pageSize);
     }
 

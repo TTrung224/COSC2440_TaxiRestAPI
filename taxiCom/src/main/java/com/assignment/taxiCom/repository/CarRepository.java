@@ -46,7 +46,7 @@ public interface CarRepository  extends PagingAndSortingRepository<Car, Integer>
     Page<Car> getAvailable(Pageable pageable);
 
     @Query(value = "select distinct C.licensePlate as car_license, count(t2) as day_used " +
-            "from car C, booking B, invoice I, Driver D, generate_series(b.pickUpTime , b.dropOffTime + cast('1 day'as interval), cast('1 day'as interval)) t, cast(t as date) t2 " +
+            "from car C, booking B, invoice I, Driver D, generate_series(cast(b.pickUpTime as date) ,  cast(b.dropOffTime as date), cast('1 day'as interval)) t, cast(t as date) t2 " +
             "where C.id = D.car_id and D.id = I.driverID and I.id = B.invoiceId " +
             "and DATE_PART('month', t2) = ?1 and DATE_PART('year', t2) = ?2 " +
             "group by C.licensePlate", nativeQuery = true)

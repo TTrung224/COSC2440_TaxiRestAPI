@@ -1,5 +1,6 @@
 package com.assignment.taxiCom.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -16,6 +17,7 @@ public class Car {
     private long id;
 
     @Column
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss z")
     @CreationTimestamp
     private ZonedDateTime dateCreated;
 

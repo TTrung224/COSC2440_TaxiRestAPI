@@ -1,13 +1,10 @@
 package com.assignment.taxiCom.controller;
 
-
 import com.assignment.taxiCom.entity.Customer;
 import com.assignment.taxiCom.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
-
 
 @RestController
 public class CustomerController {
@@ -45,17 +42,17 @@ public class CustomerController {
         return customerService.deleteCustomer(customer);
     }
 
-    @GetMapping(path="/customers/searchByPhone/{phone}")
+    @GetMapping(path="/customers/phone/{phone}")
     public Customer getCustomerByPhone (@PathVariable(name = "phone") String phone){
         return customerService.getCustomerByPhone(phone);
     }
 
-    @GetMapping(path = "/customers/searchByID/{ID}")
+    @GetMapping(path = "/customers/id/{ID}")
     public Customer getCustomerByID(@PathVariable long ID){
         return customerService.getCustomerByID(ID);
     }
 
-    @GetMapping(path = "/customers/filterCustomerByCreatedTime/{strStart}/{strEnd}")
+    @GetMapping(path = "/customers/createdTime/{strStart}/{strEnd}")
     public Page<Customer> filterCustomerCreatedTime(
             @PathVariable String strStart,
             @PathVariable String strEnd,
@@ -66,7 +63,7 @@ public class CustomerController {
 
     }
 
-    @GetMapping(path = "/customers/filterCustomerByName/{name}")
+    @GetMapping(path = "/customers/name/{name}")
     public Page<Customer> filterCustomerByName(
             @PathVariable String name,
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
@@ -75,7 +72,7 @@ public class CustomerController {
         return customerService.filterCustomerByName(name, page, pageSize);
     }
 
-    @GetMapping(path = "/customers/filterCustomerByAddress/{address}")
+    @GetMapping(path = "/customers/address/{address}")
     public Page<Customer> filterCustomerByAddress(
             @PathVariable(name = "address") String address,
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,

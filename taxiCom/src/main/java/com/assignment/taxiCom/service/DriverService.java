@@ -83,20 +83,20 @@ public class DriverService {
         return driverRepository.findAll(PageRequest.of(page, pageSize));
     }
 
-    public Page<Driver> getDriverById(long id) {
-        return driverRepository.findDriverById(id, PageRequest.of(0, 1));
+    public Driver getDriverById(long id) {
+        return driverRepository.findDriverById(id);
     }
 
-    public Page<Driver> getDriverByLicense(String license) {
-        return driverRepository.findDriverByLicense(license, PageRequest.of(0, 1));
+    public Driver getDriverByLicense(String license) {
+        return driverRepository.findDriverByLicense(license);
     }
 
     public Page<Driver> getDriverByRating(int rating, int page, int pageSize) {
         return driverRepository.findDriverByRating(rating, PageRequest.of(page, pageSize));
     }
 
-    public Page<Driver> getDriverByPhone(String phoneNum) {
-        return driverRepository.findDriverByPhone(phoneNum, PageRequest.of(0, 1));
+    public Driver getDriverByPhone(String phoneNum) {
+        return driverRepository.findDriverByPhone(phoneNum);
     }
 
     public Page<Driver> sortDriverRating(int page, int pageSize) {

@@ -1,8 +1,11 @@
 package com.assignment.taxiCom.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "customer")
@@ -21,13 +24,16 @@ public class Customer {
     @Column(unique = true)
     private String phone;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss z")
     @Column
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss z")
+    @CreationTimestamp
     private ZonedDateTime dateCreated;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "customer")
+    private List<Invoice> invoice;
 
     public Customer(){
-        this.dateCreated = ZonedDateTime.now();
     }
 
     public Customer(long id, String name, String address, String phone, ZonedDateTime dateCreated) {
@@ -75,8 +81,12 @@ public class Customer {
         return dateCreated;
     }
 
-    public void setDateCreated(ZonedDateTime dateCreated) {
-        this.dateCreated = dateCreated;
+    public List<Invoice> getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(List<Invoice> invoice) {
+        this.invoice = invoice;
     }
 }
 

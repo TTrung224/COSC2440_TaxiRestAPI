@@ -1,6 +1,7 @@
 package com.assignment.taxiCom.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -17,14 +18,10 @@ public class Invoice {
     @Column
     private double totalCharge;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss z")
     @Column
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss z")
+    @CreationTimestamp
     private ZonedDateTime dateCreated;
-
-    public Invoice(){
-        ZonedDateTime now = ZonedDateTime.now();
-        this.dateCreated = now;
-    }
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name ="customerID", referencedColumnName = "id")
@@ -34,9 +31,12 @@ public class Invoice {
     @JoinColumn(name ="driverID", referencedColumnName = "id")
     private Driver driver;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "invoice")
     private Booking booking;
 
+    public Invoice(){
+    }
 
     public long getId() {
         return id;
@@ -62,7 +62,6 @@ public class Invoice {
         this.driver = driver;
     }
 
-
     public Booking getBooking() {
         return booking;
     }
@@ -75,15 +74,11 @@ public class Invoice {
         return totalCharge;
     }
 
-    public void setTotalCharge(int totalCharge) {
+    public void setTotalCharge(double totalCharge) {
         this.totalCharge = totalCharge;
     }
 
     public ZonedDateTime getDateCreated() {
         return dateCreated;
-    }
-
-    public void setDateCreated(ZonedDateTime dateCreated) {
-        this.dateCreated = dateCreated;
     }
 }

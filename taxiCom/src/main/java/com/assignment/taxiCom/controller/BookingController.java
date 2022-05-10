@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 @RestController
@@ -24,43 +26,39 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    @PostMapping(path = "/booking")
+    @PostMapping(path = "/bookings")
     public Object addBooking(@RequestBody Booking booking){
-        if(!booking.getPickUpTime().truncatedTo(ChronoUnit.DAYS).equals(booking.getDateCreated().truncatedTo(ChronoUnit.DAYS))) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Can not reserve booking for other date");
-        } else {
-            return bookingService.addBooking(booking);
-        }
+        return bookingService.addBooking(booking);
     }
 
-    @PutMapping(path = "/booking")
+    @PutMapping(path = "/bookings")
     public Booking updateBooking(@RequestBody Booking booking){
         return bookingService.updateBooking(booking);
     }
 
-    @DeleteMapping(path = "/booking")
+    @DeleteMapping(path = "/bookings")
     public Long deleteBooking(@RequestBody Booking booking){
         return bookingService.deleteBooking(booking);
     }
 
-    @GetMapping(path = "/booking")
+    @GetMapping(path = "/bookings")
     public Page<Booking> getAllBooking(
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize){
         return bookingService.getAllBooking(page, pageSize);
     }
 
-    @GetMapping(path = "/booking/searchById")
+    @GetMapping(path = "/bookings/Id")
     public Booking getBookingById(@RequestParam long id){
         return bookingService.getBookingById(id);
     }
 
-    @GetMapping(path = "/booking/searchByInvoiceId")
+    @GetMapping(path = "/bookings/invoiceId")
     public Booking getBookingByInvoiceId(@RequestParam long invoiceId){
         return bookingService.getBookingByInvoiceId(invoiceId);
     }
 
-    @GetMapping(path = "/booking/filterByCreatedTime/{strStart}/{strEnd}")
+    @GetMapping(path = "/bookings/createdTime/{strStart}/{strEnd}")
     public Page<Booking> filterBookingByCreatedTime(
             @PathVariable String strStart,
             @PathVariable String strEnd,
@@ -70,7 +68,7 @@ public class BookingController {
         return bookingService.filterBookingByCreatedTime(strStart, strEnd, page, pageSize);
     }
 
-    @GetMapping(path = "/booking/filterByPickUpTime/{strStart}/{strEnd}")
+    @GetMapping(path = "/bookings/pickUpTime/{strStart}/{strEnd}")
     public Page<Booking> filterBookingByPickUpTime(
             @PathVariable String strStart,
             @PathVariable String strEnd,
@@ -80,7 +78,7 @@ public class BookingController {
         return bookingService.filterBookingByPickUpTime(strStart, strEnd, page, pageSize);
     }
 
-    @GetMapping(path = "/booking/filterByDropOffTime/{strStart}/{strEnd}")
+    @GetMapping(path = "/bookings/dropOffTime/{strStart}/{strEnd}")
     public Page<Booking> filterBookingByDropOffTime(
             @PathVariable String strStart,
             @PathVariable String strEnd,
@@ -90,7 +88,7 @@ public class BookingController {
         return bookingService.filterBookingByDropOffTime(strStart, strEnd, page, pageSize);
     }
 
-    @GetMapping(path = "/booking/filterByDistance/{min}/{max}")
+    @GetMapping(path = "/bookings/distance/{min}/{max}")
     public Page<Booking> filterBookingByDistance(
             @PathVariable double min,
             @PathVariable double max,
@@ -100,7 +98,7 @@ public class BookingController {
         return bookingService.filterBookingByDistance(min, max, page, pageSize);
     }
 
-    @GetMapping(path = "/booking/filterByStartLocation/{startLocation}")
+    @GetMapping(path = "/bookings/startLocation/{startLocation}")
     public Page<Booking> filterBookingByStartLocation(
             @PathVariable String startLocation,
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
@@ -109,13 +107,12 @@ public class BookingController {
         return bookingService.findBookingByStartLocation(startLocation, page, pageSize);
     }
 
-    @GetMapping(path = "/booking/filterByEndLocation/{endLocation}")
+    @GetMapping(path = "/bookings/endLocation/{endLocation}")
     public Page<Booking> filterBookingByEndLocation(
             @PathVariable String endLocation,
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize
-            ){
-
+    ){
         return bookingService.findBookingByEndLocation(endLocation, page, pageSize);
     }
 }

@@ -5,11 +5,15 @@ import com.assignment.taxiCom.repository.BookingRepository;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 @Service
 @Transactional
@@ -38,9 +42,15 @@ public class BookingService {
         this.bookingRepository = bookingRepository;
     }
 
-    public long addBooking(Booking booking){
-        sessionFactory.getCurrentSession().saveOrUpdate(booking);
-        return booking.getId();
+    public Object addBooking(Booking booking){
+        if(!booking.getPickUpTime().truncatedTo(ChronoUnit.DAYS).isEqual(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Can not reserve booking for other date");
+        } else if(booking.getPickUpTime().isBefore(LocalDateTime.now())){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Can not reserve booking for time in the past");
+        } else{
+            sessionFactory.getCurrentSession().saveOrUpdate(booking);
+            return booking.getId();
+        }
     }
 
     public Booking updateBooking(Booking booking){
@@ -76,16 +86,16 @@ public class BookingService {
 
     public Page<Booking> filterBookingByPickUpTime(String strStart, String strEnd, int page, int pageSize){
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("pickUpTime").ascending());
-        ZonedDateTime start = ZonedDateTime.parse(strStart, dateFormatter);
-        ZonedDateTime end = ZonedDateTime.parse(strEnd, dateFormatter);
+        LocalDateTime start = LocalDateTime.parse(strStart, dateFormatter);
+        LocalDateTime end = LocalDateTime.parse(strEnd, dateFormatter);
         Page<Booking> bookings = bookingRepository.filterBookingByPickUpTime(start, end, pageable);
         return bookings;
     }
 
     public Page<Booking> filterBookingByDropOffTime(String strStart, String strEnd, int page, int pageSize){
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("dropOffTime").ascending());
-        ZonedDateTime start = ZonedDateTime.parse(strStart, dateFormatter);
-        ZonedDateTime end = ZonedDateTime.parse(strEnd, dateFormatter);
+        LocalDateTime start = LocalDateTime.parse(strStart, dateFormatter);
+        LocalDateTime end = LocalDateTime.parse(strEnd, dateFormatter);
         Page<Booking> bookings = bookingRepository.filterBookingByDropOffTime(start, end, pageable);
         return bookings;
     }

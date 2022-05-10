@@ -24,13 +24,13 @@ public class DriverController {
     }
 
     @GetMapping(value = "/drivers")
-    public Page<Driver> getAllDrivers(@RequestParam(defaultValue = "0") int page,
-                                      @RequestParam(defaultValue = "10") int pageSize) {
+    public Page<Driver> getAllDrivers(@RequestParam(defaultValue = "0", required = false) int page,
+                                      @RequestParam(defaultValue = "10", required = false) int pageSize) {
         return driverService.getAllDrivers(page, pageSize);
     }
 
     @GetMapping(value = "/drivers/license")
-    public Page<Driver> getDriverByLicense(@RequestParam(name = "value") String license) {
+    public Driver getDriverByLicense(@RequestParam(name = "value") String license) {
         return driverService.getDriverByLicense(license);
     }
 
@@ -42,13 +42,13 @@ public class DriverController {
     }
 
     @GetMapping(value = "drivers/rating/sort")
-    public Page<Driver> sortDriverByRating(@RequestParam(defaultValue = "0") int page,
-                                           @RequestParam(defaultValue = "10") int pageSize) {
+    public Page<Driver> sortDriverByRating(@RequestParam(defaultValue = "0", required = false) int page,
+                                           @RequestParam(defaultValue = "10", required = false) int pageSize) {
         return driverService.sortDriverRating(page, pageSize);
     }
 
     @GetMapping(value = "drivers/phone")
-    public Page<Driver> getDriverByPhone(@RequestParam(name = "value") String phoneNum){
+    public Driver getDriverByPhone(@RequestParam(name = "value") String phoneNum){
         return driverService.getDriverByPhone(phoneNum);
     }
 

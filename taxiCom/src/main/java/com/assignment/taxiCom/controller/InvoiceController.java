@@ -6,9 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.ZonedDateTime;
-import java.util.List;
-
 @RestController
 public class InvoiceController {
 
@@ -34,16 +31,17 @@ public class InvoiceController {
 
     @PostMapping(value = "/invoices")
     public long addInvoice(
-            @RequestParam(name = "customerID") long customerID,
-            @RequestParam(name = "driverID") long driverID,
+            @RequestParam(name = "bookingId") long bookingID,
+            @RequestParam(name = "customerId") long customerID,
+            @RequestParam(name = "driverId") long driverID,
             @RequestBody Invoice invoice) {
-        return invoiceService.addInvoice(invoice, customerID, driverID);
+        return invoiceService.addInvoice(invoice, bookingID, customerID, driverID);
     }
 
     @PutMapping(value="/invoices")
     public Invoice updateInvoice(
-            @RequestParam(name = "customerID") long customerID,
-            @RequestParam(name = "driverID") long driverID,
+            @RequestParam(name = "customerId") long customerID,
+            @RequestParam(name = "driverId") long driverID,
             @RequestBody Invoice invoice
     ){
         return invoiceService.updateInvoice(invoice,customerID,driverID);
@@ -56,7 +54,7 @@ public class InvoiceController {
         return invoiceService.deleteInvoice(invoice);
     }
 
-    @GetMapping(value ="/invoices/filterByCreatedDate/{strStart}/{strEnd}")
+    @GetMapping(value ="/invoices/createdDate/{strStart}/{strEnd}")
     public Page<Invoice> filterInvoiceByPeriod(
             @PathVariable(name = "strStart") String strStart,
             @PathVariable(name = "strEnd") String strEnd,
@@ -66,7 +64,7 @@ public class InvoiceController {
         return invoiceService.filterInvoiceByPeriod(strStart,strEnd, page, pageSize);
     }
 
-    @GetMapping(value ="/invoices/getCustomerRevenue/{customerId}/{strStart}/{strEnd}")
+    @GetMapping(value ="/invoices/customerRevenue/{customerId}/{strStart}/{strEnd}")
     public double getCustomerRevenueByPeriod(
             @PathVariable(name = "customerId") long customerId,
             @PathVariable(name = "strStart") String strStart,
@@ -75,7 +73,7 @@ public class InvoiceController {
         return invoiceService.getCustomerRevenueByPeriod(customerId,strStart,strEnd);
     }
 
-    @GetMapping(value ="/invoices/getDriverRevenue/{driverId}/{strStart}/{strEnd}")
+    @GetMapping(value ="/invoices/driverRevenue/{driverId}/{strStart}/{strEnd}")
     public double getDriverRevenueByPeriod(
             @PathVariable(name = "driverId") long driverId,
             @PathVariable(name = "strStart") String strStart,
@@ -84,7 +82,7 @@ public class InvoiceController {
         return invoiceService.getDriverRevenueByPeriod(driverId,strStart,strEnd);
     }
 
-    @GetMapping(value ="/invoices/getCustomerInvoice/{customerId}/{strStart}/{strEnd}")
+    @GetMapping(value ="/invoices/customerInvoice/{customerId}/{strStart}/{strEnd}")
     public Page<Invoice> getCustomerInvoiceByPeriod(
             @PathVariable(name = "customerId") long customerId,
             @PathVariable(name = "strStart") String strStart,
@@ -95,7 +93,7 @@ public class InvoiceController {
         return invoiceService.getCustomerInvoiceByPeriod(customerId,strStart,strEnd,page, pageSize);
     }
 
-    @GetMapping(value ="/invoices/getDriverInvoice/{driverId}/{strStart}/{strEnd}")
+    @GetMapping(value ="/invoices/driverInvoice/{driverId}/{strStart}/{strEnd}")
     public Page<Invoice> getDriverInvoiceByPeriod(
             @PathVariable(name = "driverId") long driverId,
             @PathVariable(name = "strStart") String strStart,

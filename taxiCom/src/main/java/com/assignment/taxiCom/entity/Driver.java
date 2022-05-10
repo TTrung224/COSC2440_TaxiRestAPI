@@ -1,10 +1,12 @@
 package com.assignment.taxiCom.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "driver")
@@ -14,19 +16,28 @@ public class Driver {
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @Column
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss z")
     @CreationTimestamp
     private ZonedDateTime dateCreated;
+
     @Column(unique = true)
     private String licenseNumber;
+
     @Column(unique = true)
     private String phoneNumber;
+
     @Column
     private int rating;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "car_id", referencedColumnName = "id", unique = true)
     private Car car;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "driver")
+    private List<Invoice> invoice;
 
     public Driver() {
     }
@@ -73,5 +84,13 @@ public class Driver {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public List<Invoice> getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(List<Invoice> invoice) {
+        this.invoice = invoice;
     }
 }

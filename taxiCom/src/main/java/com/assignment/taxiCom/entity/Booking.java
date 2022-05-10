@@ -1,8 +1,10 @@
 package com.assignment.taxiCom.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -13,9 +15,10 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss z")
     @Column
-    private final ZonedDateTime dateCreated;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss z")
+    @CreationTimestamp
+    private ZonedDateTime dateCreated;
 
     @Column
     private String startingLocation;
@@ -23,13 +26,13 @@ public class Booking {
     @Column
     private String endLocation;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss z")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column
-    private ZonedDateTime pickUpTime;
+    private LocalDateTime pickUpTime;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss z")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column
-    private ZonedDateTime dropOffTime;
+    private LocalDateTime dropOffTime;
 
     @Column
     private double distance;
@@ -39,8 +42,7 @@ public class Booking {
     private Invoice invoice;
 
     public Booking(){
-        ZonedDateTime time = ZonedDateTime.now();
-        this.dateCreated = time;
+
     }
 
     public long getId() {
@@ -71,19 +73,19 @@ public class Booking {
         this.endLocation = endLocation;
     }
 
-    public ZonedDateTime getPickUpTime() {
+    public LocalDateTime getPickUpTime() {
         return pickUpTime;
     }
 
-    public void setPickUpTime(ZonedDateTime pickUpTime) {
+    public void setPickUpTime(LocalDateTime pickUpTime) {
         this.pickUpTime = pickUpTime;
     }
 
-    public ZonedDateTime getDropOffTime() {
+    public LocalDateTime getDropOffTime() {
         return dropOffTime;
     }
 
-    public void setDropOffTime(ZonedDateTime dropOffTime) {
+    public void setDropOffTime(LocalDateTime dropOffTime) {
         this.dropOffTime = dropOffTime;
     }
 

@@ -30,6 +30,9 @@ public class InvoiceService {
     private DriverService driverService;
 
     @Autowired
+    private BookingService bookingService;
+
+    @Autowired
     private InvoiceRepository invoiceRepository;
 
     public InvoiceRepository getInvoiceRepository() {
@@ -48,10 +51,39 @@ public class InvoiceService {
         this.sessionFactory = sessionFactory;
     }
 
-    public long addInvoice(Invoice invoice, long customerID, long driverID){
-        sessionFactory.getCurrentSession().save(invoice);
+    public CustomerService getCustomerService() {
+        return customerService;
+    }
+
+    public void setCustomerService(CustomerService customerService) {
+        this.customerService = customerService;
+    }
+
+    public DriverService getDriverService() {
+        return driverService;
+    }
+
+    public void setDriverService(DriverService driverService) {
+        this.driverService = driverService;
+    }
+
+    public BookingService getBookingService() {
+        return bookingService;
+    }
+
+    public void setBookingService(BookingService bookingService) {
+        this.bookingService = bookingService;
+    }
+
+    public long addInvoice(Invoice invoice, long bookingID, long customerID, long driverID){
+        Booking booking = bookingService.getBookingById(bookingID);
+        booking.setInvoice(invoice);
         invoice.setCustomer(customerService.getCustomerByID(customerID));
-        invoice.setDriver(driverService.getDriverByID(driverID));
+        customerService.getCustomerByID(customerID).getInvoice().add(invoice);
+        invoice.setDriver(driverService.getDriverById(driverID));
+        driverService.getDriverById(driverID).getInvoice().add(invoice);
+        invoice.setTotalCharge(booking.getDistance() * invoice.getDriver().getCar().getRatePerKilometer());
+        sessionFactory.getCurrentSession().save(invoice);
         return invoice.getId();
     }
 
@@ -104,7 +136,7 @@ public class InvoiceService {
     public Invoice updateInvoice(Invoice invoice, long customerID, long driverID){
         sessionFactory.getCurrentSession().update(invoice);
         invoice.setCustomer(customerService.getCustomerByID(customerID));
-        invoice.setDriver(driverService.getDriverByID(driverID));
+        invoice.setDriver(driverService.getDriverById(driverID));
         return invoice;
     }
 

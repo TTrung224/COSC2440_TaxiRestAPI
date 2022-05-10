@@ -102,9 +102,11 @@ public class CarController {
     }
 
     @GetMapping(value = "/cars/usage")
-    public Page<Map<String, Integer>> getUsage(@RequestParam(defaultValue = "0") int page,
+    public Page<Map<String, Integer>> getUsage(@RequestParam int month,
+                                               @RequestParam int year,
+                                               @RequestParam(defaultValue = "0") int page,
                                                @RequestParam(defaultValue = "10") int pageSize){
-        return carService.getUsage(page, pageSize);
+        return carService.getUsage(month, year, page, pageSize);
     }
 
 

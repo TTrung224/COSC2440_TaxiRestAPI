@@ -18,7 +18,8 @@ import java.time.temporal.ChronoUnit;
 @Service
 @Transactional
 public class BookingService {
-    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private final DateTimeFormatter dateFormatterWithZone = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -78,8 +79,8 @@ public class BookingService {
 
     public Page<Booking> filterBookingByCreatedTime(String strStart, String strEnd, int page, int pageSize){
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("dateCreated").ascending());
-        ZonedDateTime start = ZonedDateTime.parse(strStart, dateFormatter);
-        ZonedDateTime end = ZonedDateTime.parse(strEnd, dateFormatter);
+        ZonedDateTime start = ZonedDateTime.parse(strStart, dateFormatterWithZone);
+        ZonedDateTime end = ZonedDateTime.parse(strEnd, dateFormatterWithZone);
         Page<Booking> bookings = bookingRepository.filterBookingByCreatedTime(start, end, pageable);
         return bookings;
     }

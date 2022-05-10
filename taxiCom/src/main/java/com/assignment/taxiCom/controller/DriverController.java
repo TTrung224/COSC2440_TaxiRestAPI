@@ -64,7 +64,7 @@ public class DriverController {
     public String updateDriver(@RequestBody Driver driver) {return driverService.updateDriver(driver);}
 
     @PutMapping("/drivers/assign")
-    public String assignCar(@RequestBody Driver driver, @RequestParam(name = "car_id") long id){
+    public String assignCar(@RequestParam(name = "driver_id") long driver, @RequestParam(name = "car_id") long id){
         return driverService.assignCar(driver, id);
     }
 }

@@ -62,8 +62,9 @@ public class DriverService {
         return String.format("Driver with ID %s has been updated", driver.getId());
     }
 
-    public String assignCar(Driver driver, long carId){
+    public String assignCar(long driverId, long carId){
         Car car = carService.getCarById(carId);
+        Driver driver = getDriverById(driverId);
         if(car != null){
             if(car.getDriver() != null){
                 return "Car already assigned to another driver";

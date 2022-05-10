@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
+import java.sql.ResultSet;
 import java.util.List;
 
 @Service
@@ -104,5 +105,9 @@ public class CarService {
         else {
             return carRepository.findAll(PageRequest.of(page, pageSize));
         }
+    }
+
+    public Page<List> getUsage(int page, int pageSize) {
+        return carRepository.getUsage(PageRequest.of(page, pageSize));
     }
 }

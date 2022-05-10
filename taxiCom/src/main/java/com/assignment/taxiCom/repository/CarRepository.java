@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.util.List;
+
 @Repository
 public interface CarRepository  extends PagingAndSortingRepository<Car, Integer> {
     Page<Car> findAll(Pageable pageable);
@@ -40,4 +43,7 @@ public interface CarRepository  extends PagingAndSortingRepository<Car, Integer>
 
     @Query(value = "select * from car c where c.id not in (select car_id from driver)", nativeQuery = true)
     Page<Car> getAvailable(Pageable pageable);
+
+    @Query(value = "select distinct C.licensePlate, SUM(DATE_PART('day', b.dropOffTime - b.pickUpTime)) AS day_used from car C, booking B, invoice I, Driver D where C.id = D.car_id and D.id = I.driverID and I.id = B.invoiceId group by C.licensePlate", nativeQuery = true)
+    Page<List> getUsage(Pageable pageable);
 }

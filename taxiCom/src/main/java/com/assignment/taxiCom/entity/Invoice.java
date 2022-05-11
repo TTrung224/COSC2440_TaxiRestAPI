@@ -25,19 +25,26 @@ public class Invoice {
     @CreationTimestamp
     private ZonedDateTime dateCreated;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+
+    @ManyToOne
     @JoinColumn(name ="customerID", referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Customer customer;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+
+    @ManyToOne
     @JoinColumn(name ="driverID", referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Driver driver;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "invoice")
+    @OneToOne(mappedBy = "invoice", cascade = CascadeType.PERSIST)
     private Booking booking;
+
+    @PreRemove
+    private void preRemove() {
+        booking.setInvoice(null);
+    }
 
     public Invoice(){
     }

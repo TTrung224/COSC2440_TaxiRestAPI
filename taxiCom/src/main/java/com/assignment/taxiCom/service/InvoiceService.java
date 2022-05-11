@@ -90,11 +90,16 @@ public class InvoiceService {
     public long addInvoice(Invoice invoice, long bookingID, long customerID, long carID){
         Booking booking = bookingService.getBookingById(bookingID);
         booking.setInvoice(invoice);
+        invoice.setBooking(booking);
+
         invoice.setCustomer(customerService.getCustomerByID(customerID));
         customerService.getCustomerByID(customerID).getInvoice().add(invoice);
+
         Driver driver = carService.getCarById(carID).getDriver();
+        driver.getInvoice().add(invoice);
         invoice.setDriver(driver);
         invoice.setTotalCharge(booking.getDistance() * invoice.getDriver().getCar().getRatePerKilometer());
+
         sessionFactory.getCurrentSession().save(invoice);
         return invoice.getId();
     }
@@ -160,5 +165,6 @@ public class InvoiceService {
         invoice.getBooking().setInvoice(null);
         sessionFactory.getCurrentSession().delete(invoice);
         return "Invoice has been deleted";
+
     }
 }

@@ -8,12 +8,21 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
 import java.util.Map;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
 
 @Service
 @Transactional
@@ -117,7 +126,21 @@ public class CarService {
         }
     }
 
+
     public Page<Map<String, Integer>> getUsage(int month, int year, int page, int pageSize) {
-        return carRepository.getUsage(month, year, PageRequest.of(page, pageSize));
+        return carRepository.getUsage(month, year, PageRequest.of(page, pageSize)); 
+    }
+
+    public Object getAvailableForBooking(String strPickUp, int page, int pageSize){
+        LocalDateTime pickUp = LocalDateTime.parse(strPickUp, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        if(!pickUp.truncatedTo(ChronoUnit.DAYS).isEqual(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Can not have pick-up time for other date");
+        } else if(pickUp.isBefore(LocalDateTime.now())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Can not book car for time in the past");
+        } else {
+            Pageable pageable = PageRequest.of(page, pageSize);
+            return carRepository.getAvailableForBooking(pickUp, pageable);
+        }
+
     }
 }

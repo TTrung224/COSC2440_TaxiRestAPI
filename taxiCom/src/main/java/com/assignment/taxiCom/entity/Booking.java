@@ -1,6 +1,7 @@
 package com.assignment.taxiCom.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -44,7 +45,6 @@ public class Booking {
     private Invoice invoice;
 
     public Booking(){
-
     }
 
     public long getId() {

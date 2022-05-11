@@ -30,7 +30,8 @@ public class Customer {
     private ZonedDateTime dateCreated;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Invoice> invoice;
 
     public Customer(){

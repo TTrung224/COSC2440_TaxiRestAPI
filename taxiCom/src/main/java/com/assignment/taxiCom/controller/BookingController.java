@@ -27,7 +27,7 @@ public class BookingController {
     }
 
     @PostMapping(path = "/bookings")
-    public Object addBooking(@RequestBody Booking booking){
+    public Long addBooking(@RequestBody Booking booking){
         return bookingService.addBooking(booking);
     }
 
@@ -48,7 +48,7 @@ public class BookingController {
         return bookingService.getAllBooking(page, pageSize);
     }
 
-    @GetMapping(path = "/bookings/Id")
+    @GetMapping(path = "/bookings/id")
     public Booking getBookingById(@RequestParam long id){
         return bookingService.getBookingById(id);
     }

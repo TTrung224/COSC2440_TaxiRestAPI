@@ -32,13 +32,13 @@ public class Invoice {
     private Driver driver;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "invoice", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "invoice", cascade = CascadeType.PERSIST)
     private Booking booking;
 
-//    @PreRemove
-//    private void preRemove() {
-//        booking.setInvoice(null);
-//    }
+    @PreRemove
+    private void preRemove() {
+        booking.setInvoice(null);
+    }
 
     public Invoice(){
     }

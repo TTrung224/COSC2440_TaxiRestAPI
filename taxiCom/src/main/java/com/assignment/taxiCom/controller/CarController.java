@@ -108,12 +108,11 @@ public class CarController {
     @PutMapping("/cars")
     public String updateCar(@RequestBody Car car) {return  carService.updateCar(car);}
 
-    @GetMapping("/cars/availableBooking/{pickUp}/{dropOff}")
-    public Page<Car> getAvailableForBooking(@RequestParam(defaultValue = "0") int page,
+    @GetMapping("/cars/availableBooking/{pickUp}")
+    public Object getAvailableForBooking(@RequestParam(defaultValue = "0") int page,
                                             @RequestParam(defaultValue = "10") int pageSize,
-                                            @PathVariable(name = "pickUp") String pickup,
-                                            @PathVariable(name = "dropOff") String dropoff) {
+                                            @PathVariable(name = "pickUp") String pickup) {
 
-        return carService.getAvailableForBooking(pickup, dropoff, page, pageSize);
+        return carService.getAvailableForBooking(pickup, page, pageSize);
     }
 }

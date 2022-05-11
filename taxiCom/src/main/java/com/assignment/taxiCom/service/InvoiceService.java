@@ -159,7 +159,8 @@ public class InvoiceService {
     }
 
     public long deleteInvoice(Invoice invoice){
-        sessionFactory.getCurrentSession().delete(invoice);
+        Invoice currentInvoice = this.getInvoiceByID(invoice.getId());
+        sessionFactory.getCurrentSession().delete(currentInvoice);
         return invoice.getId();
     }
 }

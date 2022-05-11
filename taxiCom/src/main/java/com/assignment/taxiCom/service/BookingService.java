@@ -43,15 +43,9 @@ public class BookingService {
         this.bookingRepository = bookingRepository;
     }
 
-    public Object addBooking(Booking booking){
-        if(!booking.getPickUpTime().truncatedTo(ChronoUnit.DAYS).isEqual(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS))) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Can not reserve booking for other date");
-        } else if(booking.getPickUpTime().isBefore(LocalDateTime.now())){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Can not reserve booking for time in the past");
-        } else{
-            sessionFactory.getCurrentSession().saveOrUpdate(booking);
-            return booking.getId();
-        }
+    public long addBooking(Booking booking){
+        sessionFactory.getCurrentSession().saveOrUpdate(booking);
+        return booking.getId();
     }
 
     public Booking updateBooking(Booking booking){
@@ -60,7 +54,8 @@ public class BookingService {
     }
 
     public long deleteBooking(Booking booking){
-        sessionFactory.getCurrentSession().delete(booking);
+        Booking currentBooking = this.getBookingById(booking.getId());
+        sessionFactory.getCurrentSession().delete(currentBooking);
         return booking.getId();
     }
 

@@ -43,6 +43,7 @@ public class BookingService {
         this.bookingRepository = bookingRepository;
     }
 
+
     public long addBooking(Booking booking){
         sessionFactory.getCurrentSession().saveOrUpdate(booking);
         return booking.getId();
@@ -53,10 +54,14 @@ public class BookingService {
         return booking;
     }
 
-    public long deleteBooking(Booking booking){
-        Booking currentBooking = this.getBookingById(booking.getId());
-        sessionFactory.getCurrentSession().delete(currentBooking);
-        return booking.getId();
+
+    public String deleteBooking(long bookingId){
+        Booking booking = getBookingById(bookingId);
+        if(booking == null){
+            return "Booking not found";
+        }
+        sessionFactory.getCurrentSession().delete(booking);
+        return "Booking has been deleted";
     }
 
     public Page<Booking> getAllBooking(int page, int pageSize){
@@ -114,5 +119,16 @@ public class BookingService {
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("id").ascending());
         Page<Booking> bookings = bookingRepository.findBookingByEndLocation(location, pageable);
         return bookings;
+    }
+
+    public String resetInvoice(long bookingId){
+        Booking booking = getBookingById(bookingId);
+        if(booking.getInvoice() != null){
+            booking.setInvoice(null);
+            sessionFactory.getCurrentSession().update(booking);
+            return "Reset booking's invoice";
+        }else{
+            return "Booking has no invoice";
+        }
     }
 }

@@ -7,7 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.util.List;
+import java.util.Map;
 import java.time.LocalDateTime;
+
 
 @Repository
 public interface CarRepository  extends PagingAndSortingRepository<Car, Integer> {
@@ -42,6 +46,14 @@ public interface CarRepository  extends PagingAndSortingRepository<Car, Integer>
 
     @Query(value = "select * from car c where c.id not in (select car_id from driver)", nativeQuery = true)
     Page<Car> getAvailable(Pageable pageable);
+
+
+    @Query(value = "select distinct C.licensePlate as car_license, count(distinct t2) as day_used " +
+            "from car C, booking B, invoice I, Driver D, generate_series(cast(b.pickUpTime as date) ,  cast(b.dropOffTime as date), cast('1 day'as interval)) t, cast(t as date) t2 " +
+            "where C.id = D.car_id and D.id = I.driverID and I.id = B.invoiceId " +
+            "and DATE_PART('month', t2) = ?1 and DATE_PART('year', t2) = ?2 " +
+            "group by C.licensePlate", nativeQuery = true)
+    Page<Map<String, Integer>> getUsage(int month, int year, Pageable pageable);
 
     @Query(value = "SELECT C.*\n" +
                     "From booking B, invoice I, driver D, car C\n" +

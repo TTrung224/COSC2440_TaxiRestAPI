@@ -1,7 +1,9 @@
 package com.assignment.taxiCom.service;
 
 import com.assignment.taxiCom.entity.Car;
+import com.assignment.taxiCom.entity.Driver;
 import com.assignment.taxiCom.repository.CarRepository;
+import com.assignment.taxiCom.repository.DriverRepository;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,11 +16,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
+import java.util.Map;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+
 
 @Service
 @Transactional
@@ -29,6 +33,9 @@ public class CarService {
 
     @Autowired
     private CarRepository carRepository;
+
+    @Autowired
+    DriverRepository driverRepository;
 
     public SessionFactory getSessionFactory() {
         return sessionFactory;
@@ -43,9 +50,15 @@ public class CarService {
         return String.format("Car with ID %1$s is added (%2$s)", car.getId(), car.getDateCreated());
     }
 
-    public String deleteCar(Car car){
+    public String deleteCar(long carId){
+        Car car = getCarById(carId);
+        if(car == null){
+            return "Car does not exist";
+        }
+        Driver driver = car.getDriver();
+        driver.setCar(null);
         sessionFactory.getCurrentSession().delete(car);
-        return String.format("Car with ID %s is deleted", car.getId());
+        return String.format("Car has been deleted");
     }
 
     public String updateCar(Car car) {
@@ -113,6 +126,11 @@ public class CarService {
         }
     }
 
+
+    public Page<Map<String, Integer>> getUsage(int month, int year, int page, int pageSize) {
+        return carRepository.getUsage(month, year, PageRequest.of(page, pageSize)); 
+    }
+
     public Object getAvailableForBooking(String strPickUp, int page, int pageSize){
         LocalDateTime pickUp = LocalDateTime.parse(strPickUp, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         if(!pickUp.truncatedTo(ChronoUnit.DAYS).isEqual(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS))) {
@@ -123,5 +141,6 @@ public class CarService {
             Pageable pageable = PageRequest.of(page, pageSize);
             return carRepository.getAvailableForBooking(pickUp, pageable);
         }
+
     }
 }

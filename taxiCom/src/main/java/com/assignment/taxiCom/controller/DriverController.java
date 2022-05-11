@@ -1,19 +1,30 @@
 package com.assignment.taxiCom.controller;
 
-import com.assignment.taxiCom.entity.Car;
 import com.assignment.taxiCom.entity.Driver;
+import com.assignment.taxiCom.entity.Invoice;
 import com.assignment.taxiCom.service.DriverService;
+import com.assignment.taxiCom.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 public class DriverController {
 
     @Autowired
     private DriverService driverService;
+
+    @Autowired
+    private InvoiceService invoiceService;
+
+    public InvoiceService getInvoiceService() {
+        return invoiceService;
+    }
+
+    public void setInvoiceService(InvoiceService invoiceService) {
+        this.invoiceService = invoiceService;
+    }
 
     public DriverService getDriverService() {
         return driverService;
@@ -58,13 +69,20 @@ public class DriverController {
     }
 
     @DeleteMapping("/drivers")
-    public String deleteDriver(@RequestBody Driver driver) {return  driverService.deleteDriver(driver);}
+    public String deleteDriver(@RequestParam long driverId) {
+        return  driverService.deleteDriver(driverId);
+    }
 
     @PutMapping ("/drivers")
     public String updateDriver(@RequestBody Driver driver) {return driverService.updateDriver(driver);}
 
     @PutMapping("/drivers/assign")
-    public String assignCar(@RequestBody Driver driver, @RequestParam(name = "car_id") long id){
+    public String assignCar(@RequestParam(name = "driver_id") long driver, @RequestParam(name = "car_id") long id){
         return driverService.assignCar(driver, id);
+    }
+
+    @PutMapping("/drivers/unassign")
+    public String unassignCar(@RequestParam(name = "driver_id") long driver){
+        return driverService.unassignCar(driver);
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Map;
 
 @RestController
 public class CarController {
@@ -99,11 +99,22 @@ public class CarController {
         return carService.getAvailable(page, pageSize);
     }
 
+    @GetMapping(value = "/cars/usage")
+    public Page<Map<String, Integer>> getUsage(@RequestParam int month,
+                                               @RequestParam int year,
+                                               @RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "10") int pageSize){
+        return carService.getUsage(month, year, page, pageSize);
+    }
+
+
     @PostMapping(value = "/cars")
     public String addCar(@RequestBody Car car) {return carService.addCar(car);}
 
     @DeleteMapping("/cars")
-    public String deleteCar(@RequestBody Car car) {return carService.deleteCar(car);}
+    public String deleteCar(@RequestParam long carId) {
+        return carService.deleteCar(carId);
+    }
 
     @PutMapping("/cars")
     public String updateCar(@RequestBody Car car) {return  carService.updateCar(car);}

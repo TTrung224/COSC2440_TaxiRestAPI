@@ -30,6 +30,7 @@ public class Customer {
     private ZonedDateTime dateCreated;
 
     @JsonIgnore
+
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Invoice> invoice;
 

@@ -98,7 +98,6 @@ public class InvoiceService {
         Driver driver = carService.getCarById(carID).getDriver();
         driver.getInvoice().add(invoice);
         invoice.setDriver(driver);
-
         invoice.setTotalCharge(booking.getDistance() * invoice.getDriver().getCar().getRatePerKilometer());
 
         sessionFactory.getCurrentSession().save(invoice);
@@ -158,9 +157,14 @@ public class InvoiceService {
         return invoice;
     }
 
-    public long deleteInvoice(Invoice invoice){
-        Invoice currentInvoice = this.getInvoiceByID(invoice.getId());
-        sessionFactory.getCurrentSession().delete(currentInvoice);
-        return invoice.getId();
+    public String deleteInvoice(long invoiceId){
+        Invoice invoice = getInvoiceByID(invoiceId);
+        if(invoice == null){
+            return "Invoice does not exist";
+        }
+        invoice.getBooking().setInvoice(null);
+        sessionFactory.getCurrentSession().delete(invoice);
+        return "Invoice has been deleted";
+
     }
 }

@@ -37,8 +37,8 @@ public class BookingController {
     }
 
     @DeleteMapping(path = "/bookings")
-    public Long deleteBooking(@RequestBody Booking booking){
-        return bookingService.deleteBooking(booking);
+    public String deleteBooking(@RequestParam long bookingId){
+        return bookingService.deleteBooking(bookingId);
     }
 
     @GetMapping(path = "/bookings")

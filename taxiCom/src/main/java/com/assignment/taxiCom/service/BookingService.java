@@ -120,4 +120,15 @@ public class BookingService {
         Page<Booking> bookings = bookingRepository.findBookingByEndLocation(location, pageable);
         return bookings;
     }
+
+    public String resetInvoice(long bookingId){
+        Booking booking = getBookingById(bookingId);
+        if(booking.getInvoice() != null){
+            booking.setInvoice(null);
+            sessionFactory.getCurrentSession().update(booking);
+            return "Reset booking's invoice";
+        }else{
+            return "Booking has no invoice";
+        }
+    }
 }

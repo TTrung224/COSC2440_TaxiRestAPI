@@ -31,7 +31,7 @@ public class Driver {
     @Column
     private int rating;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "car_id", referencedColumnName = "id", unique = true)
     private Car car;
 

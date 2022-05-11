@@ -3,6 +3,8 @@ package com.assignment.taxiCom.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -23,12 +25,14 @@ public class Invoice {
     @CreationTimestamp
     private ZonedDateTime dateCreated;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name ="customerID", referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Customer customer;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name ="driverID", referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Driver driver;
 
     @JsonIgnore

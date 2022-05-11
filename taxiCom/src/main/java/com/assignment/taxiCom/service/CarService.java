@@ -1,7 +1,9 @@
 package com.assignment.taxiCom.service;
 
 import com.assignment.taxiCom.entity.Car;
+import com.assignment.taxiCom.entity.Driver;
 import com.assignment.taxiCom.repository.CarRepository;
+import com.assignment.taxiCom.repository.DriverRepository;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,8 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
-import java.sql.ResultSet;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -24,6 +24,9 @@ public class CarService {
 
     @Autowired
     private CarRepository carRepository;
+
+    @Autowired
+    DriverRepository driverRepository;
 
     public SessionFactory getSessionFactory() {
         return sessionFactory;
@@ -39,7 +42,10 @@ public class CarService {
     }
 
     public String deleteCar(Car car){
-        sessionFactory.getCurrentSession().delete(car);
+        Car currentCar = getCarById(car.getId());
+        Driver driver = currentCar.getDriver();
+        driver.setCar(null);
+        sessionFactory.getCurrentSession().delete(currentCar);
         return String.format("Car with ID %s is deleted", car.getId());
     }
 

@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.ResultSet;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -114,7 +112,9 @@ public class CarController {
     public String addCar(@RequestBody Car car) {return carService.addCar(car);}
 
     @DeleteMapping("/cars")
-    public String deleteCar(@RequestBody Car car) {return carService.deleteCar(car);}
+    public String deleteCar(@RequestBody Car car) {
+        return carService.deleteCar(car);
+    }
 
     @PutMapping("/cars")
     public String updateCar(@RequestBody Car car) {return  carService.updateCar(car);}

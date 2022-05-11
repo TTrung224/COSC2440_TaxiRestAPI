@@ -1,13 +1,11 @@
 package com.assignment.taxiCom.controller;
 
-import com.assignment.taxiCom.entity.Car;
 import com.assignment.taxiCom.entity.Driver;
 import com.assignment.taxiCom.service.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 public class DriverController {
@@ -66,5 +64,10 @@ public class DriverController {
     @PutMapping("/drivers/assign")
     public String assignCar(@RequestParam(name = "driver_id") long driver, @RequestParam(name = "car_id") long id){
         return driverService.assignCar(driver, id);
+    }
+
+    @PutMapping("/drivers/unassign")
+    public String unassignCar(@RequestParam(name = "driver_id") long driver){
+        return driverService.unassignCar(driver);
     }
 }

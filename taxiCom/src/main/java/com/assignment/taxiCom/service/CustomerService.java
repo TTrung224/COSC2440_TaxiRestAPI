@@ -1,6 +1,7 @@
 package com.assignment.taxiCom.service;
 
 import com.assignment.taxiCom.entity.Customer;
+import com.assignment.taxiCom.entity.Invoice;
 import com.assignment.taxiCom.repository.CustomerRepository;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;

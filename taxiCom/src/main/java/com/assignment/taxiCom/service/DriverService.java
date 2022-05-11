@@ -2,6 +2,7 @@ package com.assignment.taxiCom.service;
 
 import com.assignment.taxiCom.entity.Car;
 import com.assignment.taxiCom.entity.Driver;
+import com.assignment.taxiCom.repository.CarRepository;
 import com.assignment.taxiCom.repository.DriverRepository;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
@@ -26,7 +27,7 @@ public class DriverService {
     private DriverRepository driverRepository;
 
     @Autowired
-    private CarService carService;
+    private CarRepository carRepository;
 
     public DriverRepository getDriverRepository() {
         return driverRepository;
@@ -63,8 +64,9 @@ public class DriverService {
     }
 
     public String assignCar(long driverId, long carId){
-        Car car = carService.getCarById(carId);
+        Car car = carRepository.findCarById(carId);
         Driver driver = getDriverById(driverId);
+        if(driver == null){return "Driver does not exist";}
         if(car != null){
             if(car.getDriver() != null){
                 return "Car already assigned to another driver";
@@ -77,6 +79,18 @@ public class DriverService {
         }
         else{
             return "Car does not exist";
+        }
+    }
+
+    public String unassignCar(long driverId) {
+        Driver driver = getDriverById(driverId);
+        if(driver == null){return "Driver does not exist";}
+        if(driver.getCar() == null){
+            return "Driver does not have a car";
+        }else {
+            driver.setCar(null);
+            sessionFactory.getCurrentSession().update(driver);
+            return "Driver no longer assigned to any car";
         }
     }
 
@@ -102,5 +116,9 @@ public class DriverService {
 
     public Page<Driver> sortDriverRating(int page, int pageSize) {
         return driverRepository.findAll(PageRequest.of(page, pageSize));
+    }
+
+    public Driver getDriverByCar(long carId){
+        return driverRepository.findDriverByCar(carId);
     }
 }

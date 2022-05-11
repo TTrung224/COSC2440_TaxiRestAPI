@@ -152,10 +152,13 @@ public class InvoiceService {
         return invoice;
     }
 
-    public long deleteInvoice(Invoice invoice){
-        Invoice currentInvoice = getInvoiceByID(invoice.getId());
-        currentInvoice.getBooking().setInvoice(null);
-        sessionFactory.getCurrentSession().delete(currentInvoice);
-        return invoice.getId();
+    public String deleteInvoice(long invoiceId){
+        Invoice invoice = getInvoiceByID(invoiceId);
+        if(invoice == null){
+            return "Invoice does not exist";
+        }
+        invoice.getBooking().setInvoice(null);
+        sessionFactory.getCurrentSession().delete(invoice);
+        return "Invoice has been deleted";
     }
 }

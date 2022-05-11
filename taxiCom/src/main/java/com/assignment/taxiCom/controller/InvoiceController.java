@@ -48,10 +48,10 @@ public class InvoiceController {
     }
 
     @DeleteMapping(value ="/invoices")
-    public long deleteInvoice(
-            @RequestBody Invoice invoice
+    public String deleteInvoice(
+            @RequestParam long invoiceId
     ){
-        return invoiceService.deleteInvoice(invoice);
+        return invoiceService.deleteInvoice(invoiceId);
     }
 
     @GetMapping(value ="/invoices/createdDate/{strStart}/{strEnd}")

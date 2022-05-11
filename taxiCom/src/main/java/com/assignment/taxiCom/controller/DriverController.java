@@ -69,12 +69,8 @@ public class DriverController {
     }
 
     @DeleteMapping("/drivers")
-    public String deleteDriver(@RequestBody Driver driver) {
-        Driver currentDriver = driverService.getDriverById(driver.getId());
-        for(Invoice invoice : currentDriver.getInvoice()){
-            invoiceService.deleteInvoice(invoice);
-        }
-        return  driverService.deleteDriver(driver);
+    public String deleteDriver(@RequestParam long driverId) {
+        return  driverService.deleteDriver(driverId);
     }
 
     @PutMapping ("/drivers")

@@ -51,12 +51,8 @@ public class CustomerController {
     }
 
     @DeleteMapping(path = "/customers")
-    public long deleteCustomer(@RequestBody Customer customer){
-        Customer currentCustomer = customerService.getCustomerByID(customer.getId());
-        for(Invoice invoice : currentCustomer.getInvoice()){
-            invoiceService.deleteInvoice(invoice);
-        }
-        return customerService.deleteCustomer(customer);
+    public String deleteCustomer(@RequestParam long customerId){
+        return customerService.deleteCustomer(customerId);
     }
 
     @GetMapping(path="/customers/phone/{phone}")

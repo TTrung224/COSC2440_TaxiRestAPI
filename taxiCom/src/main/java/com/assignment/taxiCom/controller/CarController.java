@@ -112,8 +112,8 @@ public class CarController {
     public String addCar(@RequestBody Car car) {return carService.addCar(car);}
 
     @DeleteMapping("/cars")
-    public String deleteCar(@RequestBody Car car) {
-        return carService.deleteCar(car);
+    public String deleteCar(@RequestParam long carId) {
+        return carService.deleteCar(carId);
     }
 
     @PutMapping("/cars")

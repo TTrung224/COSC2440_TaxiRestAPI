@@ -50,7 +50,7 @@ public class BookingService {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Can not reserve booking for time in the past");
         } else{
             sessionFactory.getCurrentSession().saveOrUpdate(booking);
-            return booking.getId();
+            return ResponseEntity.status(HttpStatus.CREATED).body("Booking has been created");
         }
     }
 
@@ -59,9 +59,13 @@ public class BookingService {
         return booking;
     }
 
-    public long deleteBooking(Booking booking){
+    public String deleteBooking(long bookingId){
+        Booking booking = getBookingById(bookingId);
+        if(booking == null){
+            return "Booking not found";
+        }
         sessionFactory.getCurrentSession().delete(booking);
-        return booking.getId();
+        return "Booking has been deleted";
     }
 
     public Page<Booking> getAllBooking(int page, int pageSize){

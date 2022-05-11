@@ -41,12 +41,15 @@ public class CarService {
         return String.format("Car with ID %1$s is added (%2$s)", car.getId(), car.getDateCreated());
     }
 
-    public String deleteCar(Car car){
-        Car currentCar = getCarById(car.getId());
-        Driver driver = currentCar.getDriver();
+    public String deleteCar(long carId){
+        Car car = getCarById(carId);
+        if(car == null){
+            return "Car does not exist";
+        }
+        Driver driver = car.getDriver();
         driver.setCar(null);
-        sessionFactory.getCurrentSession().delete(currentCar);
-        return String.format("Car with ID %s is deleted", car.getId());
+        sessionFactory.getCurrentSession().delete(car);
+        return String.format("Car has been deleted");
     }
 
     public String updateCar(Car car) {

@@ -2,6 +2,7 @@ package com.assignment.taxiCom.service;
 
 import com.assignment.taxiCom.entity.Car;
 import com.assignment.taxiCom.entity.Driver;
+import com.assignment.taxiCom.entity.Invoice;
 import com.assignment.taxiCom.repository.CarRepository;
 import com.assignment.taxiCom.repository.DriverRepository;
 import org.hibernate.Criteria;
@@ -50,7 +51,15 @@ public class DriverService {
         return String.format("Driver with ID %1$s is added (%2$s)", driver.getId(), driver.getDateCreated());
     }
 
-    public String deleteDriver(Driver driver){
+    public String deleteDriver(long driverId){
+        Driver driver = getDriverById(driverId);
+        if (driver == null){
+            return "Driver not found";
+        }
+        for(Invoice invoice : driver.getInvoice()){
+            invoice.getBooking().setInvoice(null);
+            sessionFactory.getCurrentSession().delete(invoice);
+        }
         sessionFactory.getCurrentSession().delete(driver);
         return String.format("Driver with ID %s is deleted", driver.getId());
     }

@@ -58,9 +58,17 @@ public class CustomerService {
         return customer;
     }
 
-    public long deleteCustomer(Customer customer){
+    public String deleteCustomer(long customerId){
+        Customer customer = getCustomerByID(customerId);
+        if(customer == null){
+            return "Customer not found";
+        }
+        for(Invoice invoice : customer.getInvoice()){
+            invoice.getBooking().setInvoice(null);
+            sessionFactory.getCurrentSession().delete(invoice);
+        }
         sessionFactory.getCurrentSession().delete(customer);
-        return customer.getId();
+        return "Customer has been deleted with all associated invoices";
     }
 
     public Customer getCustomerByID(long ID){

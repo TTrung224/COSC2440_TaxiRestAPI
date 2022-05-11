@@ -36,7 +36,7 @@ public class Driver {
     private Car car;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "driver")
+    @OneToMany(mappedBy = "driver", fetch = FetchType.EAGER)
     private List<Invoice> invoice;
 
     public Driver() {

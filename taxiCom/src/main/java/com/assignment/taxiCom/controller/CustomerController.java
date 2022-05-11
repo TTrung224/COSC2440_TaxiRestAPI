@@ -1,7 +1,9 @@
 package com.assignment.taxiCom.controller;
 
 import com.assignment.taxiCom.entity.Customer;
+import com.assignment.taxiCom.entity.Invoice;
 import com.assignment.taxiCom.service.CustomerService;
+import com.assignment.taxiCom.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,17 @@ public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private InvoiceService invoiceService;
+
+    public InvoiceService getInvoiceService() {
+        return invoiceService;
+    }
+
+    public void setInvoiceService(InvoiceService invoiceService) {
+        this.invoiceService = invoiceService;
+    }
 
     public CustomerService getCustomerService(){
         return customerService;
@@ -39,6 +52,10 @@ public class CustomerController {
 
     @DeleteMapping(path = "/customers")
     public long deleteCustomer(@RequestBody Customer customer){
+        Customer currentCustomer = customerService.getCustomerByID(customer.getId());
+        for(Invoice invoice : currentCustomer.getInvoice()){
+            invoiceService.deleteInvoice(invoice);
+        }
         return customerService.deleteCustomer(customer);
     }
 

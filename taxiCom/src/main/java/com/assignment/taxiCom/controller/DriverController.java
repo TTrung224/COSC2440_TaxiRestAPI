@@ -1,7 +1,9 @@
 package com.assignment.taxiCom.controller;
 
 import com.assignment.taxiCom.entity.Driver;
+import com.assignment.taxiCom.entity.Invoice;
 import com.assignment.taxiCom.service.DriverService;
+import com.assignment.taxiCom.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +14,17 @@ public class DriverController {
 
     @Autowired
     private DriverService driverService;
+
+    @Autowired
+    private InvoiceService invoiceService;
+
+    public InvoiceService getInvoiceService() {
+        return invoiceService;
+    }
+
+    public void setInvoiceService(InvoiceService invoiceService) {
+        this.invoiceService = invoiceService;
+    }
 
     public DriverService getDriverService() {
         return driverService;
@@ -56,7 +69,13 @@ public class DriverController {
     }
 
     @DeleteMapping("/drivers")
-    public String deleteDriver(@RequestBody Driver driver) {return  driverService.deleteDriver(driver);}
+    public String deleteDriver(@RequestBody Driver driver) {
+        Driver currentDriver = driverService.getDriverById(driver.getId());
+        for(Invoice invoice : currentDriver.getInvoice()){
+            invoiceService.deleteInvoice(invoice);
+        }
+        return  driverService.deleteDriver(driver);
+    }
 
     @PutMapping ("/drivers")
     public String updateDriver(@RequestBody Driver driver) {return driverService.updateDriver(driver);}

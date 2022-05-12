@@ -55,10 +55,13 @@ public interface CarRepository  extends PagingAndSortingRepository<Car, Integer>
             "group by C.licensePlate", nativeQuery = true)
     Page<Map<String, Integer>> getUsage(int month, int year, Pageable pageable);
 
-    @Query(value = "SELECT C.*\n" +
-                    "From booking B, invoice I, driver D, car C\n" +
-                    "Where I.id = B.invoiceId and I.driverId = D.id and D.car_id = C.id\n" +
-                    "And ?1 <= B.dropOffTime\n",
+    @Query(value = "SELECT * From car C2\n" +
+                   "Where C2.id in (SELECT C1.id\n" +
+                        "From car C1, driver D1\n" +
+                        "Where C1.id = D1.car_id and C1.id not in (SELECT C.id\n" +
+                            "From booking B, invoice I, driver D, car C\n" +
+                            "Where I.id = B.invoiceId and I.driverId = D.id and D.car_id = C.id\n" +
+                            "And ?1 <= B.dropOffTime))",
             nativeQuery = true)
     Page<Car> getAvailableForBooking(LocalDateTime pickUp, Pageable pageable);
 }

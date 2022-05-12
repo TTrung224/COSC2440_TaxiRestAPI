@@ -44,14 +44,14 @@ public class BookingService {
     }
 
 
-    public long addBooking(Booking booking){
+    public String addBooking(Booking booking){
         sessionFactory.getCurrentSession().saveOrUpdate(booking);
-        return booking.getId();
+        return String.format("Booking with ID %1$s is added (%2$s)", booking.getId(), booking.getDateCreated());
     }
 
-    public Booking updateBooking(Booking booking){
+    public String updateBooking(Booking booking){
         sessionFactory.getCurrentSession().update(booking);
-        return booking;
+        return String.format("Booking with ID %s has been updated", booking.getId());
     }
 
 

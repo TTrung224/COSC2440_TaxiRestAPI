@@ -1,9 +1,7 @@
 package com.assignment.taxiCom.controller;
 
 import com.assignment.taxiCom.entity.Driver;
-import com.assignment.taxiCom.entity.Invoice;
 import com.assignment.taxiCom.service.DriverService;
-import com.assignment.taxiCom.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -14,17 +12,6 @@ public class DriverController {
 
     @Autowired
     private DriverService driverService;
-
-    @Autowired
-    private InvoiceService invoiceService;
-
-    public InvoiceService getInvoiceService() {
-        return invoiceService;
-    }
-
-    public void setInvoiceService(InvoiceService invoiceService) {
-        this.invoiceService = invoiceService;
-    }
 
     public DriverService getDriverService() {
         return driverService;

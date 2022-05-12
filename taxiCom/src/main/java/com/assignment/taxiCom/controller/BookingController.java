@@ -4,13 +4,7 @@ import com.assignment.taxiCom.entity.Booking;
 import com.assignment.taxiCom.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 
 @RestController
 public class BookingController {
@@ -27,12 +21,12 @@ public class BookingController {
     }
 
     @PostMapping(path = "/bookings")
-    public Long addBooking(@RequestBody Booking booking){
+    public String addBooking(@RequestBody Booking booking){
         return bookingService.addBooking(booking);
     }
 
     @PutMapping(path = "/bookings")
-    public Booking updateBooking(@RequestBody Booking booking){
+    public String updateBooking(@RequestBody Booking booking){
         return bookingService.updateBooking(booking);
     }
 

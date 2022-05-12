@@ -12,7 +12,6 @@ public class InvoiceController {
     @Autowired
     private InvoiceService invoiceService;
 
-
     public InvoiceService getInvoiceService() {
         return invoiceService;
     }
@@ -29,7 +28,7 @@ public class InvoiceController {
     }
 
     @PostMapping(value = "/invoices")
-    public long addInvoice(
+    public Object addInvoice(
             @RequestParam(name = "bookingId") long bookingID,
             @RequestParam(name = "customerId") long customerID,
             @RequestParam(name = "carId") long carID,
@@ -38,7 +37,7 @@ public class InvoiceController {
     }
 
     @PutMapping(value="/invoices")
-    public Invoice updateInvoice(
+    public String updateInvoice(
             @RequestParam(name = "customerId") long customerID,
             @RequestParam(name = "driverId") long driverID,
             @RequestBody Invoice invoice

@@ -48,14 +48,14 @@ public class CustomerService {
         return (Page<Customer>) customerRepository.findAll(pageable);
     }
 
-    public long addCustomer(Customer customer){
+    public String addCustomer(Customer customer){
         sessionFactory.getCurrentSession().saveOrUpdate(customer);
-        return customer.getId();
+        return String.format("Customer with ID %1$s is added (%2$s)", customer.getId(), customer.getDateCreated());
     }
 
-    public Customer updateCustomer(Customer customer){
+    public String updateCustomer(Customer customer){
         sessionFactory.getCurrentSession().update(customer);
-        return customer;
+        return String.format("Customer with ID %s has been updated", customer.getId());
     }
 
     public String deleteCustomer(long customerId){

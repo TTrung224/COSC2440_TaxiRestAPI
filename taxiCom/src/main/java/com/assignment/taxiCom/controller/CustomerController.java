@@ -1,9 +1,7 @@
 package com.assignment.taxiCom.controller;
 
 import com.assignment.taxiCom.entity.Customer;
-import com.assignment.taxiCom.entity.Invoice;
 import com.assignment.taxiCom.service.CustomerService;
-import com.assignment.taxiCom.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -13,17 +11,6 @@ public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
-
-    @Autowired
-    private InvoiceService invoiceService;
-
-    public InvoiceService getInvoiceService() {
-        return invoiceService;
-    }
-
-    public void setInvoiceService(InvoiceService invoiceService) {
-        this.invoiceService = invoiceService;
-    }
 
     public CustomerService getCustomerService(){
         return customerService;
@@ -41,12 +28,12 @@ public class CustomerController {
     }
 
     @PostMapping(path = "/customers")
-    public long addCustomer(@RequestBody Customer customer){
+    public String addCustomer(@RequestBody Customer customer){
         return customerService.addCustomer(customer);
     }
 
     @PutMapping(path = "/customers")
-    public Customer updateCustomer(@RequestBody Customer customer){
+    public String updateCustomer(@RequestBody Customer customer){
         return customerService.updateCustomer(customer);
     }
 
@@ -93,7 +80,5 @@ public class CustomerController {
     ){
         return customerService.filterCustomerByAddress(address, page, pageSize);
     }
-
-
 }
 

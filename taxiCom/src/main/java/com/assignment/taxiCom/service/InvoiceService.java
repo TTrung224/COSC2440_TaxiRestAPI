@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -87,7 +89,12 @@ public class InvoiceService {
         this.carService = carService;
     }
 
-    public long addInvoice(Invoice invoice, long bookingID, long customerID, long carID){
+    public Object addInvoice(Invoice invoice, long bookingID, long customerID, long carID){
+
+        if(bookingService.getBookingById(bookingID).getInvoice()!=null){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Booking has already had invoice");
+        }
+
         Booking booking = bookingService.getBookingById(bookingID);
         booking.setInvoice(invoice);
         invoice.setBooking(booking);
@@ -101,7 +108,24 @@ public class InvoiceService {
         invoice.setTotalCharge(booking.getDistance() * invoice.getDriver().getCar().getRatePerKilometer());
 
         sessionFactory.getCurrentSession().save(invoice);
-        return invoice.getId();
+        return String.format("Invoice with ID %1$s is added (%2$s)", invoice.getId(), invoice.getDateCreated());
+    }
+
+    public String updateInvoice(Invoice invoice, long customerID, long driverID){
+        sessionFactory.getCurrentSession().update(invoice);
+        invoice.setCustomer(customerService.getCustomerByID(customerID));
+        invoice.setDriver(driverService.getDriverById(driverID));
+        return String.format("Invoice with ID %s has been updated", invoice.getId());
+    }
+
+    public String deleteInvoice(long invoiceId){
+        Invoice invoice = getInvoiceByID(invoiceId);
+        if(invoice == null){
+            return "Invoice does not exist";
+        }
+        invoice.getBooking().setInvoice(null);
+        sessionFactory.getCurrentSession().delete(invoice);
+        return "Invoice has been deleted";
     }
 
     public Page<Invoice> getAllInvoice(int page, int pageSize){
@@ -150,21 +174,5 @@ public class InvoiceService {
         return invoices;
     }
 
-    public Invoice updateInvoice(Invoice invoice, long customerID, long driverID){
-        sessionFactory.getCurrentSession().update(invoice);
-        invoice.setCustomer(customerService.getCustomerByID(customerID));
-        invoice.setDriver(driverService.getDriverById(driverID));
-        return invoice;
-    }
 
-    public String deleteInvoice(long invoiceId){
-        Invoice invoice = getInvoiceByID(invoiceId);
-        if(invoice == null){
-            return "Invoice does not exist";
-        }
-        invoice.getBooking().setInvoice(null);
-        sessionFactory.getCurrentSession().delete(invoice);
-        return "Invoice has been deleted";
-
-    }
 }

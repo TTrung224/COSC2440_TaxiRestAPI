@@ -126,7 +126,6 @@ public class CarService {
         }
     }
 
-
     public Page<Map<String, Integer>> getUsage(int month, int year, int page, int pageSize) {
         return carRepository.getUsage(month, year, PageRequest.of(page, pageSize)); 
     }

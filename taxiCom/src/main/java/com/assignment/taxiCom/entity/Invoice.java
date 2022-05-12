@@ -8,6 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Entity
 @Table(name ="invoice")
@@ -25,26 +26,23 @@ public class Invoice {
     @CreationTimestamp
     private ZonedDateTime dateCreated;
 
-
     @ManyToOne
     @JoinColumn(name ="customerID", referencedColumnName = "id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Customer customer;
-
 
     @ManyToOne
     @JoinColumn(name ="driverID", referencedColumnName = "id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Driver driver;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "invoice", cascade = CascadeType.PERSIST)
-    private Booking booking;
-
     @PreRemove
-    private void preRemove() {
-        booking.setInvoice(null);
+    private void preRemove(){
+        customer.getInvoice().clear();
+        driver.getInvoice().clear();
     }
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "invoice")
+    private Booking booking;
 
     public Invoice(){
     }

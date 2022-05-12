@@ -40,9 +40,10 @@ public class InvoiceController {
     public String updateInvoice(
             @RequestParam(name = "customerId") long customerID,
             @RequestParam(name = "driverId") long driverID,
+            @RequestParam(name = "bookingId") long bookingID,
             @RequestBody Invoice invoice
     ){
-        return invoiceService.updateInvoice(invoice,customerID,driverID);
+        return invoiceService.updateInvoice(invoice, customerID, driverID, bookingID);
     }
 
     @DeleteMapping(value ="/invoices")

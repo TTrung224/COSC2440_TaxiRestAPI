@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.PreUpdate;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.transaction.Transactional;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -111,11 +113,15 @@ public class InvoiceService {
         return String.format("Invoice with ID %1$s is added (%2$s)", invoice.getId(), invoice.getDateCreated());
     }
 
-    public String updateInvoice(Invoice invoice, long customerID, long driverID){
-        sessionFactory.getCurrentSession().update(invoice);
-        invoice.setCustomer(customerService.getCustomerByID(customerID));
-        invoice.setDriver(driverService.getDriverById(driverID));
-        return String.format("Invoice with ID %s has been updated", invoice.getId());
+    public String updateInvoice(Invoice invoice, long customerID, long driverID, long bookingID){
+        Invoice unupdatedInvoice = getInvoiceByID(invoice.getId());
+        unupdatedInvoice.getBooking().setInvoice(null);
+        unupdatedInvoice.setCustomer(customerService.getCustomerByID(customerID));
+        unupdatedInvoice.setDriver(driverService.getDriverById(driverID));
+        unupdatedInvoice.setBooking(bookingService.getBookingById(bookingID));
+        unupdatedInvoice.getBooking().setInvoice(unupdatedInvoice);
+        sessionFactory.getCurrentSession().update(unupdatedInvoice);
+        return String.format("Invoice with ID %s has been updated", unupdatedInvoice.getId());
     }
 
     public String deleteInvoice(long invoiceId){

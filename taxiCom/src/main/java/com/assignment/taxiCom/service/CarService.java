@@ -34,15 +34,20 @@ public class CarService {
     @Autowired
     private CarRepository carRepository;
 
-    @Autowired
-    DriverRepository driverRepository;
-
     public SessionFactory getSessionFactory() {
         return sessionFactory;
     }
 
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+    }
+
+    public CarRepository getCarRepository() {
+        return carRepository;
+    }
+
+    public void setCarRepository(CarRepository carRepository) {
+        this.carRepository = carRepository;
     }
 
     public String addCar(Car car){

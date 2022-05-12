@@ -34,12 +34,6 @@ public class Invoice {
     @JoinColumn(name ="driverID", referencedColumnName = "id")
     private Driver driver;
 
-    @PreRemove
-    private void preRemove(){
-        customer.getInvoice().clear();
-        driver.getInvoice().clear();
-    }
-
     @JsonIgnore
     @OneToOne(mappedBy = "invoice")
     private Booking booking;

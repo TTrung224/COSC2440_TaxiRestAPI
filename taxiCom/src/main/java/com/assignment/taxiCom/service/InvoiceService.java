@@ -92,7 +92,6 @@ public class InvoiceService {
     }
 
     public Object addInvoice(Invoice invoice, long bookingID, long customerID, long carID){
-
         if(bookingService.getBookingById(bookingID).getInvoice()!=null){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Booking has already had invoice");
         }
@@ -102,10 +101,8 @@ public class InvoiceService {
         invoice.setBooking(booking);
 
         invoice.setCustomer(customerService.getCustomerByID(customerID));
-        customerService.getCustomerByID(customerID).getInvoice().add(invoice);
 
         Driver driver = carService.getCarById(carID).getDriver();
-        driver.getInvoice().add(invoice);
         invoice.setDriver(driver);
         invoice.setTotalCharge(booking.getDistance() * invoice.getDriver().getCar().getRatePerKilometer());
 

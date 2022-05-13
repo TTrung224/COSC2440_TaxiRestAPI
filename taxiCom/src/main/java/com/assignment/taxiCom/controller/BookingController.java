@@ -43,12 +43,12 @@ public class BookingController {
     }
 
     @GetMapping(path = "/bookings/id")
-    public Booking getBookingById(@RequestParam long id){
+    public Booking getBookingById(@RequestParam(name = "bookingId") long id){
         return bookingService.getBookingById(id);
     }
 
     @GetMapping(path = "/bookings/invoiceId")
-    public Booking getBookingByInvoiceId(@RequestParam long invoiceId){
+    public Booking getBookingByInvoiceId(@RequestParam(name = "invoiceId") long invoiceId){
         return bookingService.getBookingByInvoiceId(invoiceId);
     }
 

@@ -53,7 +53,7 @@ public class InvoiceController {
         return invoiceService.deleteInvoice(invoiceId);
     }
 
-    @GetMapping(value ="/invoices/createdDate/{strStart}/{strEnd}")
+    @GetMapping(value ="/invoices/createdTime/{strStart}/{strEnd}")
     public Page<Invoice> filterInvoiceByPeriod(
             @PathVariable(name = "strStart") String strStart,
             @PathVariable(name = "strEnd") String strEnd,

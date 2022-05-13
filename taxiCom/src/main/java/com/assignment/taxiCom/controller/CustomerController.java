@@ -42,13 +42,13 @@ public class CustomerController {
         return customerService.deleteCustomer(customerId);
     }
 
-    @GetMapping(path="/customers/phone/{phone}")
-    public Customer getCustomerByPhone (@PathVariable(name = "phone") String phone){
+    @GetMapping(path="/customers/phone")
+    public Customer getCustomerByPhone (@RequestParam(name = "phone") String phone){
         return customerService.getCustomerByPhone(phone);
     }
 
-    @GetMapping(path = "/customers/id/{ID}")
-    public Customer getCustomerByID(@PathVariable long ID){
+    @GetMapping(path = "/customers/id")
+    public Customer getCustomerByID(@RequestParam(name = "customerId") long ID){
         return customerService.getCustomerByID(ID);
     }
 
@@ -60,21 +60,20 @@ public class CustomerController {
             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
     ){
         return customerService.filterCustomerByCreatedTime(strStart, strEnd, page, pageSize);
-
     }
 
-    @GetMapping(path = "/customers/name/{name}")
+    @GetMapping(path = "/customers/name")
     public Page<Customer> filterCustomerByName(
-            @PathVariable String name,
+            @RequestParam(name = "name") String name,
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
     ){
         return customerService.filterCustomerByName(name, page, pageSize);
     }
 
-    @GetMapping(path = "/customers/address/{address}")
+    @GetMapping(path = "/customers/address")
     public Page<Customer> filterCustomerByAddress(
-            @PathVariable(name = "address") String address,
+            @RequestParam(name = "address") String address,
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
     ){

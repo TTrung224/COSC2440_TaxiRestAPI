@@ -1,15 +1,11 @@
 package com.assignment.taxiCom.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "booking")
@@ -18,26 +14,26 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
+    @Column(nullable = false)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss z")
     @CreationTimestamp
     private ZonedDateTime dateCreated;
 
-    @Column
+    @Column(nullable = false)
     private String startingLocation;
 
-    @Column
+    @Column(nullable = false)
     private String endLocation;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Column
+    @Column(nullable = false)
     private LocalDateTime pickUpTime;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Column
+    @Column(nullable = false)
     private LocalDateTime dropOffTime;
 
-    @Column
+    @Column(nullable = false)
     private double distance;
 
     @OneToOne(cascade = CascadeType.ALL)

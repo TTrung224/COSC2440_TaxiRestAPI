@@ -1,19 +1,19 @@
 package com.assignment.taxiCom;
 
 import org.apache.tomcat.jni.Local;
+import org.hibernate.PropertyValueException;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -430,18 +430,33 @@ public class TaxiComApplicationTests {
 
 //	Negative Tests
 	@Test
-	public void addBookingTestWithoutRequestBodyTest() throws Exception {
+	public void addBookingTestWithoutRequestBody() throws Exception {
 		RequestBuilder request = MockMvcRequestBuilders.post("/bookings");
 		MvcResult result = mockMvc.perform(request)
 				.andDo(print())
-//				.andExpect(result1 -> Assert.assertTrue(result1.getResolvedException() instanceof HttpMessageNotReadableException))
+				.andExpect(result1 -> Assertions.assertTrue(result1.getResolvedException() instanceof HttpMessageNotReadableException))
 				.andExpect(status().isBadRequest())
 				.andReturn();
-
 	}
 
 	@Test
-	public void addBookingTestWithWrongZonedDateTimeFormat() throws Exception {
+	public void addBookingTestWithLackOfParameter() throws Exception {
+		RequestBuilder request = MockMvcRequestBuilders
+				.post("/bookings")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{\"distance\": 1000,\n" +
+						"    \"startingLocation\": \"HCM\",\n" +
+						"    \"pickUpTime\": \"2022-02-01 08:00:00\",\n" +
+						"    \"dropOffTime\": \"2022-03-01 08:00:00\"}");
+		MvcResult result = mockMvc.perform(request)
+				.andDo(print())
+				.andExpect(status().isInternalServerError())
+				.andExpect(result1 -> Assertions.assertTrue(result1.getResolvedException() instanceof Exception))
+				.andReturn();
+	}
+
+	@Test
+	public void addBookingTestWithWrongDateTimeFormat() throws Exception {
 		RequestBuilder request = MockMvcRequestBuilders
 				.post("/bookings")
 				.contentType(MediaType.APPLICATION_JSON)

@@ -18,10 +18,10 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
+    @Column(nullable = false)
     private double totalCharge;
 
-    @Column
+    @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss z")
     @CreationTimestamp
     private ZonedDateTime dateCreated;

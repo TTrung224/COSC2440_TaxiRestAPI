@@ -17,15 +17,15 @@ public class Driver {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
+    @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss z")
     @CreationTimestamp
     private ZonedDateTime dateCreated;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String licenseNumber;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String phoneNumber;
 
     @Column
@@ -36,7 +36,6 @@ public class Driver {
     private Car car;
 
     @JsonIgnore
-
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
     private List<Invoice> invoice;
 

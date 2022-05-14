@@ -14,7 +14,7 @@ public interface DriverRepository extends PagingAndSortingRepository<Driver, Int
     @Query(value = "select * from driver d where d.id = ?1", nativeQuery = true)
     Driver findDriverById(long id);
 
-    @Query(value = "SELECT * FROM driver D WHERE D.license = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM driver D WHERE D.licenseNumber = ?1", nativeQuery = true)
     Driver findDriverByLicense(String license);
 
     @Query(value = "select * from driver d where d.rating = ?1", nativeQuery = true)

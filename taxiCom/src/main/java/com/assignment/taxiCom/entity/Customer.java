@@ -15,14 +15,15 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
-    @Column
+    @Column(nullable = false)
     private String address;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String phone;
+
 
     @Column
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss z")
@@ -30,7 +31,6 @@ public class Customer {
     private ZonedDateTime dateCreated;
 
     @JsonIgnore
-
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Invoice> invoice;
 

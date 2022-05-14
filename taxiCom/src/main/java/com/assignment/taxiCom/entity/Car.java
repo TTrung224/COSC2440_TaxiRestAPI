@@ -16,33 +16,33 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
+    @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss z")
     @CreationTimestamp
     private ZonedDateTime dateCreated;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String vin;
 
-    @Column
+    @Column(nullable = false)
     private String make;
 
-    @Column
+    @Column(nullable = false)
     private String model;
 
-    @Column
+    @Column(nullable = false)
     private String color;
 
-    @Column
+    @Column(nullable = false)
     private boolean convertible;
 
     @Column
     private int rating;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String licensePlate;
 
-    @Column
+    @Column(nullable = false)
     private int ratePerKilometer;
 
     @OneToOne(mappedBy = "car")

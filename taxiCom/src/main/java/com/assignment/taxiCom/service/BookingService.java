@@ -51,9 +51,13 @@ public class BookingService {
 
     public String updateBooking(Booking booking){
         Booking currentBooking = getBookingById(booking.getId());
-        Invoice invoice = currentBooking.getInvoice();
-        sessionFactory.getCurrentSession().update(booking);
-        booking.setInvoice(invoice);
+        currentBooking.setInvoice(booking.getInvoice());
+        currentBooking.setPickUpTime(booking.getPickUpTime());
+        currentBooking.setDropOffTime(booking.getDropOffTime());
+        currentBooking.setStartingLocation(booking.getStartingLocation());
+        currentBooking.setEndLocation(booking.getEndLocation());
+        currentBooking.setDistance(booking.getDistance());
+        sessionFactory.getCurrentSession().update(currentBooking);
         return String.format("Booking with ID %s has been updated", booking.getId());
     }
 

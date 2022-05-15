@@ -61,8 +61,10 @@ public class CarService {
         if(car == null){
             return "Car does not exist";
         }
-        Driver driver = car.getDriver();
-        driver.setCar(null);
+        if(car.getDriver() != null){
+            Driver driver = car.getDriver();
+            driver.setCar(null);
+        }
         sessionFactory.getCurrentSession().delete(car);
         return String.format("Car has been deleted");
     }

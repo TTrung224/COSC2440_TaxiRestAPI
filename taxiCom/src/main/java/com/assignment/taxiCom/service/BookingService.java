@@ -51,7 +51,6 @@ public class BookingService {
 
     public String updateBooking(Booking booking){
         Booking currentBooking = getBookingById(booking.getId());
-        currentBooking.setInvoice(booking.getInvoice());
         currentBooking.setPickUpTime(booking.getPickUpTime());
         currentBooking.setDropOffTime(booking.getDropOffTime());
         currentBooking.setStartingLocation(booking.getStartingLocation());

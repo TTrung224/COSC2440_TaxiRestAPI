@@ -136,9 +136,9 @@ public class CarService {
     }
 
     public Object getAvailableForBooking(String strPickUp, int page, int pageSize){
-        ZonedDateTime now = ZonedDateTime.now();
-        ZoneId zone = now.getZone();
-        ZonedDateTime pickUp = ZonedDateTime.parse(strPickUp, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z")).withZoneSameInstant(zone);
+        ZonedDateTime pickUp = ZonedDateTime.parse(strPickUp, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z"));
+        ZoneId zone = pickUp.getZone();
+        ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(zone);
 
         if(!pickUp.truncatedTo(ChronoUnit.DAYS).isEqual(now.truncatedTo(ChronoUnit.DAYS))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Can not have pick-up time for other date");

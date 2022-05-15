@@ -43,7 +43,6 @@ public class BookingService {
         this.bookingRepository = bookingRepository;
     }
 
-
     public String addBooking(Booking booking){
         sessionFactory.getCurrentSession().saveOrUpdate(booking);
         return String.format("Booking with ID %1$s is added (%2$s)", booking.getId(), booking.getDateCreated());
@@ -53,7 +52,6 @@ public class BookingService {
         sessionFactory.getCurrentSession().update(booking);
         return String.format("Booking with ID %s has been updated", booking.getId());
     }
-
 
     public String deleteBooking(long bookingId){
         Booking booking = getBookingById(bookingId);
@@ -87,16 +85,16 @@ public class BookingService {
 
     public Page<Booking> filterBookingByPickUpTime(String strStart, String strEnd, int page, int pageSize){
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("pickUpTime").ascending());
-        LocalDateTime start = LocalDateTime.parse(strStart, dateFormatter);
-        LocalDateTime end = LocalDateTime.parse(strEnd, dateFormatter);
+        ZonedDateTime start = ZonedDateTime.parse(strStart, dateFormatterWithZone);
+        ZonedDateTime end = ZonedDateTime.parse(strEnd, dateFormatterWithZone);
         Page<Booking> bookings = bookingRepository.filterBookingByPickUpTime(start, end, pageable);
         return bookings;
     }
 
     public Page<Booking> filterBookingByDropOffTime(String strStart, String strEnd, int page, int pageSize){
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("dropOffTime").ascending());
-        LocalDateTime start = LocalDateTime.parse(strStart, dateFormatter);
-        LocalDateTime end = LocalDateTime.parse(strEnd, dateFormatter);
+        ZonedDateTime start = ZonedDateTime.parse(strStart, dateFormatterWithZone);
+        ZonedDateTime end = ZonedDateTime.parse(strEnd, dateFormatterWithZone);
         Page<Booking> bookings = bookingRepository.filterBookingByDropOffTime(start, end, pageable);
         return bookings;
     }

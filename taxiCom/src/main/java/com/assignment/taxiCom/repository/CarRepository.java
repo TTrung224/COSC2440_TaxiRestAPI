@@ -8,6 +8,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.time.LocalDateTime;
@@ -63,5 +64,5 @@ public interface CarRepository  extends PagingAndSortingRepository<Car, Integer>
                             "Where I.id = B.invoiceId and I.driverId = D.id and D.car_id = C.id\n" +
                             "And ?1 <= B.dropOffTime))",
             nativeQuery = true)
-    Page<Car> getAvailableForBooking(LocalDateTime pickUp, Pageable pageable);
+    Page<Car> getAvailableForBooking(ZonedDateTime pickUp, Pageable pageable);
 }

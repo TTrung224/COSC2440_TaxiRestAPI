@@ -25,13 +25,13 @@ public class Booking {
     @Column(nullable = false)
     private String endLocation;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss z")
     @Column(nullable = false)
-    private LocalDateTime pickUpTime;
+    private ZonedDateTime pickUpTime;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss z")
     @Column(nullable = false)
-    private LocalDateTime dropOffTime;
+    private ZonedDateTime dropOffTime;
 
     @Column(nullable = false)
     private double distance;
@@ -71,19 +71,19 @@ public class Booking {
         this.endLocation = endLocation;
     }
 
-    public LocalDateTime getPickUpTime() {
+    public ZonedDateTime getPickUpTime() {
         return pickUpTime;
     }
 
-    public void setPickUpTime(LocalDateTime pickUpTime) {
+    public void setPickUpTime(ZonedDateTime pickUpTime) {
         this.pickUpTime = pickUpTime;
     }
 
-    public LocalDateTime getDropOffTime() {
+    public ZonedDateTime getDropOffTime() {
         return dropOffTime;
     }
 
-    public void setDropOffTime(LocalDateTime dropOffTime) {
+    public void setDropOffTime(ZonedDateTime dropOffTime) {
         this.dropOffTime = dropOffTime;
     }
 

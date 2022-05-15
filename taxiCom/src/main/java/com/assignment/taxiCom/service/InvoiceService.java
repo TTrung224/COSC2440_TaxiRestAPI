@@ -116,6 +116,8 @@ public class InvoiceService {
         unupdatedInvoice.setCustomer(customerService.getCustomerByID(customerID));
         unupdatedInvoice.setDriver(driverService.getDriverById(driverID));
         unupdatedInvoice.setBooking(bookingService.getBookingById(bookingID));
+        unupdatedInvoice.setTotalCharge(unupdatedInvoice.getBooking().getDistance() * unupdatedInvoice.getDriver().getCar().getRatePerKilometer());
+
         unupdatedInvoice.getBooking().setInvoice(unupdatedInvoice);
         sessionFactory.getCurrentSession().update(unupdatedInvoice);
         return String.format("Invoice with ID %s has been updated", unupdatedInvoice.getId());

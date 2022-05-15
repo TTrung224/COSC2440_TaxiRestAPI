@@ -1,6 +1,7 @@
 package com.assignment.taxiCom.service;
 
 import com.assignment.taxiCom.entity.Booking;
+import com.assignment.taxiCom.entity.Invoice;
 import com.assignment.taxiCom.repository.BookingRepository;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,10 @@ public class BookingService {
     }
 
     public String updateBooking(Booking booking){
+        Booking currentBooking = getBookingById(booking.getId());
+        Invoice invoice = currentBooking.getInvoice();
         sessionFactory.getCurrentSession().update(booking);
+        booking.setInvoice(invoice);
         return String.format("Booking with ID %s has been updated", booking.getId());
     }
 

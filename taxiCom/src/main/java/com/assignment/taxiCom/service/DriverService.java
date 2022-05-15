@@ -67,6 +67,7 @@ public class DriverService {
     public String updateDriver(Driver driver){
         if (driver.getCar() != null){
             driver.getCar().setDriver(driver);
+
         }
         sessionFactory.getCurrentSession().update(driver);
         return String.format("Driver with ID %s has been updated", driver.getId());

@@ -25,7 +25,7 @@ public class Customer {
     private String phone;
 
 
-    @Column
+    @Column(nullable = false, updatable = false)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss z")
     @CreationTimestamp
     private ZonedDateTime dateCreated;
@@ -80,6 +80,10 @@ public class Customer {
 
     public ZonedDateTime getDateCreated() {
         return dateCreated;
+    }
+
+    public void setDateCreated(ZonedDateTime dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public List<Invoice> getInvoice() {

@@ -21,7 +21,7 @@ public class Invoice {
     @Column(nullable = false)
     private double totalCharge;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss z")
     @CreationTimestamp
     private ZonedDateTime dateCreated;

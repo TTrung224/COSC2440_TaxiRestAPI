@@ -63,9 +63,11 @@ public class CustomerService {
         if(customer == null){
             return "Customer not found";
         }
-        for(Invoice invoice : customer.getInvoice()){
-            invoice.getBooking().setInvoice(null);
-            sessionFactory.getCurrentSession().delete(invoice);
+        if (customer.getInvoice() != null){
+            for(Invoice invoice : customer.getInvoice()){
+                invoice.getBooking().setInvoice(null);
+                sessionFactory.getCurrentSession().delete(invoice);
+            }
         }
         sessionFactory.getCurrentSession().delete(customer);
         return "Customer has been deleted with all associated invoices";

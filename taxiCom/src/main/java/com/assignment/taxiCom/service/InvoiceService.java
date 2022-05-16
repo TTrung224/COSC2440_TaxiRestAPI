@@ -89,8 +89,6 @@ public class InvoiceService {
     }
 
     public ResponseEntity<?> addInvoice(Invoice invoice, long bookingID, long customerID, long carID){
-
-
         Booking booking = bookingService.getBookingById(bookingID);
         Customer customer = customerService.getCustomerByID(customerID);
         Car car = carService.getCarById(carID);

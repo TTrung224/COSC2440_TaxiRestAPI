@@ -141,9 +141,6 @@ public class TaxiComApplicationTests {
 		addBookingTest();
 		addCustomerTest();
 		assignCarTest();
-		mockMvc.perform(MockMvcRequestBuilders.get("/drivers")
-						.contentType(MediaType.APPLICATION_JSON))
-				.andDo(print());
 
 		RequestBuilder request = MockMvcRequestBuilders
 				.post("/invoices")
@@ -157,8 +154,6 @@ public class TaxiComApplicationTests {
 				.andExpect(status().isOk())
 				.andReturn();
 	}
-
-
 
 
 	@Test
@@ -852,9 +847,7 @@ public class TaxiComApplicationTests {
 	public void filterBookingByPickUpTimeWithoutPathVariableTest() throws Exception {
 		RequestBuilder request = MockMvcRequestBuilders.get("/bookings/pickUpTime/");
 		mockMvc.perform(request)
-				.andDo(print())
-				.andExpect(status().isNotFound())
-				.andReturn();
+				.andExpect(status().isNotFound());
 	}
 
 	@Test
@@ -862,9 +855,7 @@ public class TaxiComApplicationTests {
 		RequestBuilder request = MockMvcRequestBuilders
 				.put("/bookings");
 		mockMvc.perform(request)
-				.andDo(print())
-				.andExpect(status().isBadRequest())
-				.andReturn();
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test
@@ -872,8 +863,72 @@ public class TaxiComApplicationTests {
 		RequestBuilder request = MockMvcRequestBuilders
 				.delete("/bookings");
 		mockMvc.perform(request)
-				.andDo(print())
-				.andExpect(status().isBadRequest())
-				.andReturn();
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	public void addInvoiceWithNotExistedBookingId() throws Exception {
+		addBookingTest();
+		addCustomerTest();
+		assignCarTest();
+
+		RequestBuilder request = MockMvcRequestBuilders
+				.post("/invoices")
+				.param("bookingId", "2")
+				.param("customerId", "1")
+				.param("carId", "1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{}");
+		mockMvc.perform(request)
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	public void addInvoiceWithNotExistedCarId() throws Exception {
+		addBookingTest();
+		addCustomerTest();
+		assignCarTest();
+
+		RequestBuilder request = MockMvcRequestBuilders
+				.post("/invoices")
+				.param("bookingId", "1")
+				.param("customerId", "1")
+				.param("carId", "2")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{}");
+		mockMvc.perform(request)
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	public void addInvoiceWithNotExistedCustomerId() throws Exception {
+		addBookingTest();
+		addCustomerTest();
+		assignCarTest();
+
+		RequestBuilder request = MockMvcRequestBuilders
+				.post("/invoices")
+				.param("bookingId", "1")
+				.param("customerId", "2")
+				.param("carId", "1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{}");
+		mockMvc.perform(request)
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	public void addInvoiceWithABookingThatAlreadyHadInvoice() throws Exception {
+		addInvoiceTest();
+
+		RequestBuilder request = MockMvcRequestBuilders
+				.post("/invoices")
+				.param("bookingId", "1")
+				.param("customerId", "1")
+				.param("carId", "1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{}");
+		mockMvc.perform(request)
+				.andExpect(status().isForbidden());
 	}
 }

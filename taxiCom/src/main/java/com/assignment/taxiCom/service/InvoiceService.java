@@ -1,9 +1,6 @@
 package com.assignment.taxiCom.service;
 
-import com.assignment.taxiCom.entity.Booking;
-import com.assignment.taxiCom.entity.Customer;
-import com.assignment.taxiCom.entity.Driver;
-import com.assignment.taxiCom.entity.Invoice;
+import com.assignment.taxiCom.entity.*;
 import com.assignment.taxiCom.repository.InvoiceRepository;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,23 +88,27 @@ public class InvoiceService {
         this.carService = carService;
     }
 
-    public Object addInvoice(Invoice invoice, long bookingID, long customerID, long carID){
+    public ResponseEntity<?> addInvoice(Invoice invoice, long bookingID, long customerID, long carID){
         if(bookingService.getBookingById(bookingID).getInvoice()!=null){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Booking has already had invoice");
+            return new ResponseEntity<>("Booking has already had invoice", HttpStatus.FORBIDDEN);
         }
 
         Booking booking = bookingService.getBookingById(bookingID);
+        Customer customer = customerService.getCustomerByID(customerID);
+        Car car = carService.getCarById(carID);
+        if (booking == null){return new ResponseEntity<>("Booking does not exist", HttpStatus.BAD_REQUEST);}
+        if (customer == null){return new ResponseEntity<>("Customer does not exist", HttpStatus.BAD_REQUEST);}
+        if (car == null){return new ResponseEntity<>("Car does not exist", HttpStatus.BAD_REQUEST);}
+        Driver driver = car.getDriver();
+        if (driver == null){return new ResponseEntity<>("Car does not have a driver", HttpStatus.BAD_REQUEST);}
         booking.setInvoice(invoice);
         invoice.setBooking(booking);
-
-        invoice.setCustomer(customerService.getCustomerByID(customerID));
-
-        Driver driver = carService.getCarById(carID).getDriver();
+        invoice.setCustomer(customer);
         invoice.setDriver(driver);
         invoice.setTotalCharge(booking.getDistance() * invoice.getDriver().getCar().getRatePerKilometer());
 
         sessionFactory.getCurrentSession().save(invoice);
-        return String.format("Invoice with ID %1$s is added (%2$s)", invoice.getId(), invoice.getDateCreated());
+        return new ResponseEntity<>(String.format("Invoice with ID %1$s is added (%2$s)", invoice.getId(), invoice.getDateCreated()), HttpStatus.OK);
     }
 
     public String updateInvoice(Invoice invoice, long customerID, long driverID, long bookingID){

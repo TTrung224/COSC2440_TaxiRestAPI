@@ -11,10 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
+import java.net.http.HttpResponse;
 import java.util.List;
 
 @Service
@@ -73,34 +76,39 @@ public class DriverService {
         return String.format("Driver with ID %s has been updated", driver.getId());
     }
 
-    public String assignCar(long driverId, long carId){
+    public ResponseEntity<?> assignCar(long driverId, long carId){
         Car car = carRepository.findCarById(carId);
         Driver driver = getDriverById(driverId);
-        if(driver == null){return "Driver does not exist";}
+        if(driver == null){return new ResponseEntity<>("Driver does not exist", HttpStatus.BAD_REQUEST);}
         if(car != null){
             if(car.getDriver() != null){
-                return "Car already assigned to another driver";
+                return new ResponseEntity<>("Car already assigned to another driver", HttpStatus.FORBIDDEN);
             }
             else{
                 driver.setCar(car);
                 sessionFactory.getCurrentSession().update(driver);
-                return String.format("Car with ID %1$s has been assigned to Driver with ID %2$s", car.getId(), driver.getId());
+                car.setDriver(driver);
+                sessionFactory.getCurrentSession().update(car);
+                return new ResponseEntity<>(String.format("Car with ID %1$s has been assigned to Driver with ID %2$s", car.getId(), driver.getId()), HttpStatus.OK);
             }
         }
         else{
-            return "Car does not exist";
+            return new ResponseEntity<>("Car does not exist", HttpStatus.BAD_REQUEST);
         }
     }
 
-    public String unassignCar(long driverId) {
+    public ResponseEntity<?> unassignCar(long driverId) {
         Driver driver = getDriverById(driverId);
-        if(driver == null){return "Driver does not exist";}
-        if(driver.getCar() == null){
-            return "Driver does not have a car";
+        if(driver == null){return new ResponseEntity<>("Driver does not exist", HttpStatus.BAD_REQUEST);}
+        Car car = driver.getCar();
+        if(car == null){
+            return new ResponseEntity<>("Driver does not have a car", HttpStatus.BAD_REQUEST);
         }else {
             driver.setCar(null);
             sessionFactory.getCurrentSession().update(driver);
-            return "Driver no longer assigned to any car";
+            car.setDriver(null);
+            sessionFactory.getCurrentSession().update(car);
+            return new ResponseEntity<>("Driver no longer assigned to any car", HttpStatus.OK);
         }
     }
 

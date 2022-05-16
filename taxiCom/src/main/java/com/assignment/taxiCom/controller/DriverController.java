@@ -4,6 +4,7 @@ import com.assignment.taxiCom.entity.Driver;
 import com.assignment.taxiCom.service.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -64,12 +65,12 @@ public class DriverController {
     public String updateDriver(@RequestBody Driver driver) {return driverService.updateDriver(driver);}
 
     @PutMapping("/drivers/assign")
-    public String assignCar(@RequestParam(name = "driver_id") long driver, @RequestParam(name = "car_id") long id){
+    public ResponseEntity<?> assignCar(@RequestParam(name = "driver_id") long driver, @RequestParam(name = "car_id") long id){
         return driverService.assignCar(driver, id);
     }
 
     @PutMapping("/drivers/unassign")
-    public String unassignCar(@RequestParam(name = "driver_id") long driver){
+    public ResponseEntity<?> unassignCar(@RequestParam(name = "driver_id") long driver){
         return driverService.unassignCar(driver);
     }
 }

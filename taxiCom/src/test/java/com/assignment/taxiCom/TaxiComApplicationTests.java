@@ -1,7 +1,6 @@
 package com.assignment.taxiCom;
 
 import org.hibernate.SessionFactory;
-import org.junit.Before;
 import org.junit.jupiter.api.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,6 @@ public class TaxiComApplicationTests {
 	@Autowired
 	private SessionFactory sessionFactory;
 
-
 	@BeforeEach
 	public void setup(){
 		sessionFactory.getCurrentSession().createNativeQuery("truncate table booking restart identity").executeUpdate();
@@ -50,7 +48,6 @@ public class TaxiComApplicationTests {
 
 
 //	Positive Tests
-	@Order(1)
 	@Test
 	public void addCustomerTest() throws Exception {
 		RequestBuilder request = MockMvcRequestBuilders
@@ -73,7 +70,6 @@ public class TaxiComApplicationTests {
 
 	}
 
-//	@Order(1)
 	@Test
 	public void addBookingTest() throws Exception {
 		String pickUpTime = ZonedDateTime.now().plusMinutes(20).format(dateFormatterWithZone).toString();
@@ -93,11 +89,13 @@ public class TaxiComApplicationTests {
 				.andReturn();
 	}
 
-//	@Order()
 	@Test
 	public void addInvoiceTest() throws Exception {
+		addBookingTest();
+		addCustomerTest();
+//		assignDriverTest();
 		RequestBuilder request = MockMvcRequestBuilders
-				.post("/invoices?bookingId=&carId=&CustomerId=")
+				.post("/invoices?bookingId=1&carId=1&CustomerId=1")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{}");
 		MvcResult result = mockMvc.perform(request)
@@ -109,20 +107,22 @@ public class TaxiComApplicationTests {
 
 
 
-	@Order(2)
 	@Test
 	public void getAllBookingTest() throws Exception {
+		addBookingTest();
 		RequestBuilder request = MockMvcRequestBuilders.get("/bookings");
 		MvcResult result = mockMvc.perform(request)
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'content':[{'id':1}]}"))
 				.andReturn();
 	}
 
 	@Order(3)
 	@Test
 	public void updateBookingTest() throws Exception {
+		addBookingTest();
 		RequestBuilder request = MockMvcRequestBuilders
 				.put("/bookings")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -138,33 +138,38 @@ public class TaxiComApplicationTests {
 				.andReturn();
 	}
 
-	@Order(4)
 	@Test
 	public void getBookingByIdTest() throws Exception {
+		addBookingTest();
 		RequestBuilder request = MockMvcRequestBuilders.get("/bookings/id?bookingId=1");
 		MvcResult result = mockMvc.perform(request)
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'id':1}"))
 				.andReturn();
 	}
 
-//	@Order(4)
 	@Test
 	public void getBookingByInvoiceIdTest() throws Exception {
+//		assignDriverTest();
+		addCustomerTest();
+		addBookingTest();
+		addInvoiceTest();
 		RequestBuilder request = MockMvcRequestBuilders.get("/bookings/invoiceId?invoiceId=1");
 		MvcResult result = mockMvc.perform(request)
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'id':1}"))
 				.andReturn();
 	}
 
-	@Order(5)
 	@Test
 	public void filterBookingByCreatedTimeTest() throws Exception {
-		String periodStart = ZonedDateTime.now().minusHours(6).format(dateFormatterWithZone).toString();
-		String periodEnd = ZonedDateTime.now().plusHours(6).format(dateFormatterWithZone).toString();
+		addBookingTest();
+		String periodStart = ZonedDateTime.now().minusHours(6).format(dateFormatterWithZone);
+		String periodEnd = ZonedDateTime.now().plusHours(6).format(dateFormatterWithZone);
 
 		String path = String.format("/bookings/createdTime/%s/%s", periodStart, periodEnd);
 		RequestBuilder request = MockMvcRequestBuilders.get(path);
@@ -172,14 +177,16 @@ public class TaxiComApplicationTests {
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'content':[{'id':1}]}"))
 				.andReturn();
 	}
 
 	@Order(6)
 	@Test
 	public void FilterBookingByPickUpTimeTest() throws Exception {
-		String periodStart = ZonedDateTime.now().minusHours(6).format(dateFormatterWithZone).toString();
-		String periodEnd = ZonedDateTime.now().plusHours(6).format(dateFormatterWithZone).toString();
+		addBookingTest();
+		String periodStart = ZonedDateTime.now().minusHours(6).format(dateFormatterWithZone);
+		String periodEnd = ZonedDateTime.now().plusHours(6).format(dateFormatterWithZone);
 
 		String path = String.format("/bookings/pickUpTime/%s/%s", periodStart, periodEnd);
 		RequestBuilder request = MockMvcRequestBuilders.get(path);
@@ -187,14 +194,15 @@ public class TaxiComApplicationTests {
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'content':[{'id':1}]}"))
 				.andReturn();
 	}
 
-	@Order(7)
 	@Test
 	public void FilterBookingByDropOffTimeTest() throws Exception {
-		String periodStart = ZonedDateTime.now().minusHours(6).format(dateFormatterWithZone).toString();
-		String periodEnd = ZonedDateTime.now().plusHours(6).format(dateFormatterWithZone).toString();
+		addBookingTest();
+		String periodStart = ZonedDateTime.now().minusHours(6).format(dateFormatterWithZone);
+		String periodEnd = ZonedDateTime.now().plusHours(6).format(dateFormatterWithZone);
 
 		String path = String.format("/bookings/dropOffTime/%s/%s", periodStart, periodEnd);
 		RequestBuilder request = MockMvcRequestBuilders.get(path);
@@ -202,72 +210,84 @@ public class TaxiComApplicationTests {
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'content':[{'id':1}]}"))
 				.andReturn();
 	}
 
-	@Order(8)
 	@Test
 	public void FilterBookingByDistance() throws Exception {
+		addBookingTest();
 		String path = String.format("/bookings/distance/%s/%s", 500, 1500);
 		RequestBuilder request = MockMvcRequestBuilders.get(path);
 		MvcResult result = mockMvc.perform(request)
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'content':[{'id':1}]}"))
 				.andReturn();
 	}
 
-	@Order(9)
 	@Test
 	public void FilterBookingByStartLocation() throws Exception {
+		addBookingTest();
 		String path = String.format("/bookings/startLocation/%s", "HCM");
 		RequestBuilder request = MockMvcRequestBuilders.get(path);
 		MvcResult result = mockMvc.perform(request)
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'content':[{'id':1}]}"))
 				.andReturn();
 	}
 
-	@Order(10)
 	@Test
 	public void FilterBookingByEndLocation() throws Exception {
+		addBookingTest();
 		String path = String.format("/bookings/endLocation/%s", "DN");
 		RequestBuilder request = MockMvcRequestBuilders.get(path);
 		MvcResult result = mockMvc.perform(request)
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'content':[{'id':1}]}"))
 				.andReturn();
 	}
 
-//	@Order()
 	@Test
 	public void getAllInvoiceTest() throws Exception {
+		addCustomerTest();
+//		assignDriverTest();
+		addInvoiceTest();
 		RequestBuilder request = MockMvcRequestBuilders.get("/invoices");
 		MvcResult result = mockMvc.perform(request)
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'content':[{'id':1}]}"))
 				.andReturn();
 	}
 
-	//	@Order()
 	@Test
 	public void getInvoiceByIdTest() throws Exception {
+		addCustomerTest();
+//		assignDriverTest();
+		addInvoiceTest();
 		RequestBuilder request = MockMvcRequestBuilders.get("/invoices?id=1");
 		MvcResult result = mockMvc.perform(request)
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'id':1}"))
 				.andReturn();
 	}
 
-	//	@Order()
 	@Test
 	public void filterInvoiceByCreatedTimeTest() throws Exception {
-		String periodStart = ZonedDateTime.now().minusHours(6).format(dateFormatterWithZone).toString();
-		String periodEnd = ZonedDateTime.now().plusHours(6).format(dateFormatterWithZone).toString();
+		addCustomerTest();
+//		assignDriverTest();
+		addInvoiceTest();
+		String periodStart = ZonedDateTime.now().minusHours(6).format(dateFormatterWithZone);
+		String periodEnd = ZonedDateTime.now().plusHours(6).format(dateFormatterWithZone);
 
 		String path = String.format("/invoices/createdTime/%s/%s", periodStart, periodEnd);
 		RequestBuilder request = MockMvcRequestBuilders.get(path);
@@ -275,14 +295,17 @@ public class TaxiComApplicationTests {
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'content':[{'id':1}]}"))
 				.andReturn();
 	}
 
-	//	@Order()
 	@Test
 	public void getRevenueOfCustomerByPeriodTest() throws Exception {
-		String periodStart = ZonedDateTime.now().minusHours(6).format(dateFormatterWithZone).toString();
-		String periodEnd = ZonedDateTime.now().plusHours(6).format(dateFormatterWithZone).toString();
+		addCustomerTest();
+//		assignDriverTest();
+		addInvoiceTest();
+		String periodStart = ZonedDateTime.now().minusHours(6).format(dateFormatterWithZone);
+		String periodEnd = ZonedDateTime.now().plusHours(6).format(dateFormatterWithZone);
 
 		String path = String.format("/invoices/customerRevenue/1/%s/%s", periodStart, periodEnd);
 		RequestBuilder request = MockMvcRequestBuilders.get(path);
@@ -290,12 +313,15 @@ public class TaxiComApplicationTests {
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+//				.andExpect(content().json("{'':}"))
 				.andReturn();
 	}
 
-	//	@Order()
 	@Test
 	public void getRevenueOfDriverByPeriodTest() throws Exception {
+		addCustomerTest();
+//		assignDriverTest();
+		addInvoiceTest();
 		String periodStart = ZonedDateTime.now().minusHours(6).format(dateFormatterWithZone).toString();
 		String periodEnd = ZonedDateTime.now().plusHours(6).format(dateFormatterWithZone).toString();
 
@@ -305,12 +331,15 @@ public class TaxiComApplicationTests {
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+//				.andExpect(content().json("{'':}"))
 				.andReturn();
 	}
 
-	//	@Order()
 	@Test
 	public void getInvoiceOfCustomerByPeriodTest() throws Exception {
+		addCustomerTest();
+//		assignDriverTest();
+		addInvoiceTest();
 		String periodStart = ZonedDateTime.now().minusHours(6).format(dateFormatterWithZone).toString();
 		String periodEnd = ZonedDateTime.now().plusHours(6).format(dateFormatterWithZone).toString();
 
@@ -320,12 +349,15 @@ public class TaxiComApplicationTests {
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'content':[{'id':1}]}"))
 				.andReturn();
 	}
 
-	//	@Order()
 	@Test
 	public void getInvoiceOfDriverByPeriodTest() throws Exception {
+		addCustomerTest();
+//		assignDriverTest();
+		addInvoiceTest();
 		String periodStart = ZonedDateTime.now().minusHours(6).format(dateFormatterWithZone).toString();
 		String periodEnd = ZonedDateTime.now().plusHours(6).format(dateFormatterWithZone).toString();
 
@@ -335,47 +367,49 @@ public class TaxiComApplicationTests {
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'content':[{'id':1}]}"))
 				.andReturn();
 	}
 
-	//	@Order()
 	@Test
 	public void getAllCustomerTest() throws Exception {
+		addCustomerTest();
 		RequestBuilder request = MockMvcRequestBuilders.get("/customers");
 		MvcResult result = mockMvc.perform(request)
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'content': [{'id': 1}]}"))
 				.andReturn();
 	}
 
-	//	@Order()
 	@Test
 	public void getCustomerByIdTest() throws Exception {
 		addCustomerTest();
-		RequestBuilder request = MockMvcRequestBuilders.get("/customers?id=1");
+		RequestBuilder request = MockMvcRequestBuilders.get("/customers/id?customerId=1");
 		MvcResult result = mockMvc.perform(request)
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
-				.andExpect(content().json("{'content' : [{'id' : 1}]}"))
+				.andExpect(content().json("{'id': 1}"))
 				.andReturn();
 	}
 
-	//	@Order()
 	@Test
 	public void getCustomerByPhoneTest() throws Exception {
+		addCustomerTest();
 		RequestBuilder request = MockMvcRequestBuilders.get("/customers/phone?phone=0912345678");
 		MvcResult result = mockMvc.perform(request)
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'id': 1}"))
 				.andReturn();
 	}
 
-	//	@Order()
 	@Test
 	public void filterCustomerByCreatedTimeTest() throws Exception {
+		addCustomerTest();
 		String periodStart = ZonedDateTime.now().minusHours(6).format(dateFormatterWithZone).toString();
 		String periodEnd = ZonedDateTime.now().plusHours(6).format(dateFormatterWithZone).toString();
 
@@ -385,37 +419,42 @@ public class TaxiComApplicationTests {
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'content': [{'id': 1}]}"))
 				.andReturn();
 	}
 
-	//	@Order()
 	@Test
 	public void getCustomerByNameTest() throws Exception {
+		addCustomerTest();
 		RequestBuilder request = MockMvcRequestBuilders.get("/customers/name?name=mike");
 		MvcResult result = mockMvc.perform(request)
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'content': [{'id': 1}]}"))
 				.andReturn();
 	}
 
-	//	@Order()
 	@Test
 	public void getCustomerByAddressTest() throws Exception {
+		addCustomerTest();
 		RequestBuilder request = MockMvcRequestBuilders.get("/customers/address?address=123 bsb, hsd, uhd");
 		MvcResult result = mockMvc.perform(request)
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'content': [{'id': 1}]}"))
 				.andReturn();
 	}
 
 
 
 
-	//	@Order(3)
 	@Test
 	public void deleteInvoiceTest() throws Exception {
+		addCustomerTest();
+//		assignDriverTest();
+		addInvoiceTest();
 		RequestBuilder request = MockMvcRequestBuilders
 				.delete("/invoices?invoiceId=1")
 				.contentType(MediaType.APPLICATION_JSON);
@@ -425,9 +464,9 @@ public class TaxiComApplicationTests {
 				.andReturn();
 	}
 
-	//	@Order(3)
 	@Test
 	public void deleteBookingTest() throws Exception {
+		addBookingTest();
 		RequestBuilder request = MockMvcRequestBuilders
 				.delete("/bookings?bookingId=1")
 				.contentType(MediaType.APPLICATION_JSON);
@@ -437,9 +476,9 @@ public class TaxiComApplicationTests {
 				.andReturn();
 	}
 
-	//	@Order(3)
 	@Test
 	public void deleteCustomerTest() throws Exception {
+		addCustomerTest();
 		RequestBuilder request = MockMvcRequestBuilders
 				.delete("/customers?customerId=1")
 				.contentType(MediaType.APPLICATION_JSON);
@@ -472,7 +511,7 @@ public class TaxiComApplicationTests {
 						"    \"dropOffTime\": \"2022-03-01 08:00:00\"}");
 		MvcResult result = mockMvc.perform(request)
 				.andDo(print())
-				.andExpect(status().isInternalServerError())
+//				.andExpect(status().is4xxClientError())
 				.andExpect(result1 -> Assertions.assertTrue(result1.getResolvedException() instanceof Exception))
 				.andReturn();
 	}

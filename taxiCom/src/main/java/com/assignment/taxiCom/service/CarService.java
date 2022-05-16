@@ -137,18 +137,18 @@ public class CarService {
         return carRepository.getUsage(month, year, PageRequest.of(page, pageSize)); 
     }
 
-    public Object getAvailableForBooking(String strPickUp, int page, int pageSize){
+    public ResponseEntity<?> getAvailableForBooking(String strPickUp, int page, int pageSize){
         ZonedDateTime pickUp = ZonedDateTime.parse(strPickUp, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z"));
         ZoneId zone = pickUp.getZone();
         ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(zone);
 
         if(!pickUp.truncatedTo(ChronoUnit.DAYS).isEqual(now.truncatedTo(ChronoUnit.DAYS))) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Can not have pick-up time for other date");
+            return new ResponseEntity<>("Can not have pick-up time for other date", HttpStatus.FORBIDDEN);
         } else if(pickUp.isBefore(now)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Can not book car for time in the past");
+            return new ResponseEntity<>("Can not book car for time in the past", HttpStatus.FORBIDDEN);
         } else {
             Pageable pageable = PageRequest.of(page, pageSize);
-            return carRepository.getAvailableForBooking(pickUp, pageable);
+            return new ResponseEntity<>(carRepository.getAvailableForBooking(pickUp, pageable), HttpStatus.OK);
         }
     }
 }

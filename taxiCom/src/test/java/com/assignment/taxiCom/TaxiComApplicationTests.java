@@ -106,6 +106,18 @@ public class TaxiComApplicationTests {
 	}
 
 	@Test
+	public void unassignCarTest() throws Exception {
+		assignCarTest();
+
+		mockMvc.perform(MockMvcRequestBuilders.put("/drivers/unassign")
+				.param("driver_id", "1"))
+				.andExpect(status().isOk());
+
+		mockMvc.perform(MockMvcRequestBuilders.get("/drivers"))
+				.andExpect(content().json("{'content' : [{'id':1, 'car':null}]}"));
+	}
+
+	@Test
 	public void addBookingTest() throws Exception {
 		String pickUpTime = ZonedDateTime.now().plusMinutes(20).format(dateFormatterWithZone);
 		String dropOffTime = ZonedDateTime.now().plusHours(2).format(dateFormatterWithZone);
@@ -499,6 +511,78 @@ public class TaxiComApplicationTests {
 	}
 
 	@Test
+	public void getCarByMakeTest() throws Exception {
+		addCarTest();
+		mockMvc.perform(MockMvcRequestBuilders.get("/cars/make")
+				.param("value", "Lada"))
+				.andExpect(status().isOk())
+				.andExpect(content().json("{content : [{'id':1,'make':'LADA'}]}"));
+	}
+
+	@Test
+	public void getCarByModelTest() throws Exception {
+		addCarTest();
+		mockMvc.perform(MockMvcRequestBuilders.get("/cars/model")
+						.param("value", "REE"))
+				.andExpect(status().isOk())
+				.andExpect(content().json("{content : [{'id':1,'model':'REE'}]}"));
+	}
+
+	@Test
+	public void getCarByColorTest() throws Exception {
+		addCarTest();
+		mockMvc.perform(MockMvcRequestBuilders.get("/cars/color")
+						.param("value", "red"))
+				.andExpect(status().isOk())
+				.andExpect(content().json("{content : [{'id':1,'color':'red'}]}"));
+	}
+
+	@Test
+	public void getCarByRatingTest() throws Exception {
+		addCarTest();
+		mockMvc.perform(MockMvcRequestBuilders.get("/cars/rating")
+						.param("value", "5"))
+				.andExpect(status().isOk())
+				.andExpect(content().json("{content : [{'id':1,'rating':5}]}"));
+	}
+
+	@Test
+	public void getCarByRateTest() throws Exception {
+		addCarTest();
+		mockMvc.perform(MockMvcRequestBuilders.get("/cars/rate")
+						.param("value", "10"))
+				.andExpect(status().isOk())
+				.andExpect(content().json("{content : [{'id':1,'ratePerKilometer':10}]}"));
+	}
+
+	@Test
+	public void getCarByConvertibleTest() throws Exception {
+		addCarTest();
+		mockMvc.perform(MockMvcRequestBuilders.get("/cars/convertible")
+						.param("value", "false"))
+				.andExpect(status().isOk())
+				.andExpect(content().json("{content : [{'id':1,'convertible':false}]}"));
+	}
+
+	@Test
+	public void getCarByLicenseTest() throws Exception {
+		addCarTest();
+		mockMvc.perform(MockMvcRequestBuilders.get("/cars/license")
+						.param("value", "GH124-1251"))
+				.andExpect(status().isOk())
+				.andExpect(content().json("{'id':1,'licensePlate':'GH124-1251'}"));
+	}
+
+	@Test
+	public void getCarByVinTest() throws Exception {
+		addCarTest();
+		mockMvc.perform(MockMvcRequestBuilders.get("/cars/vin")
+						.param("value", "WI12419532"))
+				.andExpect(status().isOk())
+				.andExpect(content().json("{'id':1,'vin':'WI12419532'}"));
+	}
+
+	@Test
 	public void getDriverByPhoneTest() throws Exception {
 		addDriverTest();
 		mockMvc.perform(MockMvcRequestBuilders.get("/drivers/phone")
@@ -676,6 +760,14 @@ public class TaxiComApplicationTests {
 				.param("driver_id","1")
 				.param("car_id","1"))
 				.andExpect(status().isForbidden());
+	}
+
+	@Test
+	public void unassignDriverWithNoCar() throws Exception {
+		addDriverTest();
+		mockMvc.perform(MockMvcRequestBuilders.put("/drivers/unassign")
+				.param("driverId", "1"))
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test

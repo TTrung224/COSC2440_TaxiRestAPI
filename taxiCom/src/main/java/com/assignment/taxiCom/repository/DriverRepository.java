@@ -14,13 +14,13 @@ public interface DriverRepository extends PagingAndSortingRepository<Driver, Int
     @Query(value = "select * from driver d where d.id = ?1", nativeQuery = true)
     Driver findDriverById(long id);
 
-    @Query(value = "SELECT * FROM driver D WHERE D.licenseNumber = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM driver D WHERE UPPER(D.licenseNumber) = UPPER(?1)", nativeQuery = true)
     Driver findDriverByLicense(String license);
 
     @Query(value = "select * from driver d where d.rating = ?1", nativeQuery = true)
     Page<Driver> findDriverByRating(int rating, Pageable pageable);
 
-    @Query(value = "select * from driver d where d.phoneNumber = ?1", nativeQuery = true)
+    @Query(value = "select * from driver d where UPPER(d.phoneNumber) = UPPER(?1)", nativeQuery = true)
     Driver findDriverByPhone(String phoneNumber);
 
     @Query(value = "select * from driver d where d.car_id = ?1", nativeQuery = true)

@@ -21,13 +21,13 @@ public interface CarRepository  extends PagingAndSortingRepository<Car, Integer>
     @Query(value = "select * from car c where c.id = ?1", nativeQuery = true)
     Car findCarById(long id);
 
-    @Query(value = "select * from car c where c.vin = ?1", nativeQuery = true)
+    @Query(value = "select * from car c where UPPER(c.vin) = UPPER(?1)", nativeQuery = true)
     Car findCarByVin(String vin);
 
-    @Query(value = "select * from car c where c.color = ?1", nativeQuery = true)
+    @Query(value = "select * from car c where UPPER(c.color) = UPPER(?1)", nativeQuery = true)
     Page<Car> findCarByColor(String color, Pageable pageable);
 
-    @Query(value = "select * from car c where c.licensePlate = ?1", nativeQuery = true)
+    @Query(value = "select * from car c where UPPER(c.licensePlate) = UPPER(?1)", nativeQuery = true)
     Car findCarByLicensePlate(String license);
 
     @Query(value = "select * from car c where c.convertible = ?1", nativeQuery = true)
@@ -36,10 +36,10 @@ public interface CarRepository  extends PagingAndSortingRepository<Car, Integer>
     @Query(value = "select * from car c where c.rating = ?1", nativeQuery = true)
     Page<Car> findCarByRating(int rating, Pageable pageable);
 
-    @Query(value = "select * from car c where c.make = ?1", nativeQuery = true)
+    @Query(value = "select * from car c where UPPER(c.make) = UPPER(?1)", nativeQuery = true)
     Page<Car> findCarByMake(String make, Pageable pageable);
 
-    @Query(value = "select * from car c where c.model = ?1", nativeQuery = true)
+    @Query(value = "select * from car c where UPPER(c.model) = UPPER(?1)", nativeQuery = true)
     Page<Car> findCarByModel(String model, Pageable pageable);
 
     @Query(value = "select * from car c where c.ratePerKilometer = ?1", nativeQuery = true)

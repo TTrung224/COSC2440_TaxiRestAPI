@@ -477,7 +477,7 @@ public class TaxiComApplicationTests {
 						.param("value", "10"))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
-				.andExpect(content().json("{'id': 1, 'rating' : '10'}"))
+				.andExpect(content().json("{'content':[{'id': 1, 'rating' : 10}]}"))
 				.andReturn();
 	}
 

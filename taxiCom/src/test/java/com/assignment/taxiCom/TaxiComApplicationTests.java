@@ -314,7 +314,6 @@ public class TaxiComApplicationTests {
 				.andReturn();
 	}
 
-
 	@Test
 	public void filterInvoiceByCreatedTimeTest() throws Exception {
 		addInvoiceTest();
@@ -343,6 +342,7 @@ public class TaxiComApplicationTests {
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("10000.0"))
 				.andExpect(content().string("10000.0"))
 				.andReturn();
 	}
@@ -359,6 +359,7 @@ public class TaxiComApplicationTests {
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("10000.0"))
 				.andExpect(content().string("10000.0"))
 				.andReturn();
 	}
@@ -754,6 +755,26 @@ public class TaxiComApplicationTests {
 
 //	Negative Tests
 	@Test
+	public void getAvailableCarForBookingForOtherDate() throws Exception {
+		assignCarTest();
+		String pickUp = ZonedDateTime.now().plusDays(1).format(dateFormatterWithZone);
+
+		mockMvc.perform(MockMvcRequestBuilders.get("/cars/availableBooking")
+			.param("pickUp",pickUp))
+			.andExpect(status().isForbidden());
+	}
+
+	@Test
+	public void getAvailableCarForBookingWithPassPickUpTime() throws Exception {
+		assignCarTest();
+		String pickUp = ZonedDateTime.now().minusMinutes(5).format(dateFormatterWithZone);
+
+		mockMvc.perform(MockMvcRequestBuilders.get("/cars/availableBooking")
+						.param("pickUp",pickUp))
+				.andExpect(status().isForbidden());
+	}
+
+	@Test
 	public void assignDriverToAssignedCar() throws Exception {
 		assignCarTest();
 		mockMvc.perform(MockMvcRequestBuilders.put("/drivers/assign")
@@ -800,7 +821,6 @@ public class TaxiComApplicationTests {
 						"    \"dropOffTime\": \"2022-03-01 08:00:00\"}");
 		mockMvc.perform(request)
 				.andDo(print())
-//				.andExpect(status().is4xxClientError())
 				.andExpect(result1 -> Assertions.assertNotNull(result1.getResolvedException()))
 				.andReturn();
 	}

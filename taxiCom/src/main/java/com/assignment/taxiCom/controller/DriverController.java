@@ -57,7 +57,7 @@ public class DriverController {
     }
 
     @DeleteMapping("/drivers")
-    public String deleteDriver(@RequestParam long driverId) {
+    public ResponseEntity<?> deleteDriver(@RequestParam long driverId) {
         return  driverService.deleteDriver(driverId);
     }
 

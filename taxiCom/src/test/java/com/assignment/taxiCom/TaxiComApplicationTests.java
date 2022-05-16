@@ -535,8 +535,46 @@ public class TaxiComApplicationTests {
 				.andReturn();
 	}
 
+	@Test
+	public void deleteDriverTest() throws Exception{
+		addDriverTest();
+		mockMvc.perform(MockMvcRequestBuilders.delete("/drivers")
+				.param("driverId", "1"))
+				.andExpect(status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.get("/drivers"))
+				.andExpect(content().json("{'totalElements' : 0}"));
+	}
+
+	@Test
+	public void deleteCarTest() throws Exception{
+		addCarTest();
+		mockMvc.perform(MockMvcRequestBuilders.delete("/cars")
+				.param("carId", "1"))
+				.andExpect(status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.get("/cars"))
+				.andExpect(content().json("{'totalElements' : 0}"));
+	}
+
 
 //	Negative Tests
+	@Test
+	public void assignDriverToAssignedCar() throws Exception {
+		assignCarTest();
+		mockMvc.perform(MockMvcRequestBuilders.put("/drivers/assign")
+				.param("driver_id","1")
+				.param("car_id","1"))
+				.andExpect(status().isForbidden());
+	}
+
+	@Test
+	public void assignNonExistingDriver() throws Exception {
+		assignCarTest();
+		mockMvc.perform(MockMvcRequestBuilders.put("/drivers/assign")
+				.param("driver_id","2")
+				.param("car_id","1"))
+				.andExpect(status().isBadRequest());
+	}
+
 	@Test
 	public void addBookingTestWithoutRequestBody() throws Exception {
 		RequestBuilder request = MockMvcRequestBuilders.post("/bookings");
@@ -589,7 +627,7 @@ public class TaxiComApplicationTests {
 	}
 
 	@Test
-	public void UpdateBookingTestWithoutRequestBody() throws Exception {
+	public void updateBookingTestWithoutRequestBody() throws Exception {
 		RequestBuilder request = MockMvcRequestBuilders
 				.put("/bookings");
 		mockMvc.perform(request)
@@ -599,7 +637,7 @@ public class TaxiComApplicationTests {
 	}
 
 	@Test
-	public void DeleteBookingTestWithoutRequestBody() throws Exception {
+	public void deleteBookingTestWithoutRequestBody() throws Exception {
 		RequestBuilder request = MockMvcRequestBuilders
 				.delete("/bookings");
 		mockMvc.perform(request)

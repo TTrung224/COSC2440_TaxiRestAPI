@@ -54,17 +54,20 @@ public class DriverService {
         return String.format("Driver with ID %1$s is added (%2$s)", driver.getId(), driver.getDateCreated());
     }
 
-    public String deleteDriver(long driverId){
+    public ResponseEntity<?> deleteDriver(long driverId){
         Driver driver = getDriverById(driverId);
         if (driver == null){
-            return "Driver not found";
+            return new ResponseEntity<>("Driver not found", HttpStatus.BAD_REQUEST);
         }
-        for(Invoice invoice : driver.getInvoice()){
-            invoice.getBooking().setInvoice(null);
-            sessionFactory.getCurrentSession().delete(invoice);
+        if(driver.getInvoice() != null) {
+            for(Invoice invoice : driver.getInvoice()){
+                invoice.getBooking().setInvoice(null);
+                sessionFactory.getCurrentSession().delete(invoice);
+            }
         }
+
         sessionFactory.getCurrentSession().delete(driver);
-        return String.format("Driver with ID %s is deleted", driver.getId());
+        return new ResponseEntity<>(String.format("Driver with ID %s is deleted", driver.getId()), HttpStatus.OK);
     }
 
     public String updateDriver(Driver driver){

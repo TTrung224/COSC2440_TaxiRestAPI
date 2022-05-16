@@ -1,8 +1,7 @@
 package com.assignment.taxiCom;
 
-import org.apache.tomcat.jni.Local;
-import org.hibernate.PropertyValueException;
-
+import org.hibernate.SessionFactory;
+import org.junit.Before;
 import org.junit.jupiter.api.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +9,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,12 +27,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 public class TaxiComApplicationTests {
 	private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	private final DateTimeFormatter dateFormatterWithZone = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
 
 	@Autowired
 	private MockMvc mockMvc;
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+
+	@BeforeEach
+	public void setup(){
+		sessionFactory.getCurrentSession().createNativeQuery("truncate table booking restart identity").executeUpdate();
+		sessionFactory.getCurrentSession().createNativeQuery("truncate table invoice restart identity cascade").executeUpdate();
+		sessionFactory.getCurrentSession().createNativeQuery("truncate table customer restart identity cascade").executeUpdate();
+		sessionFactory.getCurrentSession().createNativeQuery("truncate table driver restart identity cascade").executeUpdate();
+		sessionFactory.getCurrentSession().createNativeQuery("truncate table car restart identity cascade").executeUpdate();
+	}
+
 
 //	Positive Tests
 	@Order(1)
@@ -48,18 +63,26 @@ public class TaxiComApplicationTests {
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andReturn();
+		mockMvc.perform(MockMvcRequestBuilders.get("/customers"))
+				.andDo(print())
+				.andExpect(status().isOk());
+	}
+
+	@Test
+	public void addCarTest() throws Exception {
+
 	}
 
 //	@Order(1)
 	@Test
 	public void addBookingTest() throws Exception {
-		String pickUpTime = LocalDateTime.now().plusMinutes(20).format(dateFormatter).toString();
-		String dropOffTime = LocalDateTime.now().plusHours(2).format(dateFormatter).toString();
+		String pickUpTime = ZonedDateTime.now().plusMinutes(20).format(dateFormatterWithZone).toString();
+		String dropOffTime = ZonedDateTime.now().plusHours(2).format(dateFormatterWithZone).toString();
 		String requestBody = String.format("{\"distance\": 1000,\n" +
 				"    \"startingLocation\": \"HCM\",\n" +
 				"    \"endLocation\": \"DN\",\n" +
-				"    \"pickUpTime\": %s,\n" +
-				"    \"dropOffTime\": %s}", pickUpTime, dropOffTime);
+				"    \"pickUpTime\": \"%s\",\n" +
+				"    \"dropOffTime\": \"%s\"}", pickUpTime, dropOffTime);
 		RequestBuilder request = MockMvcRequestBuilders
 				.post("/bookings")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -155,8 +178,8 @@ public class TaxiComApplicationTests {
 	@Order(6)
 	@Test
 	public void FilterBookingByPickUpTimeTest() throws Exception {
-		String periodStart = LocalDateTime.now().minusHours(6).format(dateFormatter).toString();
-		String periodEnd = LocalDateTime.now().plusHours(6).format(dateFormatter).toString();
+		String periodStart = ZonedDateTime.now().minusHours(6).format(dateFormatterWithZone).toString();
+		String periodEnd = ZonedDateTime.now().plusHours(6).format(dateFormatterWithZone).toString();
 
 		String path = String.format("/bookings/pickUpTime/%s/%s", periodStart, periodEnd);
 		RequestBuilder request = MockMvcRequestBuilders.get(path);
@@ -170,8 +193,8 @@ public class TaxiComApplicationTests {
 	@Order(7)
 	@Test
 	public void FilterBookingByDropOffTimeTest() throws Exception {
-		String periodStart = LocalDateTime.now().minusHours(6).format(dateFormatter).toString();
-		String periodEnd = LocalDateTime.now().plusHours(6).format(dateFormatter).toString();
+		String periodStart = ZonedDateTime.now().minusHours(6).format(dateFormatterWithZone).toString();
+		String periodEnd = ZonedDateTime.now().plusHours(6).format(dateFormatterWithZone).toString();
 
 		String path = String.format("/bookings/dropOffTime/%s/%s", periodStart, periodEnd);
 		RequestBuilder request = MockMvcRequestBuilders.get(path);
@@ -329,11 +352,13 @@ public class TaxiComApplicationTests {
 	//	@Order()
 	@Test
 	public void getCustomerByIdTest() throws Exception {
-		RequestBuilder request = MockMvcRequestBuilders.get("/customers?id=3");
+		addCustomerTest();
+		RequestBuilder request = MockMvcRequestBuilders.get("/customers?id=1");
 		MvcResult result = mockMvc.perform(request)
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'content' : [{'id' : 1}]}"))
 				.andReturn();
 	}
 

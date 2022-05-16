@@ -112,27 +112,39 @@ public class InvoiceService {
         return new ResponseEntity<>(String.format("Invoice with ID %1$s is added (%2$s)", invoice.getId(), invoice.getDateCreated()), HttpStatus.OK);
     }
 
-    public String updateInvoice(Invoice invoice, long customerID, long driverID, long bookingID){
+    public ResponseEntity<?> updateInvoice(Invoice invoice, long customerID, long driverID, long bookingID){
         Invoice unupdatedInvoice = getInvoiceByID(invoice.getId());
         unupdatedInvoice.getBooking().setInvoice(null);
-        unupdatedInvoice.setCustomer(customerService.getCustomerByID(customerID));
-        unupdatedInvoice.setDriver(driverService.getDriverById(driverID));
-        unupdatedInvoice.setBooking(bookingService.getBookingById(bookingID));
+        Customer customer = customerService.getCustomerByID(customerID);
+        Driver driver = driverService.getDriverById(driverID);
+        Booking booking = bookingService.getBookingById(bookingID);
+        if(customer == null){
+            return new ResponseEntity<>("Customer does not exist", HttpStatus.BAD_REQUEST);
+        }
+        if(booking == null){
+            return new ResponseEntity<>("Booking does not exist", HttpStatus.BAD_REQUEST);
+        }
+        if(driver == null){
+            return new ResponseEntity<>("Driver does not exist", HttpStatus.BAD_REQUEST);
+        }
+        unupdatedInvoice.setCustomer(customer);
+        unupdatedInvoice.setDriver(driver);
+        unupdatedInvoice.setBooking(booking);
         unupdatedInvoice.setTotalCharge(unupdatedInvoice.getBooking().getDistance() * unupdatedInvoice.getDriver().getCar().getRatePerKilometer());
 
         unupdatedInvoice.getBooking().setInvoice(unupdatedInvoice);
         sessionFactory.getCurrentSession().update(unupdatedInvoice);
-        return String.format("Invoice with ID %s has been updated", unupdatedInvoice.getId());
+        return new ResponseEntity<>(String.format("Invoice with ID %s has been updated", unupdatedInvoice.getId()), HttpStatus.OK);
     }
 
-    public String deleteInvoice(long invoiceId){
+    public ResponseEntity<?> deleteInvoice(long invoiceId){
         Invoice invoice = getInvoiceByID(invoiceId);
         if(invoice == null){
-            return "Invoice does not exist";
+            return new ResponseEntity<>("Invoice does not exist",HttpStatus.BAD_REQUEST);
         }
         invoice.getBooking().setInvoice(null);
         sessionFactory.getCurrentSession().delete(invoice);
-        return "Invoice has been deleted";
+        return new ResponseEntity<>("Invoice has been deleted", HttpStatus.OK);
     }
 
     public Page<Invoice> getAllInvoice(int page, int pageSize){

@@ -4,6 +4,7 @@ import com.assignment.taxiCom.entity.Car;
 import com.assignment.taxiCom.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -109,20 +110,20 @@ public class CarController {
 
 
     @PostMapping(value = "/cars")
-    public String addCar(@RequestBody Car car) {return carService.addCar(car);}
+    public ResponseEntity<?> addCar(@RequestBody Car car) {return carService.addCar(car);}
 
     @DeleteMapping("/cars")
-    public String deleteCar(@RequestParam long carId) {
+    public ResponseEntity<?> deleteCar(@RequestParam long carId) {
         return carService.deleteCar(carId);
     }
 
     @PutMapping("/cars")
-    public String updateCar(@RequestBody Car car) {return  carService.updateCar(car);}
+    public ResponseEntity<?> updateCar(@RequestBody Car car) {return  carService.updateCar(car);}
 
     @GetMapping("/cars/availableBooking")
-    public Object getAvailableForBooking(@RequestParam(name = "pickUp") String pickup,
-                                            @RequestParam(defaultValue = "0") int page,
-                                            @RequestParam(defaultValue = "10") int pageSize) {
+    public ResponseEntity<?> getAvailableForBooking(@RequestParam(name = "pickUp") String pickup,
+                                                 @RequestParam(defaultValue = "0") int page,
+                                                 @RequestParam(defaultValue = "10") int pageSize) {
 
         return carService.getAvailableForBooking(pickup, page, pageSize);
     }

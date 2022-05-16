@@ -51,27 +51,27 @@ public class CarService {
         this.carRepository = carRepository;
     }
 
-    public String addCar(Car car){
+    public ResponseEntity<?> addCar(Car car){
         sessionFactory.getCurrentSession().save(car);
-        return String.format("Car with ID %1$s is added (%2$s)", car.getId(), car.getDateCreated());
+        return new ResponseEntity<>(String.format("Car with ID %1$s is added (%2$s)", car.getId(), car.getDateCreated()), HttpStatus.OK);
     }
 
-    public String deleteCar(long carId){
+    public ResponseEntity<?> deleteCar(long carId){
         Car car = getCarById(carId);
         if(car == null){
-            return "Car does not exist";
+            return new ResponseEntity<>("Car does not exist", HttpStatus.BAD_REQUEST);
         }
         if(car.getDriver() != null){
             Driver driver = car.getDriver();
             driver.setCar(null);
         }
         sessionFactory.getCurrentSession().delete(car);
-        return String.format("Car has been deleted");
+        return new ResponseEntity<>("Car has been deleted", HttpStatus.OK);
     }
 
-    public String updateCar(Car car) {
+    public ResponseEntity<?> updateCar(Car car) {
         sessionFactory.getCurrentSession().update(car);
-        return String.format("Car with ID %s has been updated", car.getId());
+        return new ResponseEntity<>(String.format("Car with ID %s has been updated", car.getId()), HttpStatus.OK);
     }
 
     public Page<Car> getAllCars(int page, int pageSize) {

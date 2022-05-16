@@ -4,6 +4,7 @@ import com.assignment.taxiCom.entity.Invoice;
 import com.assignment.taxiCom.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,7 +29,7 @@ public class InvoiceController {
     }
 
     @PostMapping(value = "/invoices")
-    public Object addInvoice(
+    public ResponseEntity<?> addInvoice(
             @RequestParam(name = "bookingId") long bookingID,
             @RequestParam(name = "customerId") long customerID,
             @RequestParam(name = "carId") long carID,
@@ -37,7 +38,7 @@ public class InvoiceController {
     }
 
     @PutMapping(value="/invoices")
-    public String updateInvoice(
+    public ResponseEntity<?> updateInvoice(
             @RequestParam(name = "customerId") long customerID,
             @RequestParam(name = "driverId") long driverID,
             @RequestParam(name = "bookingId") long bookingID,
@@ -47,7 +48,7 @@ public class InvoiceController {
     }
 
     @DeleteMapping(value ="/invoices")
-    public String deleteInvoice(
+    public ResponseEntity<?> deleteInvoice(
             @RequestParam long invoiceId
     ){
         return invoiceService.deleteInvoice(invoiceId);

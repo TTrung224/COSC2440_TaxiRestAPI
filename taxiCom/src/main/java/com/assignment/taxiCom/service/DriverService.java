@@ -71,13 +71,13 @@ public class DriverService {
         return new ResponseEntity<>(String.format("Driver with ID %s is deleted", driver.getId()), HttpStatus.OK);
     }
 
-    public String updateDriver(Driver driver){
+    public ResponseEntity<?> updateDriver(Driver driver){
         if (driver.getCar() != null){
             driver.getCar().setDriver(driver);
 
         }
         sessionFactory.getCurrentSession().update(driver);
-        return String.format("Driver with ID %s has been updated", driver.getId());
+        return new ResponseEntity<>(String.format("Driver with ID %s has been updated", driver.getId()), HttpStatus.OK);
     }
 
     public ResponseEntity<?> assignCar(long driverId, long carId){

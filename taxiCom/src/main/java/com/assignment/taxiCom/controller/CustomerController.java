@@ -4,6 +4,7 @@ import com.assignment.taxiCom.entity.Customer;
 import com.assignment.taxiCom.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,17 +29,17 @@ public class CustomerController {
     }
 
     @PostMapping(path = "/customers")
-    public String addCustomer(@RequestBody Customer customer){
+    public ResponseEntity<?> addCustomer(@RequestBody Customer customer){
         return customerService.addCustomer(customer);
     }
 
     @PutMapping(path = "/customers")
-    public String updateCustomer(@RequestBody Customer customer){
+    public ResponseEntity<?> updateCustomer(@RequestBody Customer customer){
         return customerService.updateCustomer(customer);
     }
 
     @DeleteMapping(path = "/customers")
-    public String deleteCustomer(@RequestParam long customerId){
+    public ResponseEntity<?> deleteCustomer(@RequestParam long customerId){
         return customerService.deleteCustomer(customerId);
     }
 

@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,20 +50,20 @@ public class CustomerService {
         return (Page<Customer>) customerRepository.findAll(pageable);
     }
 
-    public String addCustomer(Customer customer){
+    public ResponseEntity<?> addCustomer(Customer customer){
         sessionFactory.getCurrentSession().saveOrUpdate(customer);
-        return String.format("Customer with ID %1$s is added (%2$s)", customer.getId(), customer.getDateCreated());
+        return new ResponseEntity<>(String.format("Customer with ID %1$s is added (%2$s)", customer.getId(), customer.getDateCreated()), HttpStatus.OK);
     }
 
-    public String updateCustomer(Customer customer){
+    public ResponseEntity<?> updateCustomer(Customer customer){
         sessionFactory.getCurrentSession().update(customer);
-        return String.format("Customer with ID %s has been updated", customer.getId());
+        return new ResponseEntity<>(String.format("Customer with ID %s has been updated", customer.getId()), HttpStatus.OK);
     }
 
-    public String deleteCustomer(long customerId){
+    public ResponseEntity<?> deleteCustomer(long customerId){
         Customer customer = getCustomerByID(customerId);
         if(customer == null){
-            return "Customer not found";
+            return new ResponseEntity<>("Customer not found", HttpStatus.BAD_REQUEST);
         }
         if (customer.getInvoice() != null){
             for(Invoice invoice : customer.getInvoice()){
@@ -70,7 +72,7 @@ public class CustomerService {
             }
         }
         sessionFactory.getCurrentSession().delete(customer);
-        return "Customer has been deleted with all associated invoices";
+        return new ResponseEntity<>("Customer has been deleted with all associated invoices", HttpStatus.OK);
     }
 
     public Customer getCustomerByID(long ID){

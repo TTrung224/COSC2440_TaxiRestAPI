@@ -44,12 +44,12 @@ public class BookingService {
         this.bookingRepository = bookingRepository;
     }
 
-    public String addBooking(Booking booking){
+    public ResponseEntity<?> addBooking(Booking booking){
         sessionFactory.getCurrentSession().saveOrUpdate(booking);
-        return String.format("Booking with ID %1$s is added (%2$s)", booking.getId(), booking.getDateCreated());
+        return new ResponseEntity<>(String.format("Booking with ID %1$s is added (%2$s)", booking.getId(), booking.getDateCreated()), HttpStatus.OK);
     }
 
-    public String updateBooking(Booking booking){
+    public ResponseEntity<?> updateBooking(Booking booking){
         Booking currentBooking = getBookingById(booking.getId());
         currentBooking.setPickUpTime(booking.getPickUpTime());
         currentBooking.setDropOffTime(booking.getDropOffTime());
@@ -60,16 +60,16 @@ public class BookingService {
             currentBooking.getInvoice().setTotalCharge(currentBooking.getDistance() * currentBooking.getInvoice().getDriver().getCar().getRatePerKilometer());
         }
         sessionFactory.getCurrentSession().update(currentBooking);
-        return String.format("Booking with ID %s has been updated", booking.getId());
+        return new ResponseEntity<>(String.format("Booking with ID %s has been updated", booking.getId()), HttpStatus.OK);
     }
 
-    public String deleteBooking(long bookingId){
+    public ResponseEntity<?> deleteBooking(long bookingId){
         Booking booking = getBookingById(bookingId);
         if(booking == null){
-            return "Booking not found";
+            return new ResponseEntity<>("Booking not found", HttpStatus.BAD_REQUEST);
         }
         sessionFactory.getCurrentSession().delete(booking);
-        return "Booking has been deleted";
+        return new ResponseEntity<>("Booking has been deleted", HttpStatus.OK);
     }
 
     public Page<Booking> getAllBooking(int page, int pageSize){

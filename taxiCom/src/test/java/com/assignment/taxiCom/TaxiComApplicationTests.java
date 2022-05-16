@@ -343,7 +343,6 @@ public class TaxiComApplicationTests {
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
 				.andExpect(content().json("10000.0"))
-				.andExpect(content().string("10000.0"))
 				.andReturn();
 	}
 
@@ -360,7 +359,6 @@ public class TaxiComApplicationTests {
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
 				.andExpect(content().json("10000.0"))
-				.andExpect(content().string("10000.0"))
 				.andReturn();
 	}
 
@@ -548,12 +546,32 @@ public class TaxiComApplicationTests {
 	}
 
 	@Test
+	public void sortCarByRatingTest() throws Exception {
+		addCarTest();
+		mockMvc.perform(MockMvcRequestBuilders.get("/cars/rating/sort"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'pageable': {'sort' : {'sorted' : true}}}"))
+				.andReturn();
+	}
+
+	@Test
 	public void getCarByRateTest() throws Exception {
 		addCarTest();
 		mockMvc.perform(MockMvcRequestBuilders.get("/cars/rate")
 						.param("value", "10"))
 				.andExpect(status().isOk())
 				.andExpect(content().json("{content : [{'id':1,'ratePerKilometer':10}]}"));
+	}
+
+	@Test
+	public void sortCarByRateTest() throws Exception {
+		addCarTest();
+		mockMvc.perform(MockMvcRequestBuilders.get("/cars/rate/sort"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'pageable': {'sort' : {'sorted' : true}}}"))
+				.andReturn();
 	}
 
 	@Test

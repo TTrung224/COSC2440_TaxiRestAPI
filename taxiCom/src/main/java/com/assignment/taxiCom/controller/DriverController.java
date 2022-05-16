@@ -62,7 +62,7 @@ public class DriverController {
     }
 
     @PutMapping ("/drivers")
-    public String updateDriver(@RequestBody Driver driver) {return driverService.updateDriver(driver);}
+    public ResponseEntity<?> updateDriver(@RequestBody Driver driver) {return driverService.updateDriver(driver);}
 
     @PutMapping("/drivers/assign")
     public ResponseEntity<?> assignCar(@RequestParam(name = "driver_id") long driver, @RequestParam(name = "car_id") long id){

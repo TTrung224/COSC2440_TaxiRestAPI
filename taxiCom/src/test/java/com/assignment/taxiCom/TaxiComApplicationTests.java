@@ -543,6 +543,36 @@ public class TaxiComApplicationTests {
 	}
 
 	@Test
+	public void getAvailableForBookingTest() throws Exception {
+		addInvoiceTest(); // Create a car that is not available
+		// Create a new car that is available
+		mockMvc.perform(MockMvcRequestBuilders
+				.post("/cars")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{\"vin\": \"CL1295-RWN\",\n" +
+						"    \"make\": \"Toyota\",\n" +
+						"    \"model\": \"Vios\",\n" +
+						"    \"color\": \"black\",\n" +
+						"    \"convertible\": false,\n" +
+						"    \"rating\": 5,\n" +
+						"    \"licensePlate\": \"KH152-8693\",\n" +
+						"    \"ratePerKilometer\": 10}"));
+		mockMvc.perform(MockMvcRequestBuilders
+				.post("/drivers")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{\"licenseNumber\": \"KH432\",\n" +
+						"    \"phoneNumber\": \"091246568\",\n" +
+						"    \"rating\": 10}"));
+		mockMvc.perform(MockMvcRequestBuilders.put("/drivers/assign")
+						.param("car_id", "2")
+						.param("driver_id", "2"));
+		sessionFactory.getCurrentSession().flush();
+		mockMvc.perform(MockMvcRequestBuilders.get("/cars/availableBooking")
+				.param("pickUp", ZonedDateTime.now().plusMinutes(20).format(dateFormatterWithZone)))
+				.andExpect(content().json("{'content' : [{'id':2, 'vin' : 'CL1295-RWN'}]}"));
+	}
+
+	@Test
 	public void updateDriverTest() throws Exception {
 		addDriverTest();
 		sessionFactory.getCurrentSession().clear();
@@ -697,6 +727,13 @@ public class TaxiComApplicationTests {
 				.andDo(print())
 				.andExpect(status().isBadRequest())
 				.andReturn();
+	}
+
+	@Test
+	public void invalidPickUpTimeToGetAvailableCarBooking() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/cars/availableBooking")
+				.param("pickUp", ZonedDateTime.now().format(dateFormatterWithZone)))
+				.andExpect(status().isForbidden());
 	}
 
 	@Test

@@ -89,14 +89,15 @@ public class InvoiceService {
     }
 
     public ResponseEntity<?> addInvoice(Invoice invoice, long bookingID, long customerID, long carID){
-        if(bookingService.getBookingById(bookingID).getInvoice()!=null){
-            return new ResponseEntity<>("Booking has already had invoice", HttpStatus.FORBIDDEN);
-        }
+
 
         Booking booking = bookingService.getBookingById(bookingID);
         Customer customer = customerService.getCustomerByID(customerID);
         Car car = carService.getCarById(carID);
         if (booking == null){return new ResponseEntity<>("Booking does not exist", HttpStatus.BAD_REQUEST);}
+        if(bookingService.getBookingById(bookingID).getInvoice()!=null){
+            return new ResponseEntity<>("Booking has already had invoice", HttpStatus.FORBIDDEN);
+        }
         if (customer == null){return new ResponseEntity<>("Customer does not exist", HttpStatus.BAD_REQUEST);}
         if (car == null){return new ResponseEntity<>("Car does not exist", HttpStatus.BAD_REQUEST);}
         Driver driver = car.getDriver();

@@ -219,7 +219,6 @@ public class TaxiComApplicationTests {
 				.andReturn();
 	}
 
-	@Order(6)
 	@Test
 	public void FilterBookingByPickUpTimeTest() throws Exception {
 		addBookingTest();
@@ -332,7 +331,7 @@ public class TaxiComApplicationTests {
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
-//				.andExpect(content().json("{'':}"))
+				.andExpect(content().string("10000.0"))
 				.andReturn();
 	}
 
@@ -348,7 +347,7 @@ public class TaxiComApplicationTests {
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
-//				.andExpect(content().json("{'':}"))
+				.andExpect(content().string("10000.0"))
 				.andReturn();
 	}
 
@@ -458,6 +457,89 @@ public class TaxiComApplicationTests {
 				.andExpect(content().contentType("application/json"))
 				.andExpect(content().json("{'content': [{'id': 1}]}"))
 				.andReturn();
+	}
+
+	@Test
+	public void getDriverByLicenseTest() throws Exception {
+		addDriverTest();
+		mockMvc.perform(MockMvcRequestBuilders.get("/drivers/license")
+						.param("value", "GHE123"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'id': 1, 'licenseNumber' : 'GHE123'}"))
+				.andReturn();
+	}
+
+	@Test
+	public void getDriverByRatingTest() throws Exception {
+		addDriverTest();
+		mockMvc.perform(MockMvcRequestBuilders.get("/drivers/rating")
+						.param("value", "10"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'id': 1, 'rating' : '10'}"))
+				.andReturn();
+	}
+
+	@Test
+	public void sortDriverByRatingTest() throws Exception {
+		addDriverTest();
+		mockMvc.perform(MockMvcRequestBuilders
+						.post("/drivers")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content("{\"licenseNumber\": \"GHFG23\",\n" +
+								"    \"phoneNumber\": \"09175851\",\n" +
+								"    \"rating\": 5}"));
+		mockMvc.perform(MockMvcRequestBuilders.get("/drivers/rating/sort"))
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'pageable': {'sort' : {'sorted' : true}}}"))
+				.andReturn();
+	}
+
+	@Test
+	public void getDriverByPhoneTest() throws Exception {
+		addDriverTest();
+		mockMvc.perform(MockMvcRequestBuilders.get("/drivers/phone")
+						.param("value", "09153851"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType("application/json"))
+				.andExpect(content().json("{'id': 1, 'phoneNumber' : '09153851'}"))
+				.andReturn();
+	}
+
+	@Test
+	public void getUnassignedCarTest() throws Exception {
+		assignCarTest(); // Create a car and assigned it to a driver
+		mockMvc.perform(MockMvcRequestBuilders.get("/cars/available"))
+				.andExpect(status().isOk())
+				.andExpect(content().json("{'totalElements':0}"));
+		mockMvc.perform(MockMvcRequestBuilders // Post a new car with no driver
+						.post("/cars")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content("{\"vin\": \"CL1295-RWN\",\n" +
+								"    \"make\": \"Toyota\",\n" +
+								"    \"model\": \"Vios\",\n" +
+								"    \"color\": \"black\",\n" +
+								"    \"convertible\": false,\n" +
+								"    \"rating\": 5,\n" +
+								"    \"licensePlate\": \"KH152-8693\",\n" +
+								"    \"ratePerKilometer\": 10}"));
+		mockMvc.perform(MockMvcRequestBuilders.get("/cars/available"))
+				.andExpect(status().isOk())
+				.andExpect(content().json("{'content' : [{'id':2, 'vin':'CL1295-RWN'}], 'totalElements':1}"));
+	}
+
+	@Test
+	public void getCarUsageTest() throws Exception {
+		addInvoiceTest();
+		sessionFactory.getCurrentSession().flush();
+		mockMvc.perform(MockMvcRequestBuilders.get("/cars/usage")
+						.param("month", ZonedDateTime.now().format(DateTimeFormatter.ofPattern("MM")))
+						.param("year", ZonedDateTime.now().format(DateTimeFormatter.ofPattern("yyyy"))))
+				.andDo(print())
+				.andExpect(content().json("{'content' : [{'car_license':'GH124-1251','day_used':1}]}"));
 	}
 
 	@Test

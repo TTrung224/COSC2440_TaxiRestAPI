@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -136,7 +137,7 @@ public class DriverService {
     }
 
     public Page<Driver> sortDriverRating(int page, int pageSize) {
-        return driverRepository.findAll(PageRequest.of(page, pageSize));
+        return driverRepository.findAll(PageRequest.of(page, pageSize, Sort.by("rating").ascending()));
     }
 
     public Driver getDriverByCar(long carId){

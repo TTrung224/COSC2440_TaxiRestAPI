@@ -227,7 +227,7 @@ public class TaxiComApplicationTests {
 	}
 
 	@Test
-	public void FilterBookingByPickUpTimeTest() throws Exception {
+	public void filterBookingByPickUpTimeTest() throws Exception {
 		addBookingTest();
 		String periodStart = ZonedDateTime.now().minusHours(6).format(dateFormatterWithZone);
 		String periodEnd = ZonedDateTime.now().plusHours(6).format(dateFormatterWithZone);
@@ -243,7 +243,7 @@ public class TaxiComApplicationTests {
 	}
 
 	@Test
-	public void FilterBookingByDropOffTimeTest() throws Exception {
+	public void filterBookingByDropOffTimeTest() throws Exception {
 		addBookingTest();
 		String periodStart = ZonedDateTime.now().minusHours(6).format(dateFormatterWithZone);
 		String periodEnd = ZonedDateTime.now().plusHours(6).format(dateFormatterWithZone);
@@ -259,7 +259,7 @@ public class TaxiComApplicationTests {
 	}
 
 	@Test
-	public void FilterBookingByDistance() throws Exception {
+	public void filterBookingByDistance() throws Exception {
 		addBookingTest();
 		String path = String.format("/bookings/distance/%s/%s", 500, 1500);
 		RequestBuilder request = MockMvcRequestBuilders.get(path);
@@ -272,7 +272,7 @@ public class TaxiComApplicationTests {
 	}
 
 	@Test
-	public void FilterBookingByStartLocation() throws Exception {
+	public void filterBookingByStartLocation() throws Exception {
 		addBookingTest();
 		String path = String.format("/bookings/startLocation/%s", "HCM");
 		RequestBuilder request = MockMvcRequestBuilders.get(path);
@@ -285,7 +285,7 @@ public class TaxiComApplicationTests {
 	}
 
 	@Test
-	public void FilterBookingByEndLocation() throws Exception {
+	public void filterBookingByEndLocation() throws Exception {
 		addBookingTest();
 		String path = String.format("/bookings/endLocation/%s", "DN");
 		RequestBuilder request = MockMvcRequestBuilders.get(path);

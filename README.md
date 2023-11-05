@@ -1,5 +1,6 @@
 # COSC2440_A2
-system that automates business processes of a taxi company
+A system that automates business processes of a taxi company. It uses Spring Boot to create APIs that perform CRUD operations on a ProstgreSQL database.
+The system simulates a platform where users can book a taxi based on their preferences (location and time). When customer creates a booking, a new Booking entity will be made with relation to an invoice that contains the driver's and customer's id as well as the price calculated based on the rate of the car used and the distance. A driver will be assigned a car on a first-come-first-serve basis.
 
 Team 6:
     Tran Quoc Trung - s3891724
